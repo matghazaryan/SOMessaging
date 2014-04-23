@@ -8,7 +8,7 @@
 
 #import "SOMessagingViewController.h"
 
-@interface SOMessagingViewController ()
+@interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @end
 

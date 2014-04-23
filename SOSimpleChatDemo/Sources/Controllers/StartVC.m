@@ -27,7 +27,7 @@
     return [NSArray new];
 }
 
-- (UIInterfaceOrientation)interfaceOrientation
+- (NSTimeInterval)intervalForMessagesGrouping
 {
     return 0;
 }

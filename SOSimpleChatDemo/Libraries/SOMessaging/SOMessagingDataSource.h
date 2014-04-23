@@ -22,7 +22,7 @@
  * Messages will be grouped by returned time interval (in seconds).
  * return 0 if you don't want grouping.
  */
-- (NSTimeInterval)invertalForMessagesGrouping;
+- (NSTimeInterval)intervalForMessagesGrouping;
 
 /**
  * Return resizable image for sending balloon background image

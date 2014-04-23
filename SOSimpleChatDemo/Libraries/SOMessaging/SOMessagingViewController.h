@@ -10,8 +10,9 @@
 #import "SOMessageType.h"
 #import "SOMessagingDataSource.h"
 
-@interface SOMessagingViewController : UITableViewController <SOMessagingDataSource>
+@interface SOMessagingViewController : UIViewController <SOMessagingDataSource>
 
 #pragma mark - Properties
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
