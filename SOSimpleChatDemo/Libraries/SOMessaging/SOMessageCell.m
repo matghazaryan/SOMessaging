@@ -29,7 +29,7 @@
         [self hideSubViews];
         
         self.containerView = [[UIView alloc] initWithFrame:self.containerView.bounds];
-        self.containerView.autoresizingMask = self.containerView.autoresizingMask;
+//        self.containerView.autoresizingMask = self.containerView.autoresizingMask;
         
         [self.contentView addSubview:self.containerView];
         
@@ -109,7 +109,11 @@
     
     self.balloonImageView.frame = balloonFrame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
-    self.balloonImageView.image = self.balloonImage;    
+    self.balloonImageView.image = self.balloonImage;
+    
+    CGRect frm = self.containerView.frame;
+    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width : 0;
+    self.containerView.frame = frm;
 }
 
 @end
