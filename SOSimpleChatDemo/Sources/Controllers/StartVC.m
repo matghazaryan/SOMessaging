@@ -7,6 +7,7 @@
 //
 
 #import "StartVC.h"
+#import "SOMessage.h"
 
 @interface StartVC ()
 
@@ -24,22 +25,22 @@
 #pragma mark - SOMessaging data source
 - (NSArray *)messages
 {
-    return [NSArray new];
+    NSMutableArray *messages = [NSMutableArray new];
+    for (int i = 0; i < 4; i++) {
+        SOMessage *message = [[SOMessage alloc] init];
+        message.fromMe = i%2;
+        
+        message.text = @"Hello, how are you? Hello, how are you? Hello, how are you?";
+        
+        [messages addObject:message];
+    }
+        
+    return messages;
 }
 
 - (NSTimeInterval)intervalForMessagesGrouping
 {
     return 0;
-}
-
-- (UIImage *)balloonImageForSending
-{
-    return nil;
-}
-
-- (UIImage *)balloonImageForReceiving
-{
-    return nil;
 }
 
 @end

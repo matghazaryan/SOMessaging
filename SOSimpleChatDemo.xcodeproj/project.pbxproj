@@ -24,6 +24,11 @@
 		75493C52190703C7006C6BCD /* StartVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C51190703C7006C6BCD /* StartVC.m */; };
 		75493C5719070A0C006C6BCD /* SOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C5619070A0C006C6BCD /* SOMessage.m */; };
 		75493C5A1907103A006C6BCD /* SOMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C591907103A006C6BCD /* SOMessageCell.m */; };
+		756EB6AA190847EC00A33384 /* bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 756EB6A6190847EC00A33384 /* bubble.png */; };
+		756EB6AB190847EC00A33384 /* bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 756EB6A7190847EC00A33384 /* bubble@2x.png */; };
+		756EB6AC190847EC00A33384 /* bubbleReceive.png in Resources */ = {isa = PBXBuildFile; fileRef = 756EB6A8190847EC00A33384 /* bubbleReceive.png */; };
+		756EB6AD190847EC00A33384 /* bubbleReceive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 756EB6A9190847EC00A33384 /* bubbleReceive@2x.png */; };
+		756EB6B019084AF400A33384 /* NSString+Calculation.m in Sources */ = {isa = PBXBuildFile; fileRef = 756EB6AF19084AF400A33384 /* NSString+Calculation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +69,12 @@
 		75493C5619070A0C006C6BCD /* SOMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessage.m; sourceTree = "<group>"; };
 		75493C581907103A006C6BCD /* SOMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageCell.h; sourceTree = "<group>"; };
 		75493C591907103A006C6BCD /* SOMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessageCell.m; sourceTree = "<group>"; };
+		756EB6A6190847EC00A33384 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
+		756EB6A7190847EC00A33384 /* bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble@2x.png"; sourceTree = "<group>"; };
+		756EB6A8190847EC00A33384 /* bubbleReceive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubbleReceive.png; sourceTree = "<group>"; };
+		756EB6A9190847EC00A33384 /* bubbleReceive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubbleReceive@2x.png"; sourceTree = "<group>"; };
+		756EB6AE19084AF400A33384 /* NSString+Calculation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Calculation.h"; sourceTree = "<group>"; };
+		756EB6AF19084AF400A33384 /* NSString+Calculation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Calculation.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +218,7 @@
 		75493C4C19070118006C6BCD /* SOMessaging */ = {
 			isa = PBXGroup;
 			children = (
+				756EB6A51908465500A33384 /* Resources */,
 				75493C4D190703A7006C6BCD /* SOMessagingViewController.h */,
 				75493C4E190703A7006C6BCD /* SOMessagingViewController.m */,
 				75493C531907048F006C6BCD /* SOMessagingDataSource.h */,
@@ -215,8 +227,21 @@
 				75493C5619070A0C006C6BCD /* SOMessage.m */,
 				75493C581907103A006C6BCD /* SOMessageCell.h */,
 				75493C591907103A006C6BCD /* SOMessageCell.m */,
+				756EB6AE19084AF400A33384 /* NSString+Calculation.h */,
+				756EB6AF19084AF400A33384 /* NSString+Calculation.m */,
 			);
 			path = SOMessaging;
+			sourceTree = "<group>";
+		};
+		756EB6A51908465500A33384 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				756EB6A6190847EC00A33384 /* bubble.png */,
+				756EB6A7190847EC00A33384 /* bubble@2x.png */,
+				756EB6A8190847EC00A33384 /* bubbleReceive.png */,
+				756EB6A9190847EC00A33384 /* bubbleReceive@2x.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,9 +320,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				756EB6AD190847EC00A33384 /* bubbleReceive@2x.png in Resources */,
 				75493C2A19070071006C6BCD /* Images.xcassets in Resources */,
+				756EB6AA190847EC00A33384 /* bubble.png in Resources */,
 				75493C1C19070071006C6BCD /* InfoPlist.strings in Resources */,
+				756EB6AB190847EC00A33384 /* bubble@2x.png in Resources */,
 				75493C2519070071006C6BCD /* Main.storyboard in Resources */,
+				756EB6AC190847EC00A33384 /* bubbleReceive.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +348,7 @@
 				75493C2219070071006C6BCD /* AppDelegate.m in Sources */,
 				75493C4F190703A7006C6BCD /* SOMessagingViewController.m in Sources */,
 				75493C1E19070071006C6BCD /* main.m in Sources */,
+				756EB6B019084AF400A33384 /* NSString+Calculation.m in Sources */,
 				75493C5719070A0C006C6BCD /* SOMessage.m in Sources */,
 				75493C52190703C7006C6BCD /* StartVC.m in Sources */,
 				75493C5A1907103A006C6BCD /* SOMessageCell.m in Sources */,
@@ -449,6 +479,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SOSimpleChatDemo/SOSimpleChatDemo-Prefix.pch";
 				INFOPLIST_FILE = "SOSimpleChatDemo/SOSimpleChatDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -462,6 +493,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SOSimpleChatDemo/SOSimpleChatDemo-Prefix.pch";
 				INFOPLIST_FILE = "SOSimpleChatDemo/SOSimpleChatDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -526,6 +558,7 @@
 				75493C4219070071006C6BCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		75493C4319070071006C6BCD /* Build configuration list for PBXNativeTarget "SOSimpleChatDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -534,6 +567,7 @@
 				75493C4519070071006C6BCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

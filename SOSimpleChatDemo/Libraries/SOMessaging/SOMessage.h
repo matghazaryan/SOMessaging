@@ -36,7 +36,7 @@
 /**
  * Type of message.
  * Available values:
- * SOMessageTypeText, SOMessageTypePhoto, SOMessageTypeVideo, SOMessageTypeText | SOMessageTypePhoto, SOMessageTypeText | SOMessageTypeVideo
+ * SOMessageTypeText, SOMessageTypePhoto, SOMessageTypeVideo
  */
 @property (nonatomic) SOMessageType type;
 

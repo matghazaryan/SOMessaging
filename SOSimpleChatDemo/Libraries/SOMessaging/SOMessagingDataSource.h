@@ -39,6 +39,15 @@
  * Override this method if you want to customize cell that will be shown.
  * This method calls after cell configuration and adjustment
  */
-- (SOMessageCell *)messageCellForMessageAtIndex:(NSInteger)index;
+- (SOMessageCell *)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
 
+/**
+ *
+ */
+- (CGFloat)messageMaxWidth;
+
+/**
+ *
+ */
+- (UIFont *)messageFont;
  @end
