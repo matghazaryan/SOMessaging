@@ -1,0 +1,541 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		75493C1219070071006C6BCD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1119070071006C6BCD /* Foundation.framework */; };
+		75493C1419070071006C6BCD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1319070071006C6BCD /* CoreGraphics.framework */; };
+		75493C1619070071006C6BCD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1519070071006C6BCD /* UIKit.framework */; };
+		75493C1C19070071006C6BCD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75493C1A19070071006C6BCD /* InfoPlist.strings */; };
+		75493C1E19070071006C6BCD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C1D19070071006C6BCD /* main.m */; };
+		75493C2219070071006C6BCD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C2119070071006C6BCD /* AppDelegate.m */; };
+		75493C2519070071006C6BCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75493C2319070071006C6BCD /* Main.storyboard */; };
+		75493C2A19070071006C6BCD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75493C2919070071006C6BCD /* Images.xcassets */; };
+		75493C3119070071006C6BCD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C3019070071006C6BCD /* XCTest.framework */; };
+		75493C3219070071006C6BCD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1119070071006C6BCD /* Foundation.framework */; };
+		75493C3319070071006C6BCD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1519070071006C6BCD /* UIKit.framework */; };
+		75493C3B19070071006C6BCD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75493C3919070071006C6BCD /* InfoPlist.strings */; };
+		75493C3D19070071006C6BCD /* SOSimpleChatDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C3C19070071006C6BCD /* SOSimpleChatDemoTests.m */; };
+		75493C4F190703A7006C6BCD /* SOMessagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C4E190703A7006C6BCD /* SOMessagingViewController.m */; };
+		75493C52190703C7006C6BCD /* StartVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C51190703C7006C6BCD /* StartVC.m */; };
+		75493C5719070A0C006C6BCD /* SOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C5619070A0C006C6BCD /* SOMessage.m */; };
+		75493C5A1907103A006C6BCD /* SOMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C591907103A006C6BCD /* SOMessageCell.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		75493C3419070071006C6BCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75493C0619070071006C6BCD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75493C0D19070071006C6BCD;
+			remoteInfo = SOSimpleChatDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		75493C0E19070071006C6BCD /* SOSimpleChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SOSimpleChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75493C1119070071006C6BCD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		75493C1319070071006C6BCD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		75493C1519070071006C6BCD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		75493C1919070071006C6BCD /* SOSimpleChatDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SOSimpleChatDemo-Info.plist"; sourceTree = "<group>"; };
+		75493C1B19070071006C6BCD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		75493C1D19070071006C6BCD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		75493C1F19070071006C6BCD /* SOSimpleChatDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SOSimpleChatDemo-Prefix.pch"; sourceTree = "<group>"; };
+		75493C2019070071006C6BCD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		75493C2119070071006C6BCD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		75493C2419070071006C6BCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		75493C2919070071006C6BCD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		75493C2F19070071006C6BCD /* SOSimpleChatDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SOSimpleChatDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75493C3019070071006C6BCD /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		75493C3819070071006C6BCD /* SOSimpleChatDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SOSimpleChatDemoTests-Info.plist"; sourceTree = "<group>"; };
+		75493C3A19070071006C6BCD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		75493C3C19070071006C6BCD /* SOSimpleChatDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SOSimpleChatDemoTests.m; sourceTree = "<group>"; };
+		75493C4D190703A7006C6BCD /* SOMessagingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessagingViewController.h; sourceTree = "<group>"; };
+		75493C4E190703A7006C6BCD /* SOMessagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessagingViewController.m; sourceTree = "<group>"; };
+		75493C50190703C7006C6BCD /* StartVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartVC.h; sourceTree = "<group>"; };
+		75493C51190703C7006C6BCD /* StartVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartVC.m; sourceTree = "<group>"; };
+		75493C531907048F006C6BCD /* SOMessagingDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SOMessagingDataSource.h; sourceTree = "<group>"; };
+		75493C54190706A1006C6BCD /* SOMessageType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageType.h; sourceTree = "<group>"; };
+		75493C5519070A0C006C6BCD /* SOMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessage.h; sourceTree = "<group>"; };
+		75493C5619070A0C006C6BCD /* SOMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessage.m; sourceTree = "<group>"; };
+		75493C581907103A006C6BCD /* SOMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageCell.h; sourceTree = "<group>"; };
+		75493C591907103A006C6BCD /* SOMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessageCell.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		75493C0B19070071006C6BCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75493C1419070071006C6BCD /* CoreGraphics.framework in Frameworks */,
+				75493C1619070071006C6BCD /* UIKit.framework in Frameworks */,
+				75493C1219070071006C6BCD /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75493C2C19070071006C6BCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75493C3119070071006C6BCD /* XCTest.framework in Frameworks */,
+				75493C3319070071006C6BCD /* UIKit.framework in Frameworks */,
+				75493C3219070071006C6BCD /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		75493C0519070071006C6BCD = {
+			isa = PBXGroup;
+			children = (
+				75493C1719070071006C6BCD /* SOSimpleChatDemo */,
+				75493C3619070071006C6BCD /* SOSimpleChatDemoTests */,
+				75493C1019070071006C6BCD /* Frameworks */,
+				75493C0F19070071006C6BCD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		75493C0F19070071006C6BCD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75493C0E19070071006C6BCD /* SOSimpleChatDemo.app */,
+				75493C2F19070071006C6BCD /* SOSimpleChatDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		75493C1019070071006C6BCD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				75493C1119070071006C6BCD /* Foundation.framework */,
+				75493C1319070071006C6BCD /* CoreGraphics.framework */,
+				75493C1519070071006C6BCD /* UIKit.framework */,
+				75493C3019070071006C6BCD /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		75493C1719070071006C6BCD /* SOSimpleChatDemo */ = {
+			isa = PBXGroup;
+			children = (
+				75493C46190700A1006C6BCD /* Libraries */,
+				75493C47190700A1006C6BCD /* Sources */,
+				75493C2019070071006C6BCD /* AppDelegate.h */,
+				75493C2119070071006C6BCD /* AppDelegate.m */,
+				75493C2919070071006C6BCD /* Images.xcassets */,
+				75493C1819070071006C6BCD /* Supporting Files */,
+			);
+			path = SOSimpleChatDemo;
+			sourceTree = "<group>";
+		};
+		75493C1819070071006C6BCD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				75493C2319070071006C6BCD /* Main.storyboard */,
+				75493C1919070071006C6BCD /* SOSimpleChatDemo-Info.plist */,
+				75493C1A19070071006C6BCD /* InfoPlist.strings */,
+				75493C1D19070071006C6BCD /* main.m */,
+				75493C1F19070071006C6BCD /* SOSimpleChatDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		75493C3619070071006C6BCD /* SOSimpleChatDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				75493C3C19070071006C6BCD /* SOSimpleChatDemoTests.m */,
+				75493C3719070071006C6BCD /* Supporting Files */,
+			);
+			path = SOSimpleChatDemoTests;
+			sourceTree = "<group>";
+		};
+		75493C3719070071006C6BCD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				75493C3819070071006C6BCD /* SOSimpleChatDemoTests-Info.plist */,
+				75493C3919070071006C6BCD /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		75493C46190700A1006C6BCD /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				75493C4C19070118006C6BCD /* SOMessaging */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		75493C47190700A1006C6BCD /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				75493C4A190700C4006C6BCD /* Models */,
+				75493C49190700A1006C6BCD /* Views */,
+				75493C48190700A1006C6BCD /* Controllers */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		75493C48190700A1006C6BCD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				75493C50190703C7006C6BCD /* StartVC.h */,
+				75493C51190703C7006C6BCD /* StartVC.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		75493C49190700A1006C6BCD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		75493C4A190700C4006C6BCD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		75493C4C19070118006C6BCD /* SOMessaging */ = {
+			isa = PBXGroup;
+			children = (
+				75493C4D190703A7006C6BCD /* SOMessagingViewController.h */,
+				75493C4E190703A7006C6BCD /* SOMessagingViewController.m */,
+				75493C531907048F006C6BCD /* SOMessagingDataSource.h */,
+				75493C54190706A1006C6BCD /* SOMessageType.h */,
+				75493C5519070A0C006C6BCD /* SOMessage.h */,
+				75493C5619070A0C006C6BCD /* SOMessage.m */,
+				75493C581907103A006C6BCD /* SOMessageCell.h */,
+				75493C591907103A006C6BCD /* SOMessageCell.m */,
+			);
+			path = SOMessaging;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		75493C0D19070071006C6BCD /* SOSimpleChatDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75493C4019070071006C6BCD /* Build configuration list for PBXNativeTarget "SOSimpleChatDemo" */;
+			buildPhases = (
+				75493C0A19070071006C6BCD /* Sources */,
+				75493C0B19070071006C6BCD /* Frameworks */,
+				75493C0C19070071006C6BCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SOSimpleChatDemo;
+			productName = SOSimpleChatDemo;
+			productReference = 75493C0E19070071006C6BCD /* SOSimpleChatDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		75493C2E19070071006C6BCD /* SOSimpleChatDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75493C4319070071006C6BCD /* Build configuration list for PBXNativeTarget "SOSimpleChatDemoTests" */;
+			buildPhases = (
+				75493C2B19070071006C6BCD /* Sources */,
+				75493C2C19070071006C6BCD /* Frameworks */,
+				75493C2D19070071006C6BCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75493C3519070071006C6BCD /* PBXTargetDependency */,
+			);
+			name = SOSimpleChatDemoTests;
+			productName = SOSimpleChatDemoTests;
+			productReference = 75493C2F19070071006C6BCD /* SOSimpleChatDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		75493C0619070071006C6BCD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "SocialOjbects Software";
+				TargetAttributes = {
+					75493C2E19070071006C6BCD = {
+						TestTargetID = 75493C0D19070071006C6BCD;
+					};
+				};
+			};
+			buildConfigurationList = 75493C0919070071006C6BCD /* Build configuration list for PBXProject "SOSimpleChatDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 75493C0519070071006C6BCD;
+			productRefGroup = 75493C0F19070071006C6BCD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				75493C0D19070071006C6BCD /* SOSimpleChatDemo */,
+				75493C2E19070071006C6BCD /* SOSimpleChatDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		75493C0C19070071006C6BCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75493C2A19070071006C6BCD /* Images.xcassets in Resources */,
+				75493C1C19070071006C6BCD /* InfoPlist.strings in Resources */,
+				75493C2519070071006C6BCD /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75493C2D19070071006C6BCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75493C3B19070071006C6BCD /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		75493C0A19070071006C6BCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75493C2219070071006C6BCD /* AppDelegate.m in Sources */,
+				75493C4F190703A7006C6BCD /* SOMessagingViewController.m in Sources */,
+				75493C1E19070071006C6BCD /* main.m in Sources */,
+				75493C5719070A0C006C6BCD /* SOMessage.m in Sources */,
+				75493C52190703C7006C6BCD /* StartVC.m in Sources */,
+				75493C5A1907103A006C6BCD /* SOMessageCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75493C2B19070071006C6BCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75493C3D19070071006C6BCD /* SOSimpleChatDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75493C3519070071006C6BCD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75493C0D19070071006C6BCD /* SOSimpleChatDemo */;
+			targetProxy = 75493C3419070071006C6BCD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		75493C1A19070071006C6BCD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				75493C1B19070071006C6BCD /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		75493C2319070071006C6BCD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				75493C2419070071006C6BCD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		75493C3919070071006C6BCD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				75493C3A19070071006C6BCD /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		75493C3E19070071006C6BCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		75493C3F19070071006C6BCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		75493C4119070071006C6BCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SOSimpleChatDemo/SOSimpleChatDemo-Prefix.pch";
+				INFOPLIST_FILE = "SOSimpleChatDemo/SOSimpleChatDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		75493C4219070071006C6BCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SOSimpleChatDemo/SOSimpleChatDemo-Prefix.pch";
+				INFOPLIST_FILE = "SOSimpleChatDemo/SOSimpleChatDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		75493C4419070071006C6BCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SOSimpleChatDemo.app/SOSimpleChatDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SOSimpleChatDemo/SOSimpleChatDemo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "SOSimpleChatDemoTests/SOSimpleChatDemoTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		75493C4519070071006C6BCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SOSimpleChatDemo.app/SOSimpleChatDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SOSimpleChatDemo/SOSimpleChatDemo-Prefix.pch";
+				INFOPLIST_FILE = "SOSimpleChatDemoTests/SOSimpleChatDemoTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		75493C0919070071006C6BCD /* Build configuration list for PBXProject "SOSimpleChatDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75493C3E19070071006C6BCD /* Debug */,
+				75493C3F19070071006C6BCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75493C4019070071006C6BCD /* Build configuration list for PBXNativeTarget "SOSimpleChatDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75493C4119070071006C6BCD /* Debug */,
+				75493C4219070071006C6BCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		75493C4319070071006C6BCD /* Build configuration list for PBXNativeTarget "SOSimpleChatDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75493C4419070071006C6BCD /* Debug */,
+				75493C4519070071006C6BCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 75493C0619070071006C6BCD /* Project object */;
+}
