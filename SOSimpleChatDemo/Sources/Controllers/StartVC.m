@@ -8,8 +8,11 @@
 
 #import "StartVC.h"
 #import "SOMessage.h"
+#import "SOMessageCell.h"
 
 @interface StartVC ()
+
+@property (strong, nonatomic) NSMutableArray *dataSource;
 
 @end
 
@@ -20,22 +23,32 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self loadMessages];
 }
 
-#pragma mark - SOMessaging data source
-- (NSArray *)messages
+- (void)loadMessages
 {
-    NSMutableArray *messages = [NSMutableArray new];
+    self.dataSource = [NSMutableArray new];
     for (int i = 0; i < 4; i++) {
         SOMessage *message = [[SOMessage alloc] init];
         message.fromMe = i%2;
         
         message.text = @"Hello, how are you? Hello, how are you? Hello, how are you?";
         
-        [messages addObject:message];
+        [self.dataSource addObject:message];
     }
-        
-    return messages;
+    
+    SOMessage *msg = [SOMessage new];
+    msg.media = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"doggy" ofType:@"jpg"]];
+    msg.type = SOMessageTypePhoto;
+    msg.fromMe = YES;
+    [self.dataSource addObject:msg];
+}
+
+#pragma mark - SOMessaging data source
+- (NSArray *)messages
+{
+    return self.dataSource;
 }
 
 - (NSTimeInterval)intervalForMessagesGrouping
@@ -43,4 +56,36 @@
     return 0;
 }
 
+- (void) configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
+{
+    SOMessage *message = self.dataSource[index];
+    if (!message.fromMe) {
+        if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
+            CGRect frame = cell.mediaImageView.frame;
+            frame.origin.x -= 2;
+            cell.mediaImageView.frame = frame;
+        } else {
+            CGRect frame = cell.textView.frame;
+            frame.origin.x -= 2;
+            cell.textView.frame = frame;
+        }
+    } else {
+        if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
+            CGRect frame = cell.mediaImageView.frame;
+            frame.origin.x += 2;
+            cell.mediaImageView.frame = frame;
+        } else {
+            CGRect frame = cell.textView.frame;
+            frame.origin.x += 2;
+            cell.textView.frame = frame;
+        }
+    }
+}
+
+#pragma mark - SOMessaging delegate
+- (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell
+{
+    // Show selected media in fullscreen
+    
+}
 @end

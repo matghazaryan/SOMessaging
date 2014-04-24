@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--StartVC-->
+        <!--StartVC - Messaging-->
         <scene sceneID="VHT-sg-Cx7">
             <objects>
                 <viewController id="OS0-2n-Cis" customClass="StartVC" sceneMemberID="viewController">
@@ -13,7 +13,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="WWh-vO-VFm"/>
+                    <navigationItem key="navigationItem" title="Messaging" id="WWh-vO-VFm"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KWH-Tn-PUN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

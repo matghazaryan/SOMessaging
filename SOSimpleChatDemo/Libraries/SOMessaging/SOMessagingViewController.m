@@ -14,10 +14,14 @@
 
 #define kMessageMaxWidth 270.0f
 
-@interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate, SOMessageCellDelegate>
 
 @property (strong, nonatomic) UIImage *balloonSendImage;
 @property (strong, nonatomic) UIImage *balloonReceiveImage;
+
+@property (strong, nonatomic) UIView *tableViewHeaderView;
+
+@property (strong, nonatomic) NSArray *dataSource;
 
 @end
 
@@ -30,7 +34,13 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
+    self.tableViewHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 10)];
+    self.tableViewHeaderView.backgroundColor = [UIColor clearColor];
+    self.tableView.tableHeaderView = self.tableViewHeaderView;
+    
     [self.view addSubview:self.tableView];
+    
+    self.dataSource = [self messages];
 }
 
 - (void)viewDidLoad
@@ -40,11 +50,7 @@
     [self setup];
     
     self.balloonSendImage    = [self balloonImageForSending];
-    self.balloonReceiveImage = [self balloonImageForReceiving];
-    
-//    self.edgesForExtendedLayout = UIRectEdgeNone;
-//    self.extendedLayoutIncludesOpaqueBars = NO;
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.balloonReceiveImage = [self balloonImageForReceiving];    
 }
 
 #pragma mark - Table view data source
@@ -58,17 +64,20 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.messages.count;
+    return self.dataSource.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height;
     
-    SOMessage *message = self.messages[indexPath.row];
+    SOMessage *message = self.dataSource[indexPath.row];
     
     CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
-    height = size.height + 20;
+    if (message.attributes) {
+        size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
+    }
+    height = size.height + kMessageMargin + kBubbleTopMargin + kBubbleBottomMargin;
     
     return height;
 }
@@ -80,7 +89,7 @@
     NSString *cellIdentifier = @"";
     SOMessageCell *cell;
 
-    SOMessage *message = self.messages[indexPath.row];
+    SOMessage *message = self.dataSource[indexPath.row];
     if (message.fromMe) {
         cellIdentifier = sendCell;
     } else {
@@ -92,13 +101,16 @@
         cell = [[SOMessageCell alloc] initWithStyle:UITableViewCellStyleDefault
                                     reuseIdentifier:cellIdentifier
                                     messageMaxWidth:[self messageMaxWidth]];
+        [cell setMediaImageViewSize:[self mediaThumbnailSize]];
     }
     
+    cell.delegate = self;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.balloonImage = message.fromMe ? self.balloonSendImage : self.balloonReceiveImage;
     cell.message = message;    
  
     // For user customization
-    cell = [self configureMessageCell:cell forMessageAtIndex:indexPath.row];
+    [self configureMessageCell:cell forMessageAtIndex:indexPath.row];
     
     return cell;
 }
@@ -128,9 +140,9 @@
     return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(21, 17, 17, 27)];
 }
 
-- (SOMessageCell *)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
+- (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
-    return cell;
+
 }
 
 - (CGFloat)messageMaxWidth
@@ -143,6 +155,21 @@
     return [UIFont fontWithName:@"HelveticaNeue-Roman" size:12];
 }
 
+- (CGSize)mediaThumbnailSize
+{
+    return CGSizeMake(100, 100);
+}
+
+#pragma mark - SOMessaging delegate
+- (void)messageCell:(SOMessageCell *)cell didTapMedia:(NSData *)media
+{
+    [self didSelectMedia:media inMessageCell:cell];
+}
+
+- (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell
+{
+    
+}
 #pragma mark - Helper methods
 - (UIImage *)tintImage:(UIImage *)image withColor:(UIColor *)color
 {

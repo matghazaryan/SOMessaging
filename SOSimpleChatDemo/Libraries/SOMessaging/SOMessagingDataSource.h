@@ -39,15 +39,21 @@
  * Override this method if you want to customize cell that will be shown.
  * This method calls after cell configuration and adjustment
  */
-- (SOMessageCell *)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
+- (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
 
 /**
- *
+ * Maximum width of message
  */
 - (CGFloat)messageMaxWidth;
 
 /**
- *
+ * Font of message
  */
 - (UIFont *)messageFont;
+
+/**
+ * Size of photo or video thumbnail imageView
+ */
+- (CGSize)mediaThumbnailSize;
+
  @end

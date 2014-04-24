@@ -17,6 +17,11 @@
 @property (strong, nonatomic) NSString *text;
 
 /**
+ * Attributes for attributed message text
+ */
+@property (strong, nonatomic) NSDictionary *attributes;
+
+/**
  * NSData from photo or video
  */
 @property (strong, nonatomic) NSData *media;
