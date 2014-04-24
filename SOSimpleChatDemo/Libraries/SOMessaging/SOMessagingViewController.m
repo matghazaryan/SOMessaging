@@ -73,12 +73,17 @@
     
     SOMessage *message = self.dataSource[indexPath.row];
     
-    CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
-    if (message.attributes) {
-        size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
+    if (message.type == SOMessageTypeText) {
+        CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
+        if (message.attributes) {
+            size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
+        }
+        height = size.height + kMessageMargin + kBubbleTopMargin + kBubbleBottomMargin;
+    } else {
+        CGSize size = [self mediaThumbnailSize];
+
+        height = size.height + kMessageMargin + kBubbleTopMargin + kBubbleBottomMargin;
     }
-    height = size.height + kMessageMargin + kBubbleTopMargin + kBubbleBottomMargin;
-    
     return height;
 }
 

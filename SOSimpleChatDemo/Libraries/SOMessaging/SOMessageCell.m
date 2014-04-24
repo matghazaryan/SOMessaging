@@ -25,7 +25,7 @@
         self.mediaImageView.clipsToBounds = YES;
         self.mediaImageView.backgroundColor = [UIColor clearColor];
         self.mediaImageView.userInteractionEnabled = YES;
-        self.mediaImageView.layer.cornerRadius = 5;
+        self.mediaImageView.layer.cornerRadius = 10;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMediaTapped:)];
         [self.mediaImageView addGestureRecognizer:tap];
         
