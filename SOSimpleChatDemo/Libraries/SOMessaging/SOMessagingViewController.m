@@ -37,6 +37,7 @@
     self.tableViewHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 10)];
     self.tableViewHeaderView.backgroundColor = [UIColor clearColor];
     self.tableView.tableHeaderView = self.tableViewHeaderView;
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     [self.view addSubview:self.tableView];
     
@@ -162,7 +163,7 @@
 
 - (CGSize)mediaThumbnailSize
 {
-    return CGSizeMake(100, 100);
+    return CGSizeMake(90, 100);
 }
 
 #pragma mark - SOMessaging delegate

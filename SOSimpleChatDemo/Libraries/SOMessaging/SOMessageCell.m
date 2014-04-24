@@ -96,6 +96,8 @@
         
     }
     
+    self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
+
 /* 
 --  Not implemented ---
     else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
