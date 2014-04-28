@@ -15,6 +15,6 @@
 @optional
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell;
 - (void)messageInputView:(SOMessageInputView *)inputView didSendMessage:(NSString *)message;
-- (void)messageInputViewDidAttach:(SOMessageInputView *)inputView;
+- (void)messageInputViewDidSelectMediaButton:(SOMessageInputView *)inputView;
 
 @end

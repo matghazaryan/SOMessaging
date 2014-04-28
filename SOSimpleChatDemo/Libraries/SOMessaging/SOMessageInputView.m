@@ -32,6 +32,7 @@
 {
     self.textInitialHeight = 40.0f;
     self.textMaxHeight = 130.0f;
+    self.textleftMargin = 5.0f;
     self.textTopMargin = 5.5f;
     self.textBottomMargin = 5.5f;
     
@@ -111,7 +112,7 @@
     self.sendButton.center = CGPointMake(self.sendButton.center.x, self.textInitialHeight/2);
     
     CGRect txtBgFrame = self.textBgImageView.frame;
-    txtBgFrame.origin = CGPointMake(self.mediaButton.frame.origin.x + self.mediaButton.frame.size.width - self.textleftMargin, self.textTopMargin);
+    txtBgFrame.origin = CGPointMake(self.mediaButton.frame.origin.x + self.mediaButton.frame.size.width + self.textleftMargin, self.textTopMargin);
     txtBgFrame.size = CGSizeMake(self.frame.size.width - self.mediaButton.frame.size.width - self.textleftMargin - self.sendButton.frame.size.width - self.textRightMargin, self.textInitialHeight - self.textTopMargin - self.textBottomMargin);
 
     self.textBgImageView.frame = txtBgFrame;
@@ -175,8 +176,8 @@
 
 - (void)mediaTapped:(id)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(messageInputViewDidAttach:)]) {
-        [self.delegate messageInputViewDidAttach:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(messageInputViewDidSelectMediaButton:)]) {
+        [self.delegate messageInputViewDidSelectMediaButton:self];
     }
 }
 

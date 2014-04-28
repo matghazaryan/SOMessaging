@@ -43,7 +43,7 @@
 
     msg.type = SOMessageTypePhoto;
     msg.fromMe = YES;
-    [self.dataSource addObject:msg];
+    [self.dataSource addObject:msg];    
 }
 
 #pragma mark - SOMessaging data source
@@ -95,7 +95,7 @@
     
 }
 
-- (void)messageInputViewDidAttach:(SOMessageInputView *)inputView
+- (void)messageInputViewDidSelectMediaButton:(SOMessageInputView *)inputView
 {
     
 }
