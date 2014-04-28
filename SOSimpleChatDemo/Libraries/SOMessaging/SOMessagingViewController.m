@@ -41,6 +41,10 @@
     
     [self.view addSubview:self.tableView];
     
+    self.inputView = [[SOMessageInputView alloc] init];
+    [self.view addSubview:self.inputView];
+    [self.inputView adjustPosition];
+    
     self.dataSource = [self messages];
 }
 

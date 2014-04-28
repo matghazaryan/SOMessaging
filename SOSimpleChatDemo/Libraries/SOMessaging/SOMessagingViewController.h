@@ -10,10 +10,11 @@
 #import "SOMessageType.h"
 #import "SOMessagingDataSource.h"
 #import "SOMessagingDelegate.h"
+#import "SOMessageInputView.h"
 
 @interface SOMessagingViewController : UIViewController <SOMessagingDataSource, SOMessagingDelegate>
 
 #pragma mark - Properties
 @property (strong, nonatomic) UITableView *tableView;
-
+@property (strong, nonatomic) SOMessageInputView *inputView;
 @end

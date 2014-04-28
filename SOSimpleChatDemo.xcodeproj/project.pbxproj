@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75276BC0190AB78B0051611C /* SOMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75276BBF190AB78B0051611C /* SOMessageInputView.m */; };
 		75493C1219070071006C6BCD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1119070071006C6BCD /* Foundation.framework */; };
 		75493C1419070071006C6BCD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1319070071006C6BCD /* CoreGraphics.framework */; };
 		75493C1619070071006C6BCD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1519070071006C6BCD /* UIKit.framework */; };
@@ -43,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75276BBE190AB78B0051611C /* SOMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageInputView.h; sourceTree = "<group>"; };
+		75276BBF190AB78B0051611C /* SOMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessageInputView.m; sourceTree = "<group>"; };
 		75493C0E19070071006C6BCD /* SOSimpleChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SOSimpleChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75493C1119070071006C6BCD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		75493C1319070071006C6BCD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -234,6 +237,8 @@
 				75493C591907103A006C6BCD /* SOMessageCell.m */,
 				756EB6AE19084AF400A33384 /* NSString+Calculation.h */,
 				756EB6AF19084AF400A33384 /* NSString+Calculation.m */,
+				75276BBE190AB78B0051611C /* SOMessageInputView.h */,
+				75276BBF190AB78B0051611C /* SOMessageInputView.m */,
 			);
 			path = SOMessaging;
 			sourceTree = "<group>";
@@ -368,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				75493C2219070071006C6BCD /* AppDelegate.m in Sources */,
+				75276BC0190AB78B0051611C /* SOMessageInputView.m in Sources */,
 				75493C4F190703A7006C6BCD /* SOMessagingViewController.m in Sources */,
 				75493C1E19070071006C6BCD /* main.m in Sources */,
 				756EB6B019084AF400A33384 /* NSString+Calculation.m in Sources */,
