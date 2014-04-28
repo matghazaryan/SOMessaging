@@ -12,7 +12,8 @@
 typedef enum {
   SOMessageTypeText  = 0,
   SOMessageTypePhoto = 1 << 0,
-  SOMessageTypeVideo = 1 << 1
+  SOMessageTypeVideo = 1 << 1,
+  SOMessageTypeOther = 1 << 2,
 } SOMessageType;
 
 #endif

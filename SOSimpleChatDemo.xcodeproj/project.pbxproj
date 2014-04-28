@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		75276BC0190AB78B0051611C /* SOMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75276BBF190AB78B0051611C /* SOMessageInputView.m */; };
+		752EE4A7190EC8F000A61F6D /* SOPlaceholderedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 752EE4A6190EC8F000A61F6D /* SOPlaceholderedTextView.m */; };
+		752EE4AA190ECD7F00A61F6D /* attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 752EE4A8190ECD7F00A61F6D /* attachment.png */; };
+		752EE4AB190ECD7F00A61F6D /* attachment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 752EE4A9190ECD7F00A61F6D /* attachment@2x.png */; };
+		752EE4AE190ED81700A61F6D /* inputTextBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 752EE4AC190ED81700A61F6D /* inputTextBG.png */; };
+		752EE4AF190ED81700A61F6D /* inputTextBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 752EE4AD190ED81700A61F6D /* inputTextBG@2x.png */; };
 		75493C1219070071006C6BCD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1119070071006C6BCD /* Foundation.framework */; };
 		75493C1419070071006C6BCD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1319070071006C6BCD /* CoreGraphics.framework */; };
 		75493C1619070071006C6BCD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1519070071006C6BCD /* UIKit.framework */; };
@@ -46,6 +51,12 @@
 /* Begin PBXFileReference section */
 		75276BBE190AB78B0051611C /* SOMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageInputView.h; sourceTree = "<group>"; };
 		75276BBF190AB78B0051611C /* SOMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessageInputView.m; sourceTree = "<group>"; };
+		752EE4A5190EC8F000A61F6D /* SOPlaceholderedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOPlaceholderedTextView.h; sourceTree = "<group>"; };
+		752EE4A6190EC8F000A61F6D /* SOPlaceholderedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOPlaceholderedTextView.m; sourceTree = "<group>"; };
+		752EE4A8190ECD7F00A61F6D /* attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attachment.png; sourceTree = "<group>"; };
+		752EE4A9190ECD7F00A61F6D /* attachment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "attachment@2x.png"; sourceTree = "<group>"; };
+		752EE4AC190ED81700A61F6D /* inputTextBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inputTextBG.png; sourceTree = "<group>"; };
+		752EE4AD190ED81700A61F6D /* inputTextBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "inputTextBG@2x.png"; sourceTree = "<group>"; };
 		75493C0E19070071006C6BCD /* SOSimpleChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SOSimpleChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75493C1119070071006C6BCD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		75493C1319070071006C6BCD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -239,6 +250,8 @@
 				756EB6AF19084AF400A33384 /* NSString+Calculation.m */,
 				75276BBE190AB78B0051611C /* SOMessageInputView.h */,
 				75276BBF190AB78B0051611C /* SOMessageInputView.m */,
+				752EE4A5190EC8F000A61F6D /* SOPlaceholderedTextView.h */,
+				752EE4A6190EC8F000A61F6D /* SOPlaceholderedTextView.m */,
 			);
 			path = SOMessaging;
 			sourceTree = "<group>";
@@ -266,6 +279,10 @@
 				756EB6A7190847EC00A33384 /* bubble@2x.png */,
 				756EB6A8190847EC00A33384 /* bubbleReceive.png */,
 				756EB6A9190847EC00A33384 /* bubbleReceive@2x.png */,
+				752EE4A8190ECD7F00A61F6D /* attachment.png */,
+				752EE4A9190ECD7F00A61F6D /* attachment@2x.png */,
+				752EE4AC190ED81700A61F6D /* inputTextBG.png */,
+				752EE4AD190ED81700A61F6D /* inputTextBG@2x.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -346,12 +363,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				752EE4AA190ECD7F00A61F6D /* attachment.png in Resources */,
 				756EB6AD190847EC00A33384 /* bubbleReceive@2x.png in Resources */,
 				75493C2A19070071006C6BCD /* Images.xcassets in Resources */,
 				75586C551908FFA1003BDEB1 /* doggy.jpg in Resources */,
 				756EB6AA190847EC00A33384 /* bubble.png in Resources */,
+				752EE4AB190ECD7F00A61F6D /* attachment@2x.png in Resources */,
 				75493C1C19070071006C6BCD /* InfoPlist.strings in Resources */,
+				752EE4AE190ED81700A61F6D /* inputTextBG.png in Resources */,
 				756EB6AB190847EC00A33384 /* bubble@2x.png in Resources */,
+				752EE4AF190ED81700A61F6D /* inputTextBG@2x.png in Resources */,
 				75493C2519070071006C6BCD /* Main.storyboard in Resources */,
 				756EB6AC190847EC00A33384 /* bubbleReceive.png in Resources */,
 			);
@@ -376,6 +397,7 @@
 				75276BC0190AB78B0051611C /* SOMessageInputView.m in Sources */,
 				75493C4F190703A7006C6BCD /* SOMessagingViewController.m in Sources */,
 				75493C1E19070071006C6BCD /* main.m in Sources */,
+				752EE4A7190EC8F000A61F6D /* SOPlaceholderedTextView.m in Sources */,
 				756EB6B019084AF400A33384 /* NSString+Calculation.m in Sources */,
 				75493C5719070A0C006C6BCD /* SOMessage.m in Sources */,
 				75493C52190703C7006C6BCD /* StartVC.m in Sources */,

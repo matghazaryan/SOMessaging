@@ -7,19 +7,34 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SOPlaceholderedTextView.h"
 
 #define kAutoResizingMaskAll UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth
 
-#define kInitialInputViewHeight 44
-
 @interface SOMessageInputView : UIView
+
+@property (weak, nonatomic) UITableView *tableView;
 
 #pragma mark - Properties
 @property (strong, nonatomic) UIImageView *textBgImageView;
-@property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) SOPlaceholderedTextView *textView;
 @property (strong, nonatomic) UIButton *sendButton;
+@property (strong, nonatomic) UIButton *mediaButton;
+
+/**
+ * After setting above properties make sure that you called
+ * -adjustInputView; method for apply changes
+ */
+@property (nonatomic) CGFloat textInitialHeight;
+@property (nonatomic) CGFloat textMaxHeight;
+@property (nonatomic) CGFloat textTopMargin;
+@property (nonatomic) CGFloat textBottomMargin;
+@property (nonatomic) CGFloat textleftMargin;
+@property (nonatomic) CGFloat textRightMargin;
+//--
 
 #pragma mark - Methods
+- (void)adjustInputView;
 - (void)adjustPosition;
 
 @end

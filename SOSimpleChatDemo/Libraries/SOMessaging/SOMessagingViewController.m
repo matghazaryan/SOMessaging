@@ -139,14 +139,16 @@
 - (UIImage *)balloonImageForReceiving
 {
     UIImage *bubble = [UIImage imageNamed:@"bubbleReceive.png"];
-    bubble = [self tintImage:bubble withColor:[UIColor blueColor]];
+    UIColor *color = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    bubble = [self tintImage:bubble withColor:color];
     return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(17, 27, 21, 17)];
 }
 
 - (UIImage *)balloonImageForSending
 {
     UIImage *bubble = [UIImage imageNamed:@"bubble.png"];
-    bubble = [self tintImage:bubble withColor:[UIColor blueColor]];
+    UIColor *color = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    bubble = [self tintImage:bubble withColor:color];
     return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(21, 17, 17, 27)];
 }
 

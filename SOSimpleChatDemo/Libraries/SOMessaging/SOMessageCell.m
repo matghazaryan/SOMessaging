@@ -94,6 +94,8 @@
     } else if (self.message.type == SOMessageTypeVideo) {
         self.mediaImageView.hidden = NO;
         
+    } else if (self.message.type == SOMessageTypeOther) {
+        
     }
     
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
@@ -185,4 +187,7 @@
     self.containerView.frame = frm;
 }
 
+//---
+
+//---
 @end
