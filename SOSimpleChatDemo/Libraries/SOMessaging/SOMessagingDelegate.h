@@ -9,9 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @class SOMessageCell;
+@class SOMessageInputView;
 @protocol SOMessagingDelegate <NSObject>
 
 @optional
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell;
+- (void)messageInputView:(SOMessageInputView *)inputView didSendMessage:(NSString *)message;
+- (void)messageInputViewDidAttach:(SOMessageInputView *)inputView;
 
 @end

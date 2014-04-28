@@ -29,7 +29,7 @@
 - (void)loadMessages
 {
     self.dataSource = [NSMutableArray new];
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 14; i++) {
         SOMessage *message = [[SOMessage alloc] init];
         message.fromMe = i%2;
         
@@ -39,7 +39,8 @@
     }
     
     SOMessage *msg = [SOMessage new];
-    msg.media = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"doggy" ofType:@"jpg"]];
+    msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"doggy.jpg"], 1);
+
     msg.type = SOMessageTypePhoto;
     msg.fromMe = YES;
     [self.dataSource addObject:msg];
@@ -86,6 +87,16 @@
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell
 {
     // Show selected media in fullscreen
+    
+}
+
+- (void)messageInputView:(SOMessageInputView *)inputView didSendMessage:(NSString *)message
+{
+    
+}
+
+- (void)messageInputViewDidAttach:(SOMessageInputView *)inputView
+{
     
 }
 @end

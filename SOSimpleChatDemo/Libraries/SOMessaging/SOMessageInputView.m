@@ -9,7 +9,11 @@
 #import "SOMessageInputView.h"
 
 @interface SOMessageInputView() <UITextViewDelegate>
-
+{
+    CGRect keyboardFrame;
+    UIViewAnimationCurve keyboardCurve;
+    double keyboardDuration;
+}
 @end
 
 @implementation SOMessageInputView
@@ -45,7 +49,7 @@
     
     self.textBgImageView = [[UIImageView alloc] init];
     self.textBgImageView.backgroundColor = [UIColor clearColor];
-    self.textBgImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.textBgImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:self.textBgImageView];
     
     self.textView = [[SOPlaceholderedTextView alloc] init];
@@ -54,7 +58,7 @@
     self.textView.backgroundColor = [UIColor clearColor];
     [self.textView setTextContainerInset:UIEdgeInsetsZero];
     self.textView.textContainer.lineFragmentPadding = 0;
-    self.textView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:self.textView];
     
     self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -90,23 +94,31 @@
 #pragma mark - Public methods
 - (void)adjustInputView
 {
-    CGRect mediaFrame = self.mediaButton.frame;
-    mediaFrame.origin = CGPointMake(0, 0);
-    self.mediaButton.frame = mediaFrame;
-    self.mediaButton.center = CGPointMake(self.mediaButton.center.x, self.textInitialHeight/2);
+    if (!self.mediaButton.hidden) {
+        CGRect mediaFrame = self.mediaButton.frame;
+        mediaFrame.origin = CGPointMake(0, 0);
+        self.mediaButton.frame = mediaFrame;
+        self.mediaButton.center = CGPointMake(self.mediaButton.center.x, self.textInitialHeight/2);
+    } else {
+        self.mediaButton.frame = CGRectZero;
+    }
+    
+
     
     CGRect sendFrame = self.sendButton.frame;
     sendFrame.origin = CGPointMake(self.frame.size.width - sendFrame.size.width, 0);
     self.sendButton.frame = sendFrame;
     self.sendButton.center = CGPointMake(self.sendButton.center.x, self.textInitialHeight/2);
     
-    self.textBgImageView.image = [[UIImage imageNamed:@"inputTextBG.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(14, 14, 14, 14)];
-    
     CGRect txtBgFrame = self.textBgImageView.frame;
     txtBgFrame.origin = CGPointMake(self.mediaButton.frame.origin.x + self.mediaButton.frame.size.width - self.textleftMargin, self.textTopMargin);
     txtBgFrame.size = CGSizeMake(self.frame.size.width - self.mediaButton.frame.size.width - self.textleftMargin - self.sendButton.frame.size.width - self.textRightMargin, self.textInitialHeight - self.textTopMargin - self.textBottomMargin);
+
     self.textBgImageView.frame = txtBgFrame;
     
+    UIImage *image = [UIImage imageNamed:@"inputTextBG.png"];
+    self.textBgImageView.image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
+
     CGFloat topPadding = 6.0f;
     CGFloat bottomPadding = 5.0f;
     CGFloat leftPadding = 6.0f;
@@ -125,17 +137,47 @@
     CGRect frame = self.frame;
     frame.origin.y = self.superview.bounds.size.height - frame.size.height;
     self.frame = frame;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, self.frame.size.height, 0.0);
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void)adjustTableViewWithCurve:(BOOL)withCurve
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, keyboardFrame.size.height + self.frame.size.height, 0.0);
+
+    NSInteger section = [self.tableView numberOfSections] - 1;
+    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    
+    [UIView beginAnimations:@"anim" context:NULL];
+    [UIView setAnimationDuration:keyboardDuration];
+    if (withCurve) {
+        [UIView setAnimationCurve:keyboardCurve];
+    }
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    [UIView commitAnimations];
 }
 
 #pragma mark - Actions
 - (void)sendTapped:(id)sender
 {
+    [self.textView resignFirstResponder];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(messageInputView:didSendMessage:)]) {
+        [self.delegate messageInputView:self didSendMessage:self.textView.text];
+    }
     
+    self.textView.text = @"";
 }
 
 - (void)mediaTapped:(id)sender
 {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(messageInputViewDidAttach:)]) {
+        [self.delegate messageInputViewDidAttach:self];
+    }
 }
 
 #pragma mark - private Methods
@@ -146,36 +188,37 @@
     CGRect frame = self.textView.frame;
     CGFloat delta = ceilf(usedFrame.size.height) - frame.size.height;
     
-//    if (ceilf(usedFrame.size.height) > self.textInitialHeight) {
-//        frame.size.height = ceilf(usedFrame.size.height);
-//        frame.origin.y -= delta;
-//    }
-//
-//    [UIView animateWithDuration:0.2f animations:^{
-//        self.textView.frame = frame;
-//    } completion:^(BOOL finished) {
-//        [self.textView scrollRectToVisible:self.textView.frame animated:YES];
-//    }];
+     CGFloat lineHeight = self.textView.font.lineHeight;
+    int numberOfActualLines = (int)ceilf(usedFrame.size.height / lineHeight);
     
+    CGFloat actualHeight = numberOfActualLines * lineHeight;
+    
+    delta = actualHeight - self.textView.frame.size.height; //self.textView.font.lineHeight - 5;
     CGRect frm = self.frame;
-    frm.size.height += delta;
-    frm.origin.y -= delta;
-    [UIView animateWithDuration:0.2f animations:^{
-        self.frame = frm;
-    } completion:^(BOOL finished) {
-        [self.textView scrollRectToVisible:self.textView.frame animated:YES];
-    }];
+    frm.size.height += ceilf(delta);
+    frm.origin.y -= ceilf(delta);
     
+    if (frm.size.height < self.textMaxHeight) {
+        if (frm.size.height < self.textInitialHeight) {
+            frm.size.height = self.textInitialHeight;
+            frm.origin.y = self.superview.bounds.size.height - frm.size.height - keyboardFrame.size.height;
+        }
+        
+        
+        [UIView animateWithDuration:keyboardDuration animations:^{
+            self.frame = frm;
+
+        } completion:^(BOOL finished) {
+            [self.textView scrollRectToVisible:usedFrame animated:YES];
+        }];
+    } else {
+        [self.textView scrollRectToVisible:usedFrame animated:YES];
+    }
+    
+    [self adjustTableViewWithCurve:NO];
 }
 
 #pragma mark - textview delegate
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-//    [self adjustTextViewSize];
- 
-    return YES;
-}
-
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self adjustTextViewSize];    
@@ -189,31 +232,47 @@
         keyboardRect = CGRectMake(keyboardRect.origin.x, keyboardRect.origin.y, MAX(keyboardRect.size.width,keyboardRect.size.height), MIN(keyboardRect.size.width,keyboardRect.size.height));
     }
     
+    keyboardFrame = keyboardRect;
+    
 	UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    keyboardCurve = curve;
+    
 	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    keyboardDuration = duration;
     
     CGRect frame = self.frame;
     frame.origin.y = self.superview.bounds.size.height - frame.size.height - keyboardRect.size.height;
     
+    [self adjustTableViewWithCurve:YES];
+    
     [UIView animateWithDuration:duration animations:^{
         [UIView setAnimationCurve:curve];
         self.frame = frame;
     }];
+    
+    //Closing keyboard on tap
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self.textView action:@selector(resignFirstResponder)];
+    [self.tableView addGestureRecognizer:tap];
 }
 
 - (void)handleKeyboardWillHideNote:(NSNotification *)notification
 {
-//    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
 	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    keyboardCurve = curve;
+    keyboardDuration = duration;
     
     CGRect frame = self.frame;
     frame.origin.y = self.superview.bounds.size.height - frame.size.height;
-    
+    keyboardFrame = CGRectZero;
     [UIView animateWithDuration:duration animations:^{
         [UIView setAnimationCurve:curve];
         self.frame = frame;
+    } completion:^(BOOL finished) {
+
     }];
+    
+    [self adjustTableViewWithCurve:YES];
 }
 
 - (void)dealloc

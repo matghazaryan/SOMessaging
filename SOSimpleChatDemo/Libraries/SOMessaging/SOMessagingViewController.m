@@ -42,6 +42,7 @@
     [self.view addSubview:self.tableView];
     
     self.inputView = [[SOMessageInputView alloc] init];
+    self.inputView.tableView = self.tableView;
     [self.view addSubview:self.inputView];
     [self.inputView adjustPosition];
     
@@ -55,7 +56,18 @@
     [self setup];
     
     self.balloonSendImage    = [self balloonImageForSending];
-    self.balloonReceiveImage = [self balloonImageForReceiving];    
+    self.balloonReceiveImage = [self balloonImageForReceiving];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+    NSInteger section = [self.tableView numberOfSections] - 1;
+    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 }
 
 #pragma mark - Table view data source

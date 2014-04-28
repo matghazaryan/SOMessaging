@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SOPlaceholderedTextView.h"
+#import "SOMessagingDelegate.h"
 
 #define kAutoResizingMaskAll UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth
 
@@ -32,6 +33,8 @@
 @property (nonatomic) CGFloat textleftMargin;
 @property (nonatomic) CGFloat textRightMargin;
 //--
+
+@property (weak, nonatomic) id<SOMessagingDelegate> delegate;
 
 #pragma mark - Methods
 - (void)adjustInputView;
