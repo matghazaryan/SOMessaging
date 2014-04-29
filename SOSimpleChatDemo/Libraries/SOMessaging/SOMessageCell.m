@@ -8,6 +8,10 @@
 
 #import "SOMessageCell.h"
 
+@interface SOMessageCell() < UIGestureRecognizerDelegate>
+
+@end
+
 @implementation SOMessageCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
@@ -190,4 +194,7 @@
 //---
 
 //---
+
+#pragma mark - 
+
 @end

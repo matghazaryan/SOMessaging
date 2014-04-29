@@ -8,12 +8,16 @@
 
 #import "SOMessageInputView.h"
 
-@interface SOMessageInputView() <UITextViewDelegate>
+@interface SOMessageInputView() <UITextViewDelegate, UIGestureRecognizerDelegate>
 {
     CGRect keyboardFrame;
     UIViewAnimationCurve keyboardCurve;
     double keyboardDuration;
+    UIView *inputAccessoryForFindingKeyboard;
 }
+
+@property (weak, nonatomic) UIView *keyboardView;
+
 @end
 
 @implementation SOMessageInputView
@@ -60,6 +64,8 @@
     [self.textView setTextContainerInset:UIEdgeInsetsZero];
     self.textView.textContainer.lineFragmentPadding = 0;
     self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    inputAccessoryForFindingKeyboard = [[UIView alloc] initWithFrame:CGRectZero];
+    self.textView.inputAccessoryView = inputAccessoryForFindingKeyboard;
     [self addSubview:self.textView];
     
     self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -81,6 +87,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShowNote:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHideNote:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationDidChandeNote:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     
     self.textView.placeholderText = NSLocalizedString(@"Type message...", nil);
     [self.sendButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
@@ -142,6 +149,14 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, self.frame.size.height, 0.0);
     self.tableView.contentInset = contentInsets;
     self.tableView.scrollIndicatorInsets = contentInsets;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    
+    pan.delegate = self;
+    
+    [self addGestureRecognizer:tap];
+    [self.superview addGestureRecognizer:pan];
 }
 
 - (void)adjustTableViewWithCurve:(BOOL)withCurve
@@ -274,6 +289,90 @@
     }];
     
     [self adjustTableViewWithCurve:YES];
+}
+
+- (void)handleOrientationDidChandeNote:(NSNotification *)note
+{
+    [self performSelector:@selector(adjustTextViewSize) withObject:nil afterDelay:0.1];
+}
+
+#pragma mark - Gestures
+- (void)handleTap:(UITapGestureRecognizer *)tap
+{
+    if (![self.textView isFirstResponder]) {
+        [self.textView becomeFirstResponder];
+    }
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)pan
+{
+    // if keyboard isn't opened then return.
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+
+    CGPoint point = [pan locationInView:pan.view];
+    if (point.y < self.frame.origin.y) {
+        return;
+    }
+    
+    self.keyboardView = inputAccessoryForFindingKeyboard.superview;
+    // If keyboard not found then return
+    if (!self.keyboardView) {
+        return;
+    }
+    
+    CGPoint translation = [pan translationInView:pan.view];
+    
+    CGRect frame = self.keyboardView.frame;
+    CGRect selfFrame = self.frame;
+    
+    frame.origin.y += translation.y;
+    selfFrame.origin.y += translation.y;
+    
+    if (frame.origin.y < self.superview.frame.size.height - keyboardFrame.size.height) {
+        frame = keyboardFrame;
+    }
+    
+    if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
+        if (frame.origin.y > keyboardFrame.origin.y + keyboardFrame.size.height/2) {
+            frame.origin.y = self.superview.frame.size.height;
+        } else {
+            frame = keyboardFrame;
+        }
+        
+        selfFrame.origin.y = frame.origin.y - selfFrame.size.height;
+        [UIView animateWithDuration:keyboardDuration animations:^{
+            self.keyboardView.frame = frame;
+//            self.frame = selfFrame;
+        } completion:^(BOOL finished) {
+            if (!CGRectEqualToRect(frame, keyboardFrame)) {
+                [self.textView resignFirstResponder];
+            }
+        }];
+        
+        return;
+    }
+    
+    self.keyboardView.frame = frame;
+    self.frame = selfFrame;
+    
+    [pan setTranslation:CGPointZero inView:pan.view];
+}
+
+#pragma mark -
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return YES;
 }
 
 - (void)dealloc
