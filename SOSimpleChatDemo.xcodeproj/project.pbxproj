@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E739503191106B8004BB8A3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E739502191106B8004BB8A3 /* QuartzCore.framework */; };
+		3E73950E19111947004BB8A3 /* UINavigationController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E73950D19111947004BB8A3 /* UINavigationController+Rotation.m */; };
 		75276BC0190AB78B0051611C /* SOMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75276BBF190AB78B0051611C /* SOMessageInputView.m */; };
 		752EE4A7190EC8F000A61F6D /* SOPlaceholderedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 752EE4A6190EC8F000A61F6D /* SOPlaceholderedTextView.m */; };
 		752EE4AA190ECD7F00A61F6D /* attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 752EE4A8190ECD7F00A61F6D /* attachment.png */; };
@@ -49,6 +51,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E739502191106B8004BB8A3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		3E73950C19111947004BB8A3 /* UINavigationController+Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Rotation.h"; sourceTree = "<group>"; };
+		3E73950D19111947004BB8A3 /* UINavigationController+Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Rotation.m"; sourceTree = "<group>"; };
 		75276BBE190AB78B0051611C /* SOMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageInputView.h; sourceTree = "<group>"; };
 		75276BBF190AB78B0051611C /* SOMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessageInputView.m; sourceTree = "<group>"; };
 		752EE4A5190EC8F000A61F6D /* SOPlaceholderedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOPlaceholderedTextView.h; sourceTree = "<group>"; };
@@ -99,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E739503191106B8004BB8A3 /* QuartzCore.framework in Frameworks */,
 				75493C1419070071006C6BCD /* CoreGraphics.framework in Frameworks */,
 				75493C1619070071006C6BCD /* UIKit.framework in Frameworks */,
 				75493C1219070071006C6BCD /* Foundation.framework in Frameworks */,
@@ -140,6 +146,7 @@
 		75493C1019070071006C6BCD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3E739502191106B8004BB8A3 /* QuartzCore.framework */,
 				75493C1119070071006C6BCD /* Foundation.framework */,
 				75493C1319070071006C6BCD /* CoreGraphics.framework */,
 				75493C1519070071006C6BCD /* UIKit.framework */,
@@ -252,6 +259,8 @@
 				75276BBF190AB78B0051611C /* SOMessageInputView.m */,
 				752EE4A5190EC8F000A61F6D /* SOPlaceholderedTextView.h */,
 				752EE4A6190EC8F000A61F6D /* SOPlaceholderedTextView.m */,
+				3E73950C19111947004BB8A3 /* UINavigationController+Rotation.h */,
+				3E73950D19111947004BB8A3 /* UINavigationController+Rotation.m */,
 			);
 			path = SOMessaging;
 			sourceTree = "<group>";
@@ -402,6 +411,7 @@
 				75493C5719070A0C006C6BCD /* SOMessage.m in Sources */,
 				75493C52190703C7006C6BCD /* StartVC.m in Sources */,
 				75493C5A1907103A006C6BCD /* SOMessageCell.m in Sources */,
+				3E73950E19111947004BB8A3 /* UINavigationController+Rotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

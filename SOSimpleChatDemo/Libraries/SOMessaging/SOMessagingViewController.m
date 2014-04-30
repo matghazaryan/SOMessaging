@@ -49,6 +49,7 @@
     self.dataSource = [self messages];
 }
 
+#pragma mark - View lifecicle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -68,6 +69,15 @@
     NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+}
+
+// This code will work only if this vc hasn't navigation controller
+- (BOOL)shouldAutorotate
+{
+    if (self.inputView.viewIsDragging) {
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Table view data source
@@ -129,6 +139,7 @@
     cell.delegate = self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.balloonImage = message.fromMe ? self.balloonSendImage : self.balloonReceiveImage;
+    cell.textView.textColor = message.fromMe ? [UIColor whiteColor] : [UIColor blackColor];
     cell.message = message;    
  
     // For user customization
@@ -151,7 +162,7 @@
 - (UIImage *)balloonImageForReceiving
 {
     UIImage *bubble = [UIImage imageNamed:@"bubbleReceive.png"];
-    UIColor *color = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    UIColor *color = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:215.0/255.0 alpha:1.0];
     bubble = [self tintImage:bubble withColor:color];
     return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(17, 27, 21, 17)];
 }
@@ -159,9 +170,9 @@
 - (UIImage *)balloonImageForSending
 {
     UIImage *bubble = [UIImage imageNamed:@"bubble.png"];
-    UIColor *color = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    UIColor *color = [UIColor colorWithRed:74.0/255.0 green:186.0/255.0 blue:251.0/255.0 alpha:1.0];
     bubble = [self tintImage:bubble withColor:color];
-    return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(21, 17, 17, 27)];
+    return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(17, 21, 17, 27)];
 }
 
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index

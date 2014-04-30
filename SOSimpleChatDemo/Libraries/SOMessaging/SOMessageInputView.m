@@ -7,6 +7,8 @@
 //
 
 #import "SOMessageInputView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UINavigationController+Rotation.h"
 
 @interface SOMessageInputView() <UITextViewDelegate, UIGestureRecognizerDelegate>
 {
@@ -14,6 +16,8 @@
     UIViewAnimationCurve keyboardCurve;
     double keyboardDuration;
     UIView *inputAccessoryForFindingKeyboard;
+    CGFloat initialInputViewPosYWhenKeyboardIsShown;
+    BOOL keyboardHidesFromDragging;
 }
 
 @property (weak, nonatomic) UIView *keyboardView;
@@ -157,9 +161,12 @@
     
     [self addGestureRecognizer:tap];
     [self.superview addGestureRecognizer:pan];
+    
+    UINavigationController *nc = [self navigationControllerInstance];
+    nc.canAutorotate = YES;
 }
 
-- (void)adjustTableViewWithCurve:(BOOL)withCurve
+- (void)adjustTableViewWithCurve:(BOOL)withCurve scrollsToBottom:(BOOL)scrollToBottom
 {
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, keyboardFrame.size.height + self.frame.size.height, 0.0);
 
@@ -174,7 +181,9 @@
     }
     self.tableView.contentInset = contentInsets;
     self.tableView.scrollIndicatorInsets = contentInsets;
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    if (scrollToBottom) {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
     [UIView commitAnimations];
 }
 
@@ -231,7 +240,7 @@
         [self.textView scrollRectToVisible:usedFrame animated:YES];
     }
     
-    [self adjustTableViewWithCurve:NO];
+    [self adjustTableViewWithCurve:NO scrollsToBottom:YES];
 }
 
 #pragma mark - textview delegate
@@ -258,8 +267,9 @@
     
     CGRect frame = self.frame;
     frame.origin.y = self.superview.bounds.size.height - frame.size.height - keyboardRect.size.height;
+    initialInputViewPosYWhenKeyboardIsShown = frame.origin.y;
     
-    [self adjustTableViewWithCurve:YES];
+    [self adjustTableViewWithCurve:YES scrollsToBottom:YES];
     
     [UIView animateWithDuration:duration animations:^{
         [UIView setAnimationCurve:curve];
@@ -288,7 +298,9 @@
 
     }];
     
-    [self adjustTableViewWithCurve:YES];
+    [self adjustTableViewWithCurve:YES scrollsToBottom:!keyboardHidesFromDragging];
+    
+    keyboardHidesFromDragging = NO;
 }
 
 - (void)handleOrientationDidChandeNote:(NSNotification *)note
@@ -310,57 +322,184 @@
     if (![self.textView isFirstResponder]) {
         return;
     }
-
-    CGPoint point = [pan locationInView:pan.view];
-    if (point.y < self.frame.origin.y) {
-        return;
-    }
     
-    self.keyboardView = inputAccessoryForFindingKeyboard.superview;
-    // If keyboard not found then return
+    static BOOL panDidEnterIntoThisView = NO;
+    static CGFloat initialPosY          = 0;
+    static CGFloat kbInitialPosY        = 0;
+    
     if (!self.keyboardView) {
-        return;
+        self.keyboardView = inputAccessoryForFindingKeyboard.superview;
     }
     
-    CGPoint translation = [pan translationInView:pan.view];
+    CGRect frame   = self.frame;
+    CGRect kbFrame = self.keyboardView.frame;
     
-    CGRect frame = self.keyboardView.frame;
-    CGRect selfFrame = self.frame;
-    
-    frame.origin.y += translation.y;
-    selfFrame.origin.y += translation.y;
-    
-    if (frame.origin.y < self.superview.frame.size.height - keyboardFrame.size.height) {
-        frame = keyboardFrame;
+    CGPoint point = [pan locationInView:self.superview];
+
+    if (!panDidEnterIntoThisView) {
+        if (CGRectContainsPoint(self.frame, point)) {
+            panDidEnterIntoThisView = YES;
+            _viewIsDragging = YES;
+            UINavigationController *nc = [self navigationControllerInstance];
+            nc.canAutorotate = NO;
+            initialPosY = self.frame.origin.y;
+            kbInitialPosY = self.keyboardView.frame.origin.y;
+            [pan setTranslation:CGPointZero inView:pan.view];
+        }
     }
     
-    if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
-        if (frame.origin.y > keyboardFrame.origin.y + keyboardFrame.size.height/2) {
-            frame.origin.y = self.superview.frame.size.height;
-        } else {
-            frame = keyboardFrame;
+    if (_viewIsDragging)
+    {
+        CGPoint translation = [pan translationInView:pan.view];
+        
+        frame.origin.y   += translation.y;
+        kbFrame.origin.y += translation.y;
+        
+        if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled)
+        {
+            UINavigationController *nc = [self navigationControllerInstance];
+            nc.canAutorotate = YES;
+
+            panDidEnterIntoThisView = NO;
+            _viewIsDragging = NO;
+            
+            if (frame.origin.y < initialPosY + (self.frame.size.height + self.keyboardView.frame.size.height)/2) {
+                
+                frame.origin.y   = initialPosY;
+                kbFrame.origin.y = kbInitialPosY;
+                
+                [UIView animateWithDuration:keyboardDuration animations:^{
+                    self.frame = frame;
+                    self.keyboardView.frame = kbFrame;
+                }];
+                
+            } else {
+                
+                frame.origin.y   = self.superview.frame.size.height - self.frame.size.height;
+                kbFrame.origin.y = self.superview.frame.size.height;
+                
+                [UIView animateWithDuration:keyboardDuration animations:^{
+                    self.frame = frame;
+                    self.keyboardView.frame = kbFrame;
+                } completion:^(BOOL finished) {
+                    keyboardHidesFromDragging = YES;
+                    [self hideKeeyboardWithoutAnimation];
+                }];
+                
+            }
+            return;
         }
         
-        selfFrame.origin.y = frame.origin.y - selfFrame.size.height;
-        [UIView animateWithDuration:keyboardDuration animations:^{
-            self.keyboardView.frame = frame;
-//            self.frame = selfFrame;
-        } completion:^(BOOL finished) {
-            if (!CGRectEqualToRect(frame, keyboardFrame)) {
-                [self.textView resignFirstResponder];
-            }
-        }];
-        
-        return;
+        if (frame.origin.y < initialPosY) {
+            
+            UINavigationController *nc = [self navigationControllerInstance];
+            nc.canAutorotate = YES;
+            
+            panDidEnterIntoThisView = NO;
+            _viewIsDragging = NO;
+            
+            frame.origin.y   = initialPosY;
+            kbFrame.origin.y = kbInitialPosY;
+            
+            [UIView animateWithDuration:keyboardDuration animations:^{
+                self.frame = frame;
+                self.keyboardView.frame = kbFrame;
+            }];
+            
+        } else if (frame.origin.y > self.superview.frame.size.height - self.frame.size.height) {
+            
+            UINavigationController *nc = [self navigationControllerInstance];
+            nc.canAutorotate = YES;
+
+            
+            panDidEnterIntoThisView = NO;
+            _viewIsDragging = NO;
+            
+            frame.origin.y   = self.superview.frame.size.height - self.frame.size.height;
+            kbFrame.origin.y = self.superview.frame.size.height;
+            
+            [UIView animateWithDuration:keyboardDuration animations:^{
+                self.frame = frame;
+                self.keyboardView.frame = kbFrame;
+            } completion:^(BOOL finished) {
+                keyboardHidesFromDragging = YES;
+                [self hideKeeyboardWithoutAnimation];
+                
+                // Canceling pan gesture
+                pan.enabled = NO;
+                pan.enabled = YES;
+            }];
+            
+        } else {
+            
+            self.frame = frame;
+            self.keyboardView.frame = kbFrame;
+        }
     }
-    
-    self.keyboardView.frame = frame;
-    self.frame = selfFrame;
     
     [pan setTranslation:CGPointZero inView:pan.view];
 }
 
-#pragma mark -
+- (void)closeKeyboard
+{
+    CGRect frame = self.keyboardView.frame;
+    CGRect selfFrame = self.frame;
+    frame.origin.y = self.superview.frame.size.height;
+    selfFrame.origin.y = frame.origin.y - selfFrame.size.height;
+
+    __weak SOMessageInputView *weakSelf = self;
+    [UIView animateWithDuration:keyboardDuration animations:^{
+        weakSelf.keyboardView.frame = frame;
+        weakSelf.frame = selfFrame;
+    } completion:^(BOOL finished) {
+        [self hideKeeyboardWithoutAnimation];
+    }];
+}
+
+- (void)hideKeeyboardWithoutAnimation
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.0];
+    [UIView setAnimationDelay:0.0];
+    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+    
+    [self.textView resignFirstResponder];
+    
+    [UIView commitAnimations];
+}
+
+#pragma mark - 
+- (UINavigationController*)navigationControllerInstance
+{
+    UINavigationController *resultNVC = nil;
+    UIViewController *vc = nil;
+    for (UIView* next = [self superview]; next; next = next.superview)
+    {
+        UIResponder* nextResponder = [next nextResponder];
+        
+        if ([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            vc = (UIViewController*)nextResponder;
+            break;
+        }
+    }
+    
+    if (vc)
+    {
+        if ([vc isKindOfClass:[UINavigationController class]])
+        {
+            resultNVC = (UINavigationController *)vc;
+        }
+        else
+        {
+            resultNVC = vc.navigationController;
+        }
+    }
+    
+    return resultNVC;
+}
+
+#pragma mark - Gestures delegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     return YES;
