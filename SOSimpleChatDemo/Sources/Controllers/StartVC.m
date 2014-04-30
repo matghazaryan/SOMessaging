@@ -33,7 +33,7 @@
         SOMessage *message = [[SOMessage alloc] init];
         message.fromMe = i%2;
         
-        message.text = @"Hello, how are you? Hello, how are you? Hello, how are you?";
+        message.text = [NSString stringWithFormat:@"Hello, how are you? %d Hello, how are you? Hello, how are you?",i];
         
         [self.dataSource addObject:message];
     }
@@ -41,13 +41,14 @@
     SOMessage *msg = [SOMessage new];
     msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"doggy.jpg"], 1);
 
-    msg.type = SOMessageTypePhoto;
+//    msg.type = SOMessageTypePhoto;
+    msg.text = @"asldanafdsgf";
     msg.fromMe = YES;
-    [self.dataSource addObject:msg];    
+    [self.dataSource addObject:msg];
 }
 
 #pragma mark - SOMessaging data source
-- (NSArray *)messages
+- (NSMutableArray *)messages
 {
     return self.dataSource;
 }
@@ -63,21 +64,21 @@
     if (!message.fromMe) {
         if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
             CGRect frame = cell.mediaImageView.frame;
-            frame.origin.x -= 2;
+            frame.origin.x += 2.5f;
             cell.mediaImageView.frame = frame;
         } else {
             CGRect frame = cell.textView.frame;
-            frame.origin.x -= 2;
+            frame.origin.x += 2.5f;
             cell.textView.frame = frame;
         }
     } else {
         if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
             CGRect frame = cell.mediaImageView.frame;
-            frame.origin.x += 2;
+            frame.origin.x -= 2.5f;
             cell.mediaImageView.frame = frame;
         } else {
             CGRect frame = cell.textView.frame;
-            frame.origin.x += 2;
+            frame.origin.x -= 2.5f;
             cell.textView.frame = frame;
         }
     }
@@ -92,7 +93,15 @@
 
 - (void)messageInputView:(SOMessageInputView *)inputView didSendMessage:(NSString *)message
 {
-    
+    if (![[message stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
+        return;
+    }
+
+    SOMessage *msg = [[SOMessage alloc] init];
+    msg.text = message;
+    msg.fromMe = YES;
+
+    [self sendMessage:msg];
 }
 
 - (void)messageInputViewDidSelectMediaButton:(SOMessageInputView *)inputView

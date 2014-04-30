@@ -21,7 +21,7 @@
 
 @property (strong, nonatomic) UIView *tableViewHeaderView;
 
-@property (strong, nonatomic) NSArray *dataSource;
+@property (strong, nonatomic) NSMutableArray *dataSource;
 
 @end
 
@@ -42,6 +42,7 @@
     [self.view addSubview:self.tableView];
     
     self.inputView = [[SOMessageInputView alloc] init];
+    self.inputView.delegate = self;
     self.inputView.tableView = self.tableView;
     [self.view addSubview:self.inputView];
     [self.inputView adjustPosition];
@@ -105,11 +106,11 @@
         if (message.attributes) {
             size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
         }
-        height = size.height + kMessageMargin + kBubbleTopMargin + kBubbleBottomMargin;
+        height = size.height + [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin] + kBubbleTopMargin + kBubbleBottomMargin;
     } else {
         CGSize size = [self mediaThumbnailSize];
 
-        height = size.height + kMessageMargin + kBubbleTopMargin + kBubbleBottomMargin;
+        height = size.height + [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin] + kBubbleTopMargin + kBubbleBottomMargin;
     }
     return height;
 }
@@ -137,11 +138,12 @@
     }
     
     cell.delegate = self;
+    cell.messageFont = [self messageFont];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.balloonImage = message.fromMe ? self.balloonSendImage : self.balloonReceiveImage;
     cell.textView.textColor = message.fromMe ? [UIColor whiteColor] : [UIColor blackColor];
     cell.message = message;    
- 
+    
     // For user customization
     [self configureMessageCell:cell forMessageAtIndex:indexPath.row];
     
@@ -149,7 +151,7 @@
 }
 
 #pragma mark - SOMessaging datasource
-- (NSArray *)messages
+- (NSMutableArray *)messages
 {
     return nil;
 }
@@ -172,7 +174,7 @@
     UIImage *bubble = [UIImage imageNamed:@"bubble.png"];
     UIColor *color = [UIColor colorWithRed:74.0/255.0 green:186.0/255.0 blue:251.0/255.0 alpha:1.0];
     bubble = [self tintImage:bubble withColor:color];
-    return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(17, 21, 17, 27)];
+    return [bubble resizableImageWithCapInsets:UIEdgeInsetsMake(17, 21, 16, 27)];
 }
 
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
@@ -187,12 +189,66 @@
 
 - (UIFont *)messageFont
 {
-    return [UIFont fontWithName:@"HelveticaNeue-Roman" size:12];
+    return [UIFont fontWithName:@"HelveticaNeue" size:16];
+}
+
++ (void)logFontnamesOfAllFonts
+{
+    NSArray *familyNames = [[NSArray alloc] initWithArray:[UIFont familyNames]];
+    
+    NSArray *fontNames;
+    NSInteger indFamily, indFont;
+    for (indFamily=0; indFamily<[familyNames count]; ++indFamily)
+    {
+        NSLog(@"Family name: %@", [familyNames objectAtIndex:indFamily]);
+        fontNames = [[NSArray alloc] initWithArray:
+                     [UIFont fontNamesForFamilyName:
+                      [familyNames objectAtIndex:indFamily]]];
+        for (indFont=0; indFont<[fontNames count]; ++indFont)
+        {
+            NSLog(@"    Font name: %@", [fontNames objectAtIndex:indFont]);
+        }
+    }
 }
 
 - (CGSize)mediaThumbnailSize
 {
     return CGSizeMake(90, 100);
+}
+
+#pragma mark - Public methods
+- (void)sendMessage:(SOMessage *)message
+{
+    message.fromMe = YES;
+    [self.dataSource addObject:message];
+    [self.tableView reloadData];
+ 
+    NSInteger section = [self.tableView numberOfSections] - 1;
+    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void)receiveMessage:(SOMessage *)message
+{
+    message.fromMe = NO;
+    [self.dataSource addObject:message];
+    [self.tableView reloadData];
+    
+    NSInteger section = [self.tableView numberOfSections] - 1;
+    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void)refreshMessages
+{
+    self.dataSource = [self messages];
+    
+    NSInteger section = [self.tableView numberOfSections] - 1;
+    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 #pragma mark - SOMessaging delegate

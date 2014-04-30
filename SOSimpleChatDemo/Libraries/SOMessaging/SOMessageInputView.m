@@ -190,12 +190,13 @@
 #pragma mark - Actions
 - (void)sendTapped:(id)sender
 {
-    [self.textView resignFirstResponder];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(messageInputView:didSendMessage:)]) {
-        [self.delegate messageInputView:self didSendMessage:self.textView.text];
-    }
-    
+    NSString *msg = self.textView.text;
     self.textView.text = @"";
+    [self adjustTextViewSize];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(messageInputView:didSendMessage:)]) {
+        [self.delegate messageInputView:self didSendMessage:msg];
+    }
 }
 
 - (void)mediaTapped:(id)sender
@@ -230,7 +231,7 @@
         }
         
         
-        [UIView animateWithDuration:keyboardDuration animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             self.frame = frm;
 
         } completion:^(BOOL finished) {

@@ -16,7 +16,7 @@
 /**
  * Array of SOMessage objects.
  */
-- (NSArray *)messages;
+- (NSMutableArray *)messages;
 
 /**
  * Messages will be grouped by returned time interval (in seconds).

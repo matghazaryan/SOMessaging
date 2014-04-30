@@ -8,6 +8,12 @@
 
 #import "SOPlaceholderedTextView.h"
 
+@interface SOPlaceholderedTextView()
+
+@property (strong, nonatomic) UILabel *placeholderLabel;
+
+@end
+
 @implementation SOPlaceholderedTextView
 
 - (id)init
@@ -29,8 +35,11 @@
 - (void)setup
 {
     self.placeholderTextColor = [UIColor lightGrayColor];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextDidChange:) name:UITextViewTextDidChangeNotification object:self];
+    self.placeholderLabel = [[UILabel alloc] init];
+    [self addSubview:self.placeholderLabel];
+    self.placeholderLabel.hidden = YES;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextDidChange:) name:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setPlaceholderText:(NSString *)placeholderText
@@ -85,7 +94,11 @@
         }
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:self.placeholderText attributes:@{NSForegroundColorAttributeName : self.placeholderTextColor, NSFontAttributeName : self.font}];
         
-        [attrString drawAtPoint:CGPointMake(0, 0)];
+        self.placeholderLabel.attributedText = attrString;
+        [self.placeholderLabel sizeToFit];
+        self.placeholderLabel.hidden = NO;
+    } else {
+        self.placeholderLabel.hidden = YES;
     }
 }
 

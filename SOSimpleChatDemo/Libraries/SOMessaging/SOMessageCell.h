@@ -12,8 +12,7 @@
 #define kBubbleTopMargin 0
 #define kBubbleLeftMargin 5
 #define kBubbleRightMargin 5
-#define kBubbleBottomMargin 10
-#define kMessageMargin 10
+#define kBubbleBottomMargin 20
 
 @class SOMessageCell;
 @protocol SOMessageCellDelegate <NSObject>
@@ -36,6 +35,15 @@
 @property (strong, nonatomic) UIImageView *mediaImageView;
 
 @property (strong, nonatomic) UIImageView *balloonImageView;
+
++ (CGFloat) messageTopMargin;
++ (void) setMessageTopMargin:(CGFloat)margin;
++ (CGFloat) messageBottomMargin;
++ (void) setMessageBottomMargin:(CGFloat)margin;
++ (CGFloat) messageLeftMargin;
++ (void) setMessageLeftMargin:(CGFloat)margin;
++ (CGFloat) messageRightMargin;
++ (void) setMessageRightMargin:(CGFloat)margin;
 
 @property (nonatomic) CGFloat messageMaxWidth;
 
