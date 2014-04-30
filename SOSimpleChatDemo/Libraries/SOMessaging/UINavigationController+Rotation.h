@@ -10,6 +10,6 @@
 
 @interface UINavigationController (Rotation)
 
-@property (nonatomic) BOOL canAutorotate;
+@property (nonatomic) BOOL cantAutorotate;
 
 @end

@@ -11,7 +11,7 @@
 
 @implementation UINavigationController (Rotation)
 
-NSString const *kCanAutorotateKey = @"canAutorotate.key";
+NSString const *kCantAutorotateKey = @"cantAutorotate.key";
 
 + (void)load
 {
@@ -27,20 +27,20 @@ NSString const *kCanAutorotateKey = @"canAutorotate.key";
 }
 
 #pragma mark - Getters
-- (BOOL)canAutorotate
+- (BOOL)cantAutorotate
 {
-    return [objc_getAssociatedObject(self, &kCanAutorotateKey) boolValue];
+    return [objc_getAssociatedObject(self, &kCantAutorotateKey) boolValue];
 }
 
 #pragma mark - Setters
-- (void)setCanAutorotate:(BOOL)canAutorotate
+- (void)setCantAutorotate:(BOOL)cantAutorotate
 {
-    objc_setAssociatedObject(self, &kCanAutorotateKey, @(canAutorotate), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &kCantAutorotateKey, @(cantAutorotate), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)my_shouldAutorotate
 {
-    if (!self.canAutorotate) {
+    if (self.cantAutorotate) {
         return NO;
     }
     return [self my_shouldAutorotate];
