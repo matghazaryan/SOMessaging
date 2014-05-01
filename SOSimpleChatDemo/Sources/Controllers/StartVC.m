@@ -41,8 +41,8 @@
     SOMessage *msg = [SOMessage new];
     msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"doggy.jpg"], 1);
 
-//    msg.type = SOMessageTypePhoto;
-    msg.text = @"asldanafdsgf";
+    msg.type = SOMessageTypePhoto;
+//    msg.text = @"asldanafdsgf";
     msg.fromMe = YES;
     [self.dataSource addObject:msg];
 }
@@ -64,21 +64,21 @@
     if (!message.fromMe) {
         if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
             CGRect frame = cell.mediaImageView.frame;
-            frame.origin.x += 2.5f;
+            frame.origin.x += 3.0f;
             cell.mediaImageView.frame = frame;
         } else {
             CGRect frame = cell.textView.frame;
-            frame.origin.x += 2.5f;
+            frame.origin.x += 3.0f;
             cell.textView.frame = frame;
         }
     } else {
         if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
             CGRect frame = cell.mediaImageView.frame;
-            frame.origin.x -= 2.5f;
+            frame.origin.x -= 3.0f;
             cell.mediaImageView.frame = frame;
         } else {
             CGRect frame = cell.textView.frame;
-            frame.origin.x -= 2.5f;
+            frame.origin.x -= 3.0f;
             cell.textView.frame = frame;
         }
     }
