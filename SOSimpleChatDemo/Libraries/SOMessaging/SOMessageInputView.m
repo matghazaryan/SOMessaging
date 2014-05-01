@@ -319,12 +319,18 @@
 
 - (void)handlePan:(UIPanGestureRecognizer *)pan
 {
+    static CGPoint panStartPos;
+    if (pan.state == UIGestureRecognizerStateBegan) {
+        panStartPos = [pan locationInView:self.superview];
+    }
+    
     // if keyboard isn't opened then return.
     if (![self.textView isFirstResponder]) {
         return;
     }
     
     static BOOL panDidEnterIntoThisView = NO;
+    static BOOL panDidStartetFromThisView = NO;
     static CGFloat initialPosY          = 0;
     static CGFloat kbInitialPosY        = 0;
     
@@ -349,6 +355,14 @@
         }
     }
     
+    if (pan.state == UIGestureRecognizerStateBegan) {
+        if (CGRectContainsPoint(self.frame, panStartPos)) {
+            panDidStartetFromThisView = YES;
+        } else {
+            panDidStartetFromThisView = NO;
+        }
+    }
+    
     if (_viewIsDragging)
     {
         CGPoint translation = [pan translationInView:pan.view];
@@ -362,10 +376,13 @@
             nc.cantAutorotate = NO;
 
             panDidEnterIntoThisView = NO;
+            panDidStartetFromThisView = NO;
             _viewIsDragging = NO;
             
-            if (frame.origin.y < initialPosY + (self.frame.size.height + self.keyboardView.frame.size.height)/2) {
-                
+            CGPoint vel = [pan velocityInView:pan.view];
+
+         /* if (frame.origin.y < initialPosY + (self.frame.size.height + self.keyboardView.frame.size.height)/2 && NO) { */
+            if (vel.y < 0) { // if scroll direction is up , then fully open keyboard
                 frame.origin.y   = initialPosY;
                 kbFrame.origin.y = kbInitialPosY;
                 
@@ -374,7 +391,7 @@
                     self.keyboardView.frame = kbFrame;
                 }];
                 
-            } else {
+            } else { // else , if scroll direction is down , then close keyboard
                 
                 frame.origin.y   = self.superview.frame.size.height - self.frame.size.height;
                 kbFrame.origin.y = self.superview.frame.size.height;
@@ -386,8 +403,18 @@
                     keyboardHidesFromDragging = YES;
                     [self hideKeeyboardWithoutAnimation];
                 }];
-                
+                kbFrame.size.height = 0;
             }
+
+            UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, kbFrame.size.height + self.frame.size.height, 0.0);
+            [UIView beginAnimations:@"animKb" context:NULL];
+            [UIView setAnimationDuration:keyboardDuration];
+
+            self.tableView.contentInset = contentInsets;
+            self.tableView.scrollIndicatorInsets = contentInsets;
+
+            [UIView commitAnimations];
+            
             return;
         }
         
@@ -435,6 +462,13 @@
             
             self.frame = frame;
             self.keyboardView.frame = kbFrame;
+            
+            if (panDidStartetFromThisView) {
+                UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, keyboardFrame.size.height - (kbFrame.origin.y - keyboardFrame.origin.y) + self.frame.size.height, 0.0);
+                
+                self.tableView.contentInset = contentInsets;
+                self.tableView.scrollIndicatorInsets = contentInsets;
+            }
         }
     }
     
