@@ -12,7 +12,7 @@
 
 #import "NSString+Calculation.h"
 
-#define kMessageMaxWidth 270.0f
+#define kMessageMaxWidth 240.0f
 
 @interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate, SOMessageCellDelegate>
 
@@ -106,6 +106,9 @@
         if (message.attributes) {
             size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
         }
+        if ([self messageMinHeight] && size.height < [self messageMinHeight]) {
+            size.height = [self messageMinHeight];
+        }
         height = size.height + [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin] + kBubbleTopMargin + kBubbleBottomMargin;
     } else {
         CGSize size = [self mediaThumbnailSize];
@@ -135,8 +138,10 @@
                                     reuseIdentifier:cellIdentifier
                                     messageMaxWidth:[self messageMaxWidth]];
         [cell setMediaImageViewSize:[self mediaThumbnailSize]];
+        [cell setUserImageViewSize:[self userImageSize]];
     }
-    
+    cell.tableView = self.tableView;
+    cell.messageMinHeight = [self messageMinHeight];
     cell.delegate = self;
     cell.messageFont = [self messageFont];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -185,6 +190,11 @@
 - (CGFloat)messageMaxWidth
 {
     return kMessageMaxWidth;
+}
+
+- (CGFloat)messageMinHeight
+{
+    return 0;
 }
 
 - (UIFont *)messageFont

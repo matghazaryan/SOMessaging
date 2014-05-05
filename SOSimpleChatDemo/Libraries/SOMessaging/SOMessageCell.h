@@ -24,10 +24,11 @@
 
 @interface SOMessageCell : UITableViewCell
 
+@property (weak, nonatomic) UITableView *tableView;
 @property (weak, nonatomic) SOMessage *message;
 @property (weak, nonatomic) UIImage *balloonImage;
+@property (weak, nonatomic) UIImage *userImage;
 @property (strong, nonatomic) UIFont *messageFont;
-
 
 @property (strong, nonatomic) UIImageView *userImageView;
 @property (strong, nonatomic) UITextView *textView;
@@ -35,6 +36,8 @@
 @property (strong, nonatomic) UIImageView *mediaImageView;
 
 @property (strong, nonatomic) UIImageView *balloonImageView;
+
+@property (strong, nonatomic) UIPanGestureRecognizer *panGesture;
 
 + (CGFloat) messageTopMargin;
 + (void) setMessageTopMargin:(CGFloat)margin;
@@ -45,7 +48,11 @@
 + (CGFloat) messageRightMargin;
 + (void) setMessageRightMargin:(CGFloat)margin;
 
++ (CGFloat) maxContentOffsetX;
++ (void) setMaxContentOffsetX:(CGFloat)offsetX;
+
 @property (nonatomic) CGFloat messageMaxWidth;
+@property (nonatomic) CGFloat messageMinHeight;
 
 @property (strong, nonatomic) UIView *containerView;
 
@@ -53,6 +60,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth;
 - (void)setMediaImageViewSize:(CGSize)size;
+- (void)setUserImageViewSize:(CGSize)size;
 
 - (void)adjustCell;
 

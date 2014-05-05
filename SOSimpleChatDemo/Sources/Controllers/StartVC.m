@@ -39,7 +39,7 @@
     }
     
     SOMessage *msg = [SOMessage new];
-    msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"doggy.jpg"], 1);
+    msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
 
     msg.type = SOMessageTypePhoto;
 //    msg.text = @"asldanafdsgf";
@@ -82,8 +82,26 @@
             cell.textView.frame = frame;
         }
     }
+    
+    cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;
+    cell.userImageView.autoresizingMask = message.fromMe ? UIViewAutoresizingFlexibleTopMargin : UIViewAutoresizingFlexibleBottomMargin;
+    cell.userImage = [UIImage imageNamed:@"lion.jpg"];
 }
 
+- (CGFloat)messageMaxWidth
+{
+    return 200;
+}
+
+- (CGSize)userImageSize
+{
+    return CGSizeMake(40, 40);
+}
+
+- (CGFloat)messageMinHeight
+{
+    return 40;
+}
 #pragma mark - SOMessaging delegate
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell
 {

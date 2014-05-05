@@ -47,6 +47,11 @@
 - (CGFloat)messageMaxWidth;
 
 /**
+ * Minimum height of message
+ */
+- (CGFloat)messageMinHeight;
+
+/**
  * Font of message
  */
 - (UIFont *)messageFont;
@@ -55,5 +60,10 @@
  * Size of photo or video thumbnail imageView
  */
 - (CGSize)mediaThumbnailSize;
+
+/**
+ * Size user's imageview
+ */
+- (CGSize)userImageSize;
 
  @end
