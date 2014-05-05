@@ -42,7 +42,6 @@
     msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
 
     msg.type = SOMessageTypePhoto;
-//    msg.text = @"asldanafdsgf";
     msg.fromMe = YES;
     [self.dataSource addObject:msg];
 }
@@ -61,6 +60,11 @@
 - (void) configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
     SOMessage *message = self.dataSource[index];
+    
+    cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;
+    cell.userImageView.autoresizingMask = message.fromMe ? UIViewAutoresizingFlexibleTopMargin : UIViewAutoresizingFlexibleBottomMargin;
+    cell.userImage = [UIImage imageNamed:@"lion.jpg"];
+    
     if (!message.fromMe) {
         if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
             CGRect frame = cell.mediaImageView.frame;
@@ -82,10 +86,6 @@
             cell.textView.frame = frame;
         }
     }
-    
-    cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;
-    cell.userImageView.autoresizingMask = message.fromMe ? UIViewAutoresizingFlexibleTopMargin : UIViewAutoresizingFlexibleBottomMargin;
-    cell.userImage = [UIImage imageNamed:@"lion.jpg"];
 }
 
 - (CGFloat)messageMaxWidth
@@ -100,7 +100,7 @@
 
 - (CGFloat)messageMinHeight
 {
-    return 40;
+    return 0;
 }
 #pragma mark - SOMessaging delegate
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell

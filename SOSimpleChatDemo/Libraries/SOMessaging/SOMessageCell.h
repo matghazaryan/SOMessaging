@@ -10,8 +10,8 @@
 #import "SOMessage.h"
 
 #define kBubbleTopMargin 0
-#define kBubbleLeftMargin 5
-#define kBubbleRightMargin 5
+#define kBubbleLeftMargin 7
+#define kBubbleRightMargin 7
 #define kBubbleBottomMargin 20
 
 @class SOMessageCell;
@@ -34,6 +34,7 @@
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UILabel *label;
 @property (strong, nonatomic) UIImageView *mediaImageView;
+@property (strong, nonatomic) UIView *otherView; //appears while dragging cell
 
 @property (strong, nonatomic) UIImageView *balloonImageView;
 

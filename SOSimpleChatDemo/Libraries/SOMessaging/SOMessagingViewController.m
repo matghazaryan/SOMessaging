@@ -106,14 +106,19 @@
         if (message.attributes) {
             size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
         }
+        
         if ([self messageMinHeight] && size.height < [self messageMinHeight]) {
             size.height = [self messageMinHeight];
         }
-        height = size.height + [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin] + kBubbleTopMargin + kBubbleBottomMargin;
+        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
+        height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
     } else {
         CGSize size = [self mediaThumbnailSize];
-
-        height = size.height + [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin] + kBubbleTopMargin + kBubbleBottomMargin;
+        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
+        if (size.height < [self userImageSize].height) {
+            size.height = [self userImageSize].height;
+        }
+        height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
     }
     return height;
 }
@@ -200,25 +205,6 @@
 - (UIFont *)messageFont
 {
     return [UIFont fontWithName:@"HelveticaNeue" size:16];
-}
-
-+ (void)logFontnamesOfAllFonts
-{
-    NSArray *familyNames = [[NSArray alloc] initWithArray:[UIFont familyNames]];
-    
-    NSArray *fontNames;
-    NSInteger indFamily, indFont;
-    for (indFamily=0; indFamily<[familyNames count]; ++indFamily)
-    {
-        NSLog(@"Family name: %@", [familyNames objectAtIndex:indFamily]);
-        fontNames = [[NSArray alloc] initWithArray:
-                     [UIFont fontNamesForFamilyName:
-                      [familyNames objectAtIndex:indFamily]]];
-        for (indFont=0; indFont<[fontNames count]; ++indFont)
-        {
-            NSLog(@"    Font name: %@", [fontNames objectAtIndex:indFont]);
-        }
-    }
 }
 
 - (CGSize)mediaThumbnailSize

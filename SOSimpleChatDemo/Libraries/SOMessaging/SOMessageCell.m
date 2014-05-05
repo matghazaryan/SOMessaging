@@ -102,6 +102,7 @@ static CGFloat contentOffsetX;
     [self hideSubViews];
     
     self.containerView = [[UIView alloc] initWithFrame:self.contentView.bounds];
+    self.containerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     
     [self.contentView addSubview:self.containerView];
     
@@ -139,6 +140,9 @@ static CGFloat contentOffsetX;
 - (void)setUserImage:(UIImage *)userImage
 {
     _userImage = userImage;
+    if (!userImage) {
+        self.userImageViewSize = CGSizeZero;
+    }
     [self adjustCell];
 }
 #pragma mark -
@@ -194,6 +198,8 @@ static CGFloat contentOffsetX;
 //---
 - (void)adjustForTextOnly
 {
+    CGFloat userImageViewLeftMargin = 3;
+    
     CGRect usedFrame = CGRectZero;
     if (self.message.attributes) {
         NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:self.message.text attributes:self.message.attributes];
@@ -218,10 +224,17 @@ static CGFloat contentOffsetX;
     CGRect balloonFrame = self.balloonImageView.frame;
     balloonFrame.size.width = frame.size.width + messageLeftMargin + messageRightMargin;
     balloonFrame.size.height = frame.size.height + messageTopMargin + messageBottomMargin;
-    
+    balloonFrame.origin.y = 0;
     frame.origin.x = self.message.fromMe ? messageLeftMargin : (balloonFrame.size.width - frame.size.width - messageLeftMargin);
+    if (!self.message.fromMe) {
+        frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
+        balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
+    }
+    
     
     self.textView.frame = frame;
+    
+
     
     self.balloonImageView.frame = balloonFrame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
@@ -239,7 +252,7 @@ static CGFloat contentOffsetX;
     } else {
         userRect.origin.y = 0;
     }
-    CGFloat userImageViewLeftMargin = 3;
+
     if (self.message.fromMe) {
         userRect.origin.x = balloonFrame.origin.x + userImageViewLeftMargin + balloonFrame.size.width;
     } else {
@@ -257,17 +270,28 @@ static CGFloat contentOffsetX;
         frm.size.width += userImageViewLeftMargin + userRect.size.width;
         if (self.message.fromMe) {
             frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
-        } else {
-            frm.origin.x += userImageViewLeftMargin + userRect.size.width;
         }
     }
     frm.size.height = balloonFrame.size.height;
+
+    if (frm.size.height < self.userImageViewSize.height) {
+        CGFloat delta = self.userImageViewSize.height - frm.size.height;
+        frm.size.height = self.userImageViewSize.height;
+        
+        for (UIView *sub in self.containerView.subviews) {
+            CGRect fr = sub.frame;
+            fr.origin.y += delta;
+            sub.frame = fr;
+        }
+    }
     self.containerView.frame = frm;
 }
 
 //---
 - (void)adjustForPhotoOnly
 {
+    CGFloat userImageViewLeftMargin = 3;
+
     UIImage *image = [[UIImage alloc] initWithData:self.message.media];
     self.mediaImageView.image = image;
 
@@ -279,6 +303,10 @@ static CGFloat contentOffsetX;
     
     frame.origin.x = self.message.fromMe ? messageLeftMargin : (balloonFrame.size.width - frame.size.width - messageLeftMargin);
     frame.origin.y = messageTopMargin;
+    if (!self.message.fromMe) {
+        frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
+        balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
+    }
     
     self.mediaImageView.frame = frame;
     
@@ -286,14 +314,54 @@ static CGFloat contentOffsetX;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
     self.balloonImageView.image = self.balloonImage;
     
+    CGRect userRect = self.userImageView.frame;
+    
+    if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
+        userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
+    } else {
+        userRect.origin.y = 0;
+    }
+    
+    if (self.message.fromMe) {
+        userRect.origin.x = balloonFrame.origin.x + userImageViewLeftMargin + balloonFrame.size.width;
+    } else {
+        userRect.origin.x = balloonFrame.origin.x - userImageViewLeftMargin - userRect.size.width;
+    }
+    self.userImageView.frame = userRect;
+    self.userImageView.image = self.userImage;
     
     CGRect frm = self.containerView.frame;
     frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
     frm.origin.y = kBubbleTopMargin;
     frm.size.width = balloonFrame.size.width;
+    if (!CGSizeEqualToSize(userRect.size, CGSizeZero)) {
+        self.userImageView.hidden = NO;
+        frm.size.width += userImageViewLeftMargin + userRect.size.width;
+        if (self.message.fromMe) {
+            frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
+        }
+    }
+
     frm.size.height = balloonFrame.size.height;
+    if (frm.size.height < self.userImageViewSize.height) {
+        CGFloat delta = self.userImageViewSize.height - frm.size.height;
+        frm.size.height = self.userImageViewSize.height;
+        
+        for (UIView *sub in self.containerView.subviews) {
+            CGRect fr = sub.frame;
+            fr.origin.y += delta;
+            sub.frame = fr;
+        }
+    }
     self.containerView.frame = frm;
 }
+
+- (void)adjustForVideoOnly
+{
+    [self adjustForPhotoOnly];
+    
+}
+
 
 //---
 
@@ -326,7 +394,8 @@ static CGFloat contentOffsetX;
         NSArray *visibleCells = [self.tableView visibleCells];
         
         if (pan.state == UIGestureRecognizerStateEnded) {
-            [UIView animateWithDuration:0.2 animations:^{
+            [UIView animateWithDuration:0.25 animations:^{
+                [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
                 for (SOMessageCell *cell in visibleCells) {
                     
                     contentOffsetX = 0;
