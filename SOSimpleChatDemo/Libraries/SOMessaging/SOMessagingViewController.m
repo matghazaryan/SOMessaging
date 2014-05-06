@@ -114,7 +114,7 @@
         height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
     } else {
         CGSize size = [self mediaThumbnailSize];
-        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
+//        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
         if (size.height < [self userImageSize].height) {
             size.height = [self userImageSize].height;
         }

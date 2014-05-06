@@ -14,6 +14,9 @@
 
 @property (strong, nonatomic) NSMutableArray *dataSource;
 
+@property (strong, nonatomic) UIImage *myImage;
+@property (strong, nonatomic) UIImage *partnerImage;
+
 @end
 
 @implementation StartVC
@@ -22,6 +25,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.myImage      = [UIImage imageNamed:@"arturdev.jpg"];
+    self.partnerImage = [UIImage imageNamed:@"jobs.jpg"];
     
     [self loadMessages];
 }
@@ -42,7 +48,7 @@
     msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
 
     msg.type = SOMessageTypePhoto;
-    msg.fromMe = YES;
+//    msg.fromMe = YES;
     [self.dataSource addObject:msg];
 }
 
@@ -63,7 +69,8 @@
     
     cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;
     cell.userImageView.autoresizingMask = message.fromMe ? UIViewAutoresizingFlexibleTopMargin : UIViewAutoresizingFlexibleBottomMargin;
-    cell.userImage = [UIImage imageNamed:@"lion.jpg"];
+    
+    cell.userImage = message.fromMe ? self.myImage : self.partnerImage;
     
     if (!message.fromMe) {
         if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {

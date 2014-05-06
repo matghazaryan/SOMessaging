@@ -90,7 +90,7 @@ static CGFloat contentOffsetX;
     self.mediaImageView.clipsToBounds = YES;
     self.mediaImageView.backgroundColor = [UIColor clearColor];
     self.mediaImageView.userInteractionEnabled = YES;
-    self.mediaImageView.layer.cornerRadius = 10;
+//    self.mediaImageView.layer.cornerRadius = 10;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMediaTapped:)];
     [self.mediaImageView addGestureRecognizer:tap];
     
@@ -226,15 +226,13 @@ static CGFloat contentOffsetX;
     balloonFrame.size.height = frame.size.height + messageTopMargin + messageBottomMargin;
     balloonFrame.origin.y = 0;
     frame.origin.x = self.message.fromMe ? messageLeftMargin : (balloonFrame.size.width - frame.size.width - messageLeftMargin);
-    if (!self.message.fromMe) {
+    if (!self.message.fromMe && self.userImage) {
         frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
         balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
     }
     
     
     self.textView.frame = frame;
-    
-
     
     self.balloonImageView.frame = balloonFrame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
@@ -265,7 +263,7 @@ static CGFloat contentOffsetX;
     frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
     frm.origin.y = kBubbleTopMargin;
     frm.size.width = balloonFrame.size.width;
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero)) {
+    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
         frm.size.width += userImageViewLeftMargin + userRect.size.width;
         if (self.message.fromMe) {
@@ -298,12 +296,13 @@ static CGFloat contentOffsetX;
     CGRect frame = self.mediaImageView.frame;    
     
     CGRect balloonFrame = self.balloonImageView.frame;
-    balloonFrame.size.width = frame.size.width + messageLeftMargin + messageRightMargin;
-    balloonFrame.size.height = frame.size.height + messageTopMargin + messageBottomMargin;
+    balloonFrame.size.width = frame.size.width;// + messageLeftMargin + messageRightMargin;
+    balloonFrame.size.height = frame.size.height;// + messageTopMargin + messageBottomMargin;
     
-    frame.origin.x = self.message.fromMe ? messageLeftMargin : (balloonFrame.size.width - frame.size.width - messageLeftMargin);
-    frame.origin.y = messageTopMargin;
-    if (!self.message.fromMe) {
+    frame.origin.x = self.message.fromMe ? 0 : (balloonFrame.size.width - frame.size.width);
+    frame.origin.y = 0;
+
+    if (!self.message.fromMe && self.userImage) {
         frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
         balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
     }
@@ -334,7 +333,7 @@ static CGFloat contentOffsetX;
     frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
     frm.origin.y = kBubbleTopMargin;
     frm.size.width = balloonFrame.size.width;
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero)) {
+    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
         frm.size.width += userImageViewLeftMargin + userRect.size.width;
         if (self.message.fromMe) {
@@ -354,6 +353,13 @@ static CGFloat contentOffsetX;
         }
     }
     self.containerView.frame = frm;
+
+//    self.mediaImageView.hidden = YES;
+//    self.balloonImageView.hidden = YES;
+    //Masking mediaImageView with balloon image
+
+    self.mediaImageView.layer.mask = self.balloonImageView.layer;
+    [self.mediaImageView setNeedsDisplay];
 }
 
 - (void)adjustForVideoOnly
