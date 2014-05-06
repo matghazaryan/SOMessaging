@@ -67,6 +67,7 @@ static CGFloat contentOffsetX;
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.messageMaxWidth, 0)];
     self.label = [[UILabel alloc] init];
     self.mediaImageView = [[UIImageView alloc] init];
+    self.mediaOverlayView = [[UIView alloc] init];
     self.balloonImageView = [[UIImageView alloc] init];
 
     if (!CGSizeEqualToSize(self.userImageViewSize, CGSizeZero)) {
@@ -93,6 +94,9 @@ static CGFloat contentOffsetX;
 //    self.mediaImageView.layer.cornerRadius = 10;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMediaTapped:)];
     [self.mediaImageView addGestureRecognizer:tap];
+    
+    self.mediaOverlayView.backgroundColor = [UIColor clearColor];
+    [self.mediaImageView addSubview:self.mediaOverlayView];
     
     self.textView.textColor = [UIColor whiteColor];
     self.textView.backgroundColor = [UIColor clearColor];
@@ -160,7 +164,7 @@ static CGFloat contentOffsetX;
     _message = message;
  
     [self setInitialSizes];
-    [self adjustCell];
+//    [self adjustCell];
 }
 
 - (void)adjustCell
@@ -175,7 +179,7 @@ static CGFloat contentOffsetX;
         [self adjustForPhotoOnly];
     } else if (self.message.type == SOMessageTypeVideo) {
         self.mediaImageView.hidden = NO;
-        
+        [self adjustForVideoOnly];
     } else if (self.message.type == SOMessageTypeOther) {
         
     }
@@ -231,6 +235,7 @@ static CGFloat contentOffsetX;
         balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
     }
     
+    frame.origin.x += self.contentInsets.left - self.contentInsets.right;
     
     self.textView.frame = frame;
     
@@ -289,13 +294,16 @@ static CGFloat contentOffsetX;
 - (void)adjustForPhotoOnly
 {
     CGFloat userImageViewLeftMargin = 3;
-
-    UIImage *image = [[UIImage alloc] initWithData:self.message.media];
+    
+    UIImage *image = self.message.thumbnail;
+    if (!image) {
+        image = [[UIImage alloc] initWithData:self.message.media];
+    }
     self.mediaImageView.image = image;
 
     CGRect frame = CGRectZero;
     frame.size = self.mediaImageViewSize;
-    
+
     if (!self.message.fromMe && self.userImage) {
         frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
     }
@@ -348,10 +356,8 @@ static CGFloat contentOffsetX;
     self.containerView.frame = frm;
 
     //Masking mediaImageView with balloon image
-
     CALayer *layer = self.balloonImageView.layer;
     layer.frame    = (CGRect){{0,0},self.balloonImageView.layer.frame.size};
-
     self.mediaImageView.layer.mask = layer;
     [self.mediaImageView setNeedsDisplay];
 }
@@ -360,6 +366,28 @@ static CGFloat contentOffsetX;
 {
     [self adjustForPhotoOnly];
     
+    CGRect frame = self.mediaOverlayView.frame;
+    frame.origin = CGPointZero;
+    frame.size   = self.mediaImageView.frame.size;
+    self.mediaOverlayView.frame = frame;
+    
+    [self.mediaOverlayView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    UIView *bgView = [[UIView alloc] init];
+    bgView.frame = self.mediaImageView.bounds;
+    bgView.backgroundColor = [UIColor blackColor];
+    bgView.alpha = 0.5f;
+    [self.mediaOverlayView addSubview:bgView];
+    
+    UIImageView *playButtonImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_button.png"]];
+    playButtonImageView.contentMode = UIViewContentModeScaleAspectFit;
+    playButtonImageView.clipsToBounds = YES;
+    playButtonImageView.backgroundColor = [UIColor clearColor];
+    CGRect playFrame = playButtonImageView.frame;
+    playFrame.size   = CGSizeMake(20, 20);
+    playButtonImageView.frame = playFrame;
+    playButtonImageView.center = CGPointMake(self.mediaOverlayView.frame.size.width/2 + self.contentInsets.left - self.contentInsets.right, self.mediaOverlayView.frame.size.height/2);
+    [self.mediaOverlayView addSubview:playButtonImageView];
 }
 
 

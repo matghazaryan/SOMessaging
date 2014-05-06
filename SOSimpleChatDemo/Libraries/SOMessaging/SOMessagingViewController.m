@@ -157,6 +157,8 @@
     // For user customization
     [self configureMessageCell:cell forMessageAtIndex:indexPath.row];
     
+    [cell adjustCell];
+    
     return cell;
 }
 

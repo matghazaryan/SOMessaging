@@ -27,6 +27,11 @@
 @property (strong, nonatomic) NSData *media;
 
 /**
+ * Default thumbnail for media.
+ */
+@property (strong, nonatomic) UIImage *thumbnail;
+
+/**
  * Message sent date
  * Messages will be sorted by this property
  */

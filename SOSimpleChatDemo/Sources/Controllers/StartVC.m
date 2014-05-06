@@ -39,17 +39,23 @@
         SOMessage *message = [[SOMessage alloc] init];
         message.fromMe = i%2;
         
-        message.text = [NSString stringWithFormat:@"Hello, how are you? %d Hello, how are you? Hello, how are you?",i];
+        message.text = @"Hello, how are you? Hello, how are you? Hello, how are you?";
         
         [self.dataSource addObject:message];
     }
-    
-    SOMessage *msg = [SOMessage new];
-    msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
 
-    msg.type = SOMessageTypePhoto;
-    msg.fromMe = YES;
-    [self.dataSource addObject:msg];
+    SOMessage *msgVideo = [SOMessage new];
+    msgVideo.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
+//    msgVideo.fromMe = YES;    
+    msgVideo.type = SOMessageTypeVideo;
+    [self.dataSource addObject:msgVideo];
+    
+    SOMessage *msgPhoto = [SOMessage new];
+    msgPhoto.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
+
+    msgPhoto.type = SOMessageTypePhoto;
+    msgPhoto.fromMe = YES;
+    [self.dataSource addObject:msgPhoto];
 }
 
 #pragma mark - SOMessaging data source
@@ -60,39 +66,28 @@
 
 - (NSTimeInterval)intervalForMessagesGrouping
 {
+    // Return 0 for disableing grouping
     return 0;
 }
 
-- (void) configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
+- (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
     SOMessage *message = self.dataSource[index];
     
+    // Adjusting content for 3px. (In this demo the width of bubble's tail is 3px)/
+    if (!message.fromMe) {
+        cell.contentInsets = UIEdgeInsetsMake(0, 3.0f, 0, 0); //Move content for 3 px. to right
+    } else {
+        cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 3.0f); //Move content for 3 px. to left
+    }
+    
     cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;
+    
+    // Fix user image position on top or bottom.
     cell.userImageView.autoresizingMask = message.fromMe ? UIViewAutoresizingFlexibleTopMargin : UIViewAutoresizingFlexibleBottomMargin;
     
+    // Setting user images
     cell.userImage = message.fromMe ? self.myImage : self.partnerImage;
-    
-    if (!message.fromMe) {
-        if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
-            CGRect frame = cell.mediaImageView.frame;
-            frame.origin.x += 3.0f;
-            cell.mediaImageView.frame = frame;
-        } else {
-            CGRect frame = cell.textView.frame;
-            frame.origin.x += 3.0f;
-            cell.textView.frame = frame;
-        }
-    } else {
-        if (message.type == SOMessageTypePhoto || message.type == SOMessageTypeVideo) {
-            CGRect frame = cell.mediaImageView.frame;
-            frame.origin.x -= 3.0f;
-            cell.mediaImageView.frame = frame;
-        } else {
-            CGRect frame = cell.textView.frame;
-            frame.origin.x -= 3.0f;
-            cell.textView.frame = frame;
-        }
-    }
 }
 
 - (CGFloat)messageMaxWidth

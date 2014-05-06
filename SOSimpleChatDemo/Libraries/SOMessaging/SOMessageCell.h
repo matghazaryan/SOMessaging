@@ -34,6 +34,7 @@
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UILabel *label;
 @property (strong, nonatomic) UIImageView *mediaImageView;
+@property (strong, nonatomic) UIView *mediaOverlayView; // For video only
 @property (strong, nonatomic) UIView *otherView; //appears while dragging cell
 
 @property (strong, nonatomic) UIImageView *balloonImageView;
@@ -54,6 +55,8 @@
 
 @property (nonatomic) CGFloat messageMaxWidth;
 @property (nonatomic) CGFloat messageMinHeight;
+
+@property (nonatomic) UIEdgeInsets contentInsets;
 
 @property (strong, nonatomic) UIView *containerView;
 
