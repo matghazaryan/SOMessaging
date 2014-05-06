@@ -48,7 +48,7 @@
     msg.media = UIImageJPEGRepresentation([UIImage imageNamed:@"lion.jpg"], 1);
 
     msg.type = SOMessageTypePhoto;
-//    msg.fromMe = YES;
+    msg.fromMe = YES;
     [self.dataSource addObject:msg];
 }
 

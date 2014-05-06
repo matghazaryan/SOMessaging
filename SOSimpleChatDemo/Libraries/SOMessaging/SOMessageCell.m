@@ -293,46 +293,39 @@ static CGFloat contentOffsetX;
     UIImage *image = [[UIImage alloc] initWithData:self.message.media];
     self.mediaImageView.image = image;
 
-    CGRect frame = self.mediaImageView.frame;    
+    CGRect frame = CGRectZero;
+    frame.size = self.mediaImageViewSize;
     
-    CGRect balloonFrame = self.balloonImageView.frame;
-    balloonFrame.size.width = frame.size.width;// + messageLeftMargin + messageRightMargin;
-    balloonFrame.size.height = frame.size.height;// + messageTopMargin + messageBottomMargin;
-    
-    frame.origin.x = self.message.fromMe ? 0 : (balloonFrame.size.width - frame.size.width);
-    frame.origin.y = 0;
-
     if (!self.message.fromMe && self.userImage) {
         frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
-        balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
     }
     
     self.mediaImageView.frame = frame;
-    
-    self.balloonImageView.frame = balloonFrame;
+
+    self.balloonImageView.frame = frame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
     self.balloonImageView.image = self.balloonImage;
     
     CGRect userRect = self.userImageView.frame;
     
     if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
-        userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
+        userRect.origin.y = frame.origin.y + frame.size.height - userRect.size.height;
     } else {
         userRect.origin.y = 0;
     }
     
     if (self.message.fromMe) {
-        userRect.origin.x = balloonFrame.origin.x + userImageViewLeftMargin + balloonFrame.size.width;
+        userRect.origin.x = frame.origin.x + userImageViewLeftMargin + frame.size.width;
     } else {
-        userRect.origin.x = balloonFrame.origin.x - userImageViewLeftMargin - userRect.size.width;
+        userRect.origin.x = frame.origin.x - userImageViewLeftMargin - userRect.size.width;
     }
     self.userImageView.frame = userRect;
     self.userImageView.image = self.userImage;
     
     CGRect frm = self.containerView.frame;
-    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
+    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - frame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
     frm.origin.y = kBubbleTopMargin;
-    frm.size.width = balloonFrame.size.width;
+    frm.size.width = frame.size.width;
     if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
         frm.size.width += userImageViewLeftMargin + userRect.size.width;
@@ -341,7 +334,7 @@ static CGFloat contentOffsetX;
         }
     }
 
-    frm.size.height = balloonFrame.size.height;
+    frm.size.height = frame.size.height;
     if (frm.size.height < self.userImageViewSize.height) {
         CGFloat delta = self.userImageViewSize.height - frm.size.height;
         frm.size.height = self.userImageViewSize.height;
@@ -354,11 +347,12 @@ static CGFloat contentOffsetX;
     }
     self.containerView.frame = frm;
 
-//    self.mediaImageView.hidden = YES;
-//    self.balloonImageView.hidden = YES;
     //Masking mediaImageView with balloon image
 
-    self.mediaImageView.layer.mask = self.balloonImageView.layer;
+    CALayer *layer = self.balloonImageView.layer;
+    layer.frame    = (CGRect){{0,0},self.balloonImageView.layer.frame.size};
+
+    self.mediaImageView.layer.mask = layer;
     [self.mediaImageView setNeedsDisplay];
 }
 
