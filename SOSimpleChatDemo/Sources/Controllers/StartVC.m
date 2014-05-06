@@ -74,11 +74,11 @@
 {
     SOMessage *message = self.dataSource[index];
     
-    // Adjusting content for 3px. (In this demo the width of bubble's tail is 3px)/
+    // Adjusting content for 3pt. (In this demo the width of bubble's tail is 3pt)
     if (!message.fromMe) {
-        cell.contentInsets = UIEdgeInsetsMake(0, 3.0f, 0, 0); //Move content for 3 px. to right
+        cell.contentInsets = UIEdgeInsetsMake(0, 3.0f, 0, 0); //Move content for 3 pt. to right
     } else {
-        cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 3.0f); //Move content for 3 px. to left
+        cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 3.0f); //Move content for 3 pt. to left
     }
     
     cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;
@@ -92,7 +92,7 @@
 
 - (CGFloat)messageMaxWidth
 {
-    return 200;
+    return 140;
 }
 
 - (CGSize)userImageSize

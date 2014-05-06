@@ -32,7 +32,7 @@
 
 @property (strong, nonatomic) UIImageView *userImageView;
 @property (strong, nonatomic) UITextView *textView;
-@property (strong, nonatomic) UILabel *label;
+@property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UIImageView *mediaImageView;
 @property (strong, nonatomic) UIView *mediaOverlayView; // For video only
 @property (strong, nonatomic) UIView *otherView; //appears while dragging cell

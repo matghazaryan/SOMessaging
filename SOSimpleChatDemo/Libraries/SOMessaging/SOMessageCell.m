@@ -28,6 +28,8 @@ static CGFloat messageRightMargin;
 static CGFloat maxContentOffsetX;
 static CGFloat contentOffsetX;
 
+static CGFloat initialTimeLabelPosX;
+
 + (void)load
 {
     messageTopMargin = 9;
@@ -61,11 +63,14 @@ static CGFloat contentOffsetX;
     if (self.containerView) {
         [self.containerView removeFromSuperview];
     }
+    if (self.timeLabel) {
+        [self.timeLabel removeFromSuperview];
+    }
     
     self.userImageView = [[UIImageView alloc] init];
     self.userImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.messageMaxWidth, 0)];
-    self.label = [[UILabel alloc] init];
+    self.timeLabel = [[UILabel alloc] init];
     self.mediaImageView = [[UIImageView alloc] init];
     self.mediaOverlayView = [[UIView alloc] init];
     self.balloonImageView = [[UIImageView alloc] init];
@@ -112,16 +117,22 @@ static CGFloat contentOffsetX;
     
     [self.containerView addSubview:self.balloonImageView];
     [self.containerView addSubview:self.textView];
-    [self.containerView addSubview:self.label];
     [self.containerView addSubview:self.mediaImageView];
     [self.containerView addSubview:self.userImageView];
+    
+    [self.contentView addSubview:self.timeLabel];
+    
+    self.contentView.clipsToBounds = NO;
+    self.clipsToBounds = NO;
+    
+    self.timeLabel.font = [UIFont systemFontOfSize:12];
+    self.timeLabel.textColor = [UIColor lightGrayColor];
 }
 
 - (void)hideSubViews
 {
     self.userImageView.hidden = YES;
     self.textView.hidden = YES;
-    self.label.hidden = YES;
     self.mediaImageView.hidden = YES;
 }
 
@@ -155,7 +166,6 @@ static CGFloat contentOffsetX;
     if (self.delegate && [self.delegate respondsToSelector:@selector(messageCell:didTapMedia:)]) {
         [self.delegate messageCell:self didTapMedia:self.message.media];
     }
-
 }
 
 #pragma mark -
@@ -185,7 +195,7 @@ static CGFloat contentOffsetX;
     }
     
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
-
+    initialTimeLabelPosX = self.timeLabel.frame.origin.x;
 /* 
 --  Not implemented ---
     else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
@@ -288,6 +298,18 @@ static CGFloat contentOffsetX;
         }
     }
     self.containerView.frame = frm;
+    
+    // Adjusing time label
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm"];
+    self.timeLabel.frame = CGRectZero;
+    self.timeLabel.text = [formatter stringFromDate:self.message.date];
+
+    [self.timeLabel sizeToFit];
+    CGRect timeLabel = self.timeLabel.frame;
+    timeLabel.origin.x = self.contentView.frame.size.width + 5;
+    self.timeLabel.frame = timeLabel;
+    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
 }
 
 //---
@@ -360,6 +382,19 @@ static CGFloat contentOffsetX;
     layer.frame    = (CGRect){{0,0},self.balloonImageView.layer.frame.size};
     self.mediaImageView.layer.mask = layer;
     [self.mediaImageView setNeedsDisplay];
+    
+    
+    // Adjusing time label
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm"];
+    self.timeLabel.frame = CGRectZero;
+    self.timeLabel.text = [formatter stringFromDate:self.message.date];
+    
+    [self.timeLabel sizeToFit];
+    CGRect timeLabel = self.timeLabel.frame;
+    timeLabel.origin.x = self.contentView.frame.size.width + 5;
+    self.timeLabel.frame = timeLabel;
+    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
 }
 
 - (void)adjustForVideoOnly
@@ -415,7 +450,7 @@ static CGFloat contentOffsetX;
     CGPoint velocity = [pan velocityInView:pan.view];
     
     if (pan.state == UIGestureRecognizerStateBegan) {
-            isHorizontalPan = fabs(velocity.x) > fabs(velocity.y);
+        isHorizontalPan = fabs(velocity.x) > fabs(velocity.y);
     }
     
     if (isHorizontalPan) {
@@ -430,6 +465,12 @@ static CGFloat contentOffsetX;
                     CGRect frame = cell.contentView.frame;
                     frame.origin.x = contentOffsetX;
                     cell.contentView.frame = frame;
+                    
+                    if (!cell.message.fromMe) {
+                        CGRect timeframe = cell.timeLabel.frame;
+                        timeframe.origin.x = initialTimeLabelPosX;
+                        cell.timeLabel.frame = timeframe;
+                    }
                 }
             }];
         } else {
@@ -447,6 +488,10 @@ static CGFloat contentOffsetX;
                     CGRect frame = cell.contentView.frame;
                     frame.origin.x = contentOffsetX;
                     cell.contentView.frame = frame;
+                } else {
+                    CGRect frame = cell.timeLabel.frame;
+                    frame.origin.x = initialTimeLabelPosX - fabs(contentOffsetX);
+                    cell.timeLabel.frame = frame;
                 }
             }
         }

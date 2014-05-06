@@ -37,7 +37,7 @@
 @optional
 /**
  * Override this method if you want to customize cell that will be shown.
- * This method calls after cell configuration and adjustment
+ * This method calls after cell default adjustment on every reuse time
  */
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
 
