@@ -29,6 +29,7 @@ static CGFloat maxContentOffsetX;
 static CGFloat contentOffsetX;
 
 static CGFloat initialTimeLabelPosX;
+static BOOL cellIsDragging;
 
 + (void)load
 {
@@ -53,6 +54,9 @@ static CGFloat initialTimeLabelPosX;
         [self addGestureRecognizer:self.panGesture];
         
         [self setInitialSizes];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationWillChandeNote:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
     }
     
     return self;
@@ -127,6 +131,7 @@ static CGFloat initialTimeLabelPosX;
     
     self.timeLabel.font = [UIFont systemFontOfSize:12];
     self.timeLabel.textColor = [UIColor lightGrayColor];
+    self.timeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 }
 
 - (void)hideSubViews
@@ -451,12 +456,17 @@ static CGFloat initialTimeLabelPosX;
     
     if (pan.state == UIGestureRecognizerStateBegan) {
         isHorizontalPan = fabs(velocity.x) > fabs(velocity.y);
+        
+        if (!cellIsDragging) {
+            initialTimeLabelPosX = self.timeLabel.frame.origin.x;
+        }
     }
     
     if (isHorizontalPan) {
         NSArray *visibleCells = [self.tableView visibleCells];
         
-        if (pan.state == UIGestureRecognizerStateEnded) {
+        if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled || pan.state == UIGestureRecognizerStateFailed) {
+            cellIsDragging = NO;
             [UIView animateWithDuration:0.25 animations:^{
                 [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
                 for (SOMessageCell *cell in visibleCells) {
@@ -474,6 +484,8 @@ static CGFloat initialTimeLabelPosX;
                 }
             }];
         } else {
+            cellIsDragging = YES;
+            
             CGPoint translation = [pan translationInView:pan.view];
             CGFloat delta = translation.x * (1 - fabs(contentOffsetX / maxContentOffsetX));
             contentOffsetX += delta;
@@ -507,6 +519,12 @@ static CGFloat initialTimeLabelPosX;
     CGRect frame = self.contentView.frame;
     frame.origin.x = contentOffsetX;
     self.contentView.frame = frame;
+}
+
+- (void)handleOrientationWillChandeNote:(NSNotification *)note
+{
+    self.panGesture.enabled = NO;
+    self.panGesture.enabled = YES;
 }
 #pragma mark - Getters and Setters
 + (CGFloat) messageTopMargin
@@ -559,5 +577,10 @@ static CGFloat initialTimeLabelPosX;
     maxContentOffsetX = offsetX;
 }
 
+#pragma mark -
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
