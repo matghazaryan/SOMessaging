@@ -47,9 +47,14 @@
 - (CGFloat)messageMaxWidth;
 
 /**
- * Minimum height of message
+ * Minimum height of balloon
  */
-- (CGFloat)messageMinHeight;
+- (CGFloat)balloonMinHeight;
+
+/**
+ * Minimum width of balloon
+ */
+- (CGFloat)balloonMinWidth;
 
 /**
  * Font of message
@@ -65,5 +70,7 @@
  * Size user's imageview
  */
 - (CGSize)userImageSize;
+
+
 
  @end

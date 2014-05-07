@@ -12,6 +12,8 @@
 #import "SOMessagingDelegate.h"
 #import "SOMessageInputView.h"
 #import "SOMessage.h"
+#import "SOMessageCell.h"
+
 
 @interface SOMessagingViewController : UIViewController <SOMessagingDataSource, SOMessagingDelegate>
 

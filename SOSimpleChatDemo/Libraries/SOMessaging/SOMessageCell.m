@@ -33,6 +33,11 @@ static BOOL cellIsDragging;
 
 + (void)load
 {
+    [self setDefaultConfigs];
+}
+
++ (void)setDefaultConfigs
+{
     messageTopMargin = 9;
     messageBottomMargin = 9;
     messageLeftMargin = 15;
@@ -229,8 +234,17 @@ static BOOL cellIsDragging;
         usedFrame.size = [self.message.text usedSizeForMaxWidth:self.messageMaxWidth withFont:self.messageFont];
     }
     
-    if (self.messageMinHeight && usedFrame.size.height < self.messageMinHeight) {
-        usedFrame.size.height = self.messageMinHeight;
+    if (self.balloonMinWidth) {
+        CGFloat messageMinWidth = self.balloonMinWidth - messageLeftMargin - messageRightMargin;
+        if (usedFrame.size.width <  messageMinWidth) {
+            usedFrame.size.width = messageMinWidth;
+        }
+    }
+    
+    CGFloat messageMinHeight = self.balloonMinHeight - messageTopMargin - messageBottomMargin;
+    
+    if (self.balloonMinHeight && usedFrame.size.height < messageMinHeight) {
+        usedFrame.size.height = messageMinHeight;
     }
     
     self.textView.font = self.messageFont;
@@ -254,6 +268,14 @@ static BOOL cellIsDragging;
     
     self.textView.frame = frame;
     
+    CGRect userRect = self.userImageView.frame;
+    
+    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
+        if (balloonFrame.size.height < userRect.size.height) {
+            balloonFrame.size.height = userRect.size.height;
+        }
+    }
+    
     self.balloonImageView.frame = balloonFrame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
     self.balloonImageView.image = self.balloonImage;
@@ -262,8 +284,7 @@ static BOOL cellIsDragging;
     self.textView.scrollEnabled = NO;
     self.textView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
     
-    
-    CGRect userRect = self.userImageView.frame;
+
     
     if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
         userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
@@ -282,6 +303,7 @@ static BOOL cellIsDragging;
     CGRect frm = self.containerView.frame;
     frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
     frm.origin.y = kBubbleTopMargin;
+    frm.size.height = balloonFrame.size.height;
     frm.size.width = balloonFrame.size.width;
     if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
@@ -290,7 +312,7 @@ static BOOL cellIsDragging;
             frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
         }
     }
-    frm.size.height = balloonFrame.size.height;
+
 
     if (frm.size.height < self.userImageViewSize.height) {
         CGFloat delta = self.userImageViewSize.height - frm.size.height;

@@ -12,6 +12,9 @@
 
 #import "NSString+Calculation.h"
 
+#import "SOImageBrowserView.h"
+#import <MediaPlayer/MediaPlayer.h>
+
 #define kMessageMaxWidth 240.0f
 
 @interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate, SOMessageCellDelegate>
@@ -22,6 +25,10 @@
 @property (strong, nonatomic) UIView *tableViewHeaderView;
 
 @property (strong, nonatomic) NSMutableArray *dataSource;
+
+
+@property (strong, nonatomic) SOImageBrowserView *imageBrowser;
+@property (strong, nonatomic) MPMoviePlayerViewController *moviePlayerController;
 
 @end
 
@@ -66,10 +73,13 @@
     [super viewWillAppear:animated];
     
     [self.tableView reloadData];
-    NSInteger section = [self.tableView numberOfSections] - 1;
-    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    
+    if ([self.messages count]) {
+        NSInteger section = [self.tableView numberOfSections] - 1;
+        NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
 }
 
 // This code will work only if this vc hasn't navigation controller
@@ -107,14 +117,23 @@
             size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
         }
         
-        if ([self messageMinHeight] && size.height < [self messageMinHeight]) {
-            size.height = [self messageMinHeight];
+        CGFloat messageMinHeight = self.balloonMinHeight - ([SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin]);
+        if ([self balloonMinHeight] && size.height < messageMinHeight) {
+            size.height = messageMinHeight;
         }
+        
         size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
+        
+        if (!CGSizeEqualToSize([self userImageSize], CGSizeZero)) {
+            if (size.height < [self userImageSize].height) {
+                size.height = [self userImageSize].height;
+            }
+        }
+        
         height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
+        
     } else {
         CGSize size = [self mediaThumbnailSize];
-//        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
         if (size.height < [self userImageSize].height) {
             size.height = [self userImageSize].height;
         }
@@ -146,7 +165,8 @@
         [cell setUserImageViewSize:[self userImageSize]];
     }
     cell.tableView = self.tableView;
-    cell.messageMinHeight = [self messageMinHeight];
+    cell.balloonMinHeight = [self balloonMinHeight];
+    cell.balloonMinWidth  = [self balloonMinWidth];
     cell.delegate = self;
     cell.messageFont = [self messageFont];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -199,19 +219,29 @@
     return kMessageMaxWidth;
 }
 
-- (CGFloat)messageMinHeight
+- (CGFloat)balloonMinHeight
+{
+    return 0;
+}
+
+- (CGFloat)balloonMinWidth
 {
     return 0;
 }
 
 - (UIFont *)messageFont
 {
-    return [UIFont fontWithName:@"HelveticaNeue" size:16];
+    return [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
 }
 
 - (CGSize)mediaThumbnailSize
 {
     return CGSizeMake(90, 100);
+}
+
+- (CGSize)userImageSize
+{
+    return CGSizeMake(40, 40);
 }
 
 #pragma mark - Public methods
@@ -246,7 +276,9 @@
     NSInteger section = [self.tableView numberOfSections] - 1;
     NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if (row >= 0) {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 #pragma mark - SOMessaging delegate
@@ -257,7 +289,29 @@
 
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell
 {
-    
+    if (cell.message.type == SOMessageTypePhoto) {
+        self.imageBrowser = [[SOImageBrowserView alloc] init];
+        
+        self.imageBrowser.image = [UIImage imageWithData:cell.message.media];
+
+        self.imageBrowser.startFrame = [cell convertRect:cell.containerView.frame toView:self.view];
+        
+        [self.imageBrowser show];
+    } else if (cell.message.type == SOMessageTypeVideo) {
+        
+        NSString *appFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"video.mp4"];
+        [cell.message.media writeToFile:appFile atomically:YES];
+        
+
+        self.moviePlayerController = [[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:appFile]];
+        [self.moviePlayerController.moviePlayer prepareToPlay];
+        [self.moviePlayerController.moviePlayer setShouldAutoplay:YES];
+
+        [self presentViewController:self.moviePlayerController animated:YES completion:^{
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        }];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    }
 }
 #pragma mark - Helper methods
 - (UIImage *)tintImage:(UIImage *)image withColor:(UIColor *)color

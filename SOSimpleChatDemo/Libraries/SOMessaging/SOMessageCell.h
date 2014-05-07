@@ -53,8 +53,11 @@
 + (CGFloat) maxContentOffsetX;
 + (void) setMaxContentOffsetX:(CGFloat)offsetX;
 
++ (void)setDefaultConfigs;
+
+@property (nonatomic) CGFloat balloonMinWidth;
+@property (nonatomic) CGFloat balloonMinHeight;
 @property (nonatomic) CGFloat messageMaxWidth;
-@property (nonatomic) CGFloat messageMinHeight;
 
 @property (nonatomic) UIEdgeInsets contentInsets;
 

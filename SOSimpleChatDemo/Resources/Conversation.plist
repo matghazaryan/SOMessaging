@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>Hi</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>Hi :)</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>How are you?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>Good (Y)</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>And you?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>Mee too</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>What&apos;s for dinner?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>I&apos;m not sure.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>How about a pizza?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>You had pizza for lunch.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>But I love pizza.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>Everybody loves pizza.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>So why can&apos;t I have pizza for dinner?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>Because you need variety.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>What&apos;s &quot;variety?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>Different things—not the same thing all the time.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>message</key>
+		<string>You mean, like a pepperoni pizza instead of a cheese pizza?</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>No, I mean a lion instead of a pizza.</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>image</key>
+		<string>lion.jpg</string>
+		<key>type</key>
+		<string>SOMessageTypePhoto</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<true/>
+		<key>message</key>
+		<string>:D</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+	</dict>
+	<dict>
+		<key>fromMe</key>
+		<false/>
+		<key>video</key>
+		<string>lion</string>
+		<key>thumbnail</key>
+		<string>lion.jpg</string>
+		<key>type</key>
+		<string>SOMessageTypeVideo</string>
+	</dict>
+</array>
+</plist>
