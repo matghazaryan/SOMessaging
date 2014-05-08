@@ -134,8 +134,8 @@ static BOOL cellIsDragging;
     self.contentView.clipsToBounds = NO;
     self.clipsToBounds = NO;
     
-    self.timeLabel.font = [UIFont systemFontOfSize:12];
-    self.timeLabel.textColor = [UIColor lightGrayColor];
+    self.timeLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+    self.timeLabel.textColor = [UIColor grayColor];
     self.timeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 }
 
@@ -452,10 +452,6 @@ static BOOL cellIsDragging;
     [self.mediaOverlayView addSubview:playButtonImageView];
 }
 
-
-//---
-
-//---
 
 #pragma mark - GestureRecognizer delegates
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

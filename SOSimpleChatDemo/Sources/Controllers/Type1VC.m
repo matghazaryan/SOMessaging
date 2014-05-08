@@ -21,7 +21,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+   
     [SOMessageCell setDefaultConfigs];
     [self loadMessages];
 }
@@ -81,5 +81,6 @@
 {
 
 }
+
 
 @end

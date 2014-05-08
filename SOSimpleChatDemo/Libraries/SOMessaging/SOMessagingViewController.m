@@ -27,7 +27,7 @@
 
 @property (strong, nonatomic) UIView *tableViewHeaderView;
 
-@property (strong, nonatomic) NSMutableArray *dataSource;
+@property (strong, nonatomic) NSMutableArray *conversation;
 
 
 @property (strong, nonatomic) SOImageBrowserView *imageBrowser;
@@ -41,7 +41,8 @@
 
 - (void)setup
 {
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -58,8 +59,6 @@
     self.inputView.tableView = self.tableView;
     [self.view addSubview:self.inputView];
     [self.inputView adjustPosition];
-    
-    self.dataSource = [self messages];
 }
 
 #pragma mark - View lifecicle
@@ -77,11 +76,9 @@
 {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    self.conversation = [self grouppedMessages];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-    });
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLayoutSubviews
@@ -89,9 +86,9 @@
     [super viewDidLayoutSubviews];
     
     dispatch_once(&onceToken, ^{
-        if ([self.messages count]) {
-            NSInteger section = [self.tableView numberOfSections] - 1;
-            NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+        if ([self.conversation count]) {
+            NSInteger section = self.conversation.count - 1;
+            NSInteger row = [self.conversation[section] count] - 1;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
         }
@@ -112,20 +109,20 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return self.conversation.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.dataSource.count;
+    return [self.conversation[section] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height;
     
-    SOMessage *message = self.dataSource[indexPath.row];
+    SOMessage *message = self.conversation[indexPath.section][indexPath.row];
     
     if (message.type == SOMessageTypeText) {
         CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
@@ -158,19 +155,55 @@
     return height;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if ([self intervalForMessagesGrouping])
+        return 40;
+    
+    return 0.01f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (![self intervalForMessagesGrouping])
+        return nil;
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40)];
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    view.backgroundColor = [UIColor clearColor];
+    
+    SOMessage *firstMessageInGroup = [self.conversation[section] firstObject];
+    NSDate *date = [firstMessageInGroup date];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd MMM, eee, HH:mm"];
+    UILabel *label = [[UILabel alloc] init];
+    label.text = [formatter stringFromDate:date];
+    
+    label.textColor = [UIColor grayColor];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+    [label sizeToFit];
+    
+    label.center = CGPointMake(view.frame.size.width/2, view.frame.size.height/2);
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+    
+    [view addSubview:label];
+    
+    return view;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *sendCell = @"sendCell";
-    static NSString *receiveCell = @"receiveCell";
-    NSString *cellIdentifier = @"";
+    static NSString *cellIdentifier = @"sendCell";
+
     SOMessageCell *cell;
 
-    SOMessage *message = self.dataSource[indexPath.row];
-    if (message.fromMe) {
-        cellIdentifier = sendCell;
-    } else {
-        cellIdentifier = receiveCell;
-    }
+    SOMessage *message = self.conversation[indexPath.section][indexPath.row];
     
     cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
@@ -191,7 +224,8 @@
     cell.message = message;    
     
     // For user customization
-    [self configureMessageCell:cell forMessageAtIndex:indexPath.row];
+    int index = (int)[[self messages] indexOfObject:message];
+    [self configureMessageCell:cell forMessageAtIndex:index];
     
     [cell adjustCell];
     
@@ -257,14 +291,25 @@
 
 - (CGSize)userImageSize
 {
-    return CGSizeMake(40, 40);
+    return CGSizeMake(0, 0);
 }
 
 #pragma mark - Public methods
 - (void)sendMessage:(SOMessage *)message
 {
     message.fromMe = YES;
-    [self.dataSource addObject:message];
+    NSMutableArray *messages = [self messages];
+    [messages addObject:message];
+    
+    
+    SOMessage *lastMessage = [self.conversation.lastObject lastObject]; // Getting the latest message
+    NSTimeInterval interval = [message.date timeIntervalSinceDate:lastMessage.date];
+    if (![self intervalForMessagesGrouping] || interval < [self intervalForMessagesGrouping]) {
+        [self.conversation.lastObject addObject:message]; //add to last group
+    } else {
+        [self.conversation addObject:[@[message] mutableCopy]]; // create a new group with new message and add to conversation
+    }
+    
     [self.tableView reloadData];
  
     NSInteger section = [self.tableView numberOfSections] - 1;
@@ -276,7 +321,15 @@
 - (void)receiveMessage:(SOMessage *)message
 {
     message.fromMe = NO;
-    [self.dataSource addObject:message];
+
+    SOMessage *lastMessage = [self.conversation.lastObject lastObject]; // Getting the latest message
+    NSTimeInterval interval = [message.date timeIntervalSinceDate:lastMessage.date];
+    if (![self intervalForMessagesGrouping] || interval < [self intervalForMessagesGrouping]) {
+        [self.conversation.lastObject addObject:message]; //add to last group
+    } else {
+        [self.conversation addObject:[@[message] mutableCopy]]; // create a new group with new message and add to conversation
+    }
+    
     [self.tableView reloadData];
     
     NSInteger section = [self.tableView numberOfSections] - 1;
@@ -287,7 +340,7 @@
 
 - (void)refreshMessages
 {
-    self.dataSource = [self messages];
+    self.conversation = [self grouppedMessages];
     [self.tableView reloadData];
     
     NSInteger section = [self.tableView numberOfSections] - 1;
@@ -296,6 +349,49 @@
     if (row >= 0) {
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
+}
+
+#pragma mark - Private methods
+- (NSMutableArray *)grouppedMessages
+{
+    NSMutableArray *conversation = [NSMutableArray new];
+    
+    if (![self intervalForMessagesGrouping]) {
+        if ([self messages]) {
+            [conversation addObject:[self messages]];
+        }
+    } else {
+        int groupIndex = 0;
+        NSMutableArray *allMessages = [self messages];
+
+        for (int i = 0; i < allMessages.count; i++) {
+            if (i == 0) {
+                NSMutableArray *firstGroup = [NSMutableArray new];
+                [firstGroup addObject:allMessages[i]];
+                [conversation addObject:firstGroup];
+            } else {
+                SOMessage *prevMessage    = allMessages[i-1];
+                SOMessage *currentMessage = allMessages[i];
+                
+                NSDate *prevMessageDate    = prevMessage.date;
+                NSDate *currentMessageDate = currentMessage.date;
+                
+                NSTimeInterval interval = [currentMessageDate timeIntervalSinceDate:prevMessageDate];
+                if (interval < [self intervalForMessagesGrouping]) {
+                    NSMutableArray *group = conversation[groupIndex];
+                    [group addObject:currentMessage];
+                    
+                } else {
+                    NSMutableArray *newGroup = [NSMutableArray new];
+                    [newGroup addObject:currentMessage];
+                    [conversation addObject:newGroup];
+                    groupIndex++;
+                }
+            }
+        }
+    }
+    
+    return conversation;
 }
 
 #pragma mark - SOMessaging delegate

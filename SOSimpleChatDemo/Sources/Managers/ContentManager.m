@@ -34,6 +34,12 @@
         message.type = [self messageTypeFromString:msg[@"type"]];
         message.date = [NSDate date];
         
+        int index = (int)[data indexOfObject:msg];
+        if (index > 0) {
+            SOMessage *prevMesage = result.lastObject;
+            message.date = [NSDate dateWithTimeInterval:((index % 2) ? 2*24*60*60 : 120) sinceDate:prevMesage.date];
+        }
+        
         if (message.type == SOMessageTypePhoto) {
             message.media = UIImageJPEGRepresentation([UIImage imageNamed:msg[@"image"]], 1);
         } else if (message.type == SOMessageTypeVideo) {
