@@ -18,6 +18,9 @@
 #define kMessageMaxWidth 240.0f
 
 @interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate, SOMessageCellDelegate>
+{
+
+}
 
 @property (strong, nonatomic) UIImage *balloonSendImage;
 @property (strong, nonatomic) UIImage *balloonReceiveImage;
@@ -32,7 +35,9 @@
 
 @end
 
-@implementation SOMessagingViewController
+@implementation SOMessagingViewController {
+    dispatch_once_t onceToken;
+}
 
 - (void)setup
 {
@@ -74,12 +79,23 @@
     
     [self.tableView reloadData];
     
-    if ([self.messages count]) {
-        NSInteger section = [self.tableView numberOfSections] - 1;
-        NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+    });
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    dispatch_once(&onceToken, ^{
+        if ([self.messages count]) {
+            NSInteger section = [self.tableView numberOfSections] - 1;
+            NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        }
+    });
 }
 
 // This code will work only if this vc hasn't navigation controller
@@ -272,6 +288,7 @@
 - (void)refreshMessages
 {
     self.dataSource = [self messages];
+    [self.tableView reloadData];
     
     NSInteger section = [self.tableView numberOfSections] - 1;
     NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
