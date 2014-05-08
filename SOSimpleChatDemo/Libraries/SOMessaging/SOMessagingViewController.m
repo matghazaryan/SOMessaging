@@ -17,7 +17,7 @@
 
 #define kMessageMaxWidth 240.0f
 
-@interface SOMessagingViewController () <UITableViewDataSource, UITableViewDelegate, SOMessageCellDelegate>
+@interface SOMessagingViewController () <UITableViewDelegate, SOMessageCellDelegate>
 {
 
 }
@@ -123,35 +123,9 @@
     CGFloat height;
     
     SOMessage *message = self.conversation[indexPath.section][indexPath.row];
-    
-    if (message.type == SOMessageTypeText) {
-        CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
-        if (message.attributes) {
-            size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
-        }
-        
-        CGFloat messageMinHeight = self.balloonMinHeight - ([SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin]);
-        if ([self balloonMinHeight] && size.height < messageMinHeight) {
-            size.height = messageMinHeight;
-        }
-        
-        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
-        
-        if (!CGSizeEqualToSize([self userImageSize], CGSizeZero)) {
-            if (size.height < [self userImageSize].height) {
-                size.height = [self userImageSize].height;
-            }
-        }
-        
-        height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
-        
-    } else {
-        CGSize size = [self mediaThumbnailSize];
-        if (size.height < [self userImageSize].height) {
-            size.height = [self userImageSize].height;
-        }
-        height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
-    }
+    int index = (int)[[self messages] indexOfObject:message];
+    height = [self heightForMessageForIndex:index];
+
     return height;
 }
 
@@ -238,6 +212,57 @@
     return nil;
 }
 
+- (CGFloat)heightForMessageForIndex:(NSInteger)index
+{
+    CGFloat height;
+    
+    SOMessage *message = [self messages][index];
+    
+    if (message.type == SOMessageTypeText) {
+        CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
+        if (message.attributes) {
+            size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
+        }
+        
+        if (self.balloonMinWidth) {
+            CGFloat messageMinWidth = self.balloonMinWidth - [SOMessageCell messageLeftMargin] - [SOMessageCell messageRightMargin];
+            if (size.width <  messageMinWidth) {
+                size.width = messageMinWidth;
+
+                CGSize newSize = [message.text usedSizeForMaxWidth:messageMinWidth withFont:[self messageFont]];
+                if (message.attributes) {
+                    newSize = [message.text usedSizeForMaxWidth:messageMinWidth withAttributes:message.attributes];
+                }
+                
+                size.height = newSize.height;
+            }
+        }
+        
+        CGFloat messageMinHeight = self.balloonMinHeight - ([SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin]);
+        if ([self balloonMinHeight] && size.height < messageMinHeight) {
+            size.height = messageMinHeight;
+        }
+        
+        size.height += [SOMessageCell messageTopMargin] + [SOMessageCell messageBottomMargin];
+        
+        if (!CGSizeEqualToSize([self userImageSize], CGSizeZero)) {
+            if (size.height < [self userImageSize].height) {
+                size.height = [self userImageSize].height;
+            }
+        }
+        
+        height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
+        
+    } else {
+        CGSize size = [self mediaThumbnailSize];
+        if (size.height < [self userImageSize].height) {
+            size.height = [self userImageSize].height;
+        }
+        height = size.height + kBubbleTopMargin + kBubbleBottomMargin;
+    }
+    return height;
+}
+
 - (NSTimeInterval)intervalForMessagesGrouping
 {
     return 0;
@@ -300,42 +325,18 @@
     message.fromMe = YES;
     NSMutableArray *messages = [self messages];
     [messages addObject:message];
-    
-    
-    SOMessage *lastMessage = [self.conversation.lastObject lastObject]; // Getting the latest message
-    NSTimeInterval interval = [message.date timeIntervalSinceDate:lastMessage.date];
-    if (![self intervalForMessagesGrouping] || interval < [self intervalForMessagesGrouping]) {
-        [self.conversation.lastObject addObject:message]; //add to last group
-    } else {
-        [self.conversation addObject:[@[message] mutableCopy]]; // create a new group with new message and add to conversation
-    }
-    
-    [self.tableView reloadData];
- 
-    NSInteger section = [self.tableView numberOfSections] - 1;
-    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+    [self refreshMessages];
 }
 
 - (void)receiveMessage:(SOMessage *)message
 {
     message.fromMe = NO;
 
-    SOMessage *lastMessage = [self.conversation.lastObject lastObject]; // Getting the latest message
-    NSTimeInterval interval = [message.date timeIntervalSinceDate:lastMessage.date];
-    if (![self intervalForMessagesGrouping] || interval < [self intervalForMessagesGrouping]) {
-        [self.conversation.lastObject addObject:message]; //add to last group
-    } else {
-        [self.conversation addObject:[@[message] mutableCopy]]; // create a new group with new message and add to conversation
-    }
-    
-    [self.tableView reloadData];
-    
-    NSInteger section = [self.tableView numberOfSections] - 1;
-    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    NSMutableArray *messages = [self messages];
+    [messages addObject:message];
+
+    [self refreshMessages];
 }
 
 - (void)refreshMessages

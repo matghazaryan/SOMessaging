@@ -27,9 +27,16 @@
     
     self.myImage      = [UIImage imageNamed:@"arturdev.jpg"];
     self.partnerImage = [UIImage imageNamed:@"jobs.jpg"];
+ 
+//--------------------------------------------------
+//         Customizing input view
+//--------------------------------------------------
+    self.inputView.textInitialHeight = 45;
+    self.inputView.textView.font = [UIFont systemFontOfSize:17];
     
-//    [SOMessageCell setMessageTopMargin:5.5f];
-//    [SOMessageCell setMessageBottomMargin:5.5f];
+    // Apply changes
+    [self.inputView adjustInputView];
+//--------------------------------------------------
     
     [self loadMessages];
 }
@@ -45,21 +52,24 @@
     return self.dataSource;
 }
 
-- (NSTimeInterval)intervalForMessagesGrouping
+- (CGFloat)heightForMessageForIndex:(NSInteger)index
 {
-    // Return 0 for disableing grouping
-    return 0;
+    CGFloat height = [super heightForMessageForIndex:index];
+    
+    height += 15; // Increasing message height for more 15pts
+    
+    return height;
 }
 
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
     SOMessage *message = self.dataSource[index];
     
-    // Adjusting content for 3pt. (In this demo the width of bubble's tail is 3pt)
+    // Adjusting content for 4pt. (In this demo the width of bubble's tail is 8pt)
     if (!message.fromMe) {
-        cell.contentInsets = UIEdgeInsetsMake(0, 4.0f, 0, 0); //Move content for 3 pt. to right
+        cell.contentInsets = UIEdgeInsetsMake(0, 4.0f, 0, 0); //Move content for 4 pt. to right
     } else {
-        cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 4.0f); //Move content for 3 pt. to left
+        cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 4.0f); //Move content for 4 pt. to left
     }
     
     cell.textView.textColor = [UIColor blackColor];
@@ -74,6 +84,47 @@
     
     // Disabling left drag functionality
     cell.panGesture.enabled = NO;
+ 
+    
+//-----------------------------------------------//
+//     Adding datetime label under balloon
+//-----------------------------------------------//
+    UILabel *label = [self generateLabelForCell:cell];
+    
+    UILabel *existingLabel = [[cell.contentView.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag == %d",label.tag]] lastObject];;
+    [existingLabel removeFromSuperview];
+    
+    [cell.contentView addSubview:label];
+//-----------------------------------------------//
+}
+
+- (UILabel *)generateLabelForCell:(SOMessageCell *)cell
+{
+    SOMessage *message = cell.message;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd.MM.yyyy HH:mm"];
+    UILabel *label = [[UILabel alloc] init];
+    label.font = [UIFont systemFontOfSize:8];
+    label.textColor = [UIColor grayColor];
+    label.tag = 90;
+    label.text = [formatter stringFromDate:message.date];
+    [label sizeToFit];
+    CGRect frame = label.frame;
+    
+    CGFloat topMargin = 5.0f;
+    CGFloat leftMargin = 15.0f;
+    CGFloat rightMargin = 20.0f;
+    
+    if (message.fromMe) {
+        frame.origin.x = cell.contentView.frame.size.width - cell.userImageView.frame.size.width - frame.size.width - rightMargin;
+        frame.origin.y = cell.containerView.frame.origin.y + cell.containerView.frame.size.height + topMargin;
+    } else {
+        frame.origin.x = cell.containerView.frame.origin.x + cell.userImageView.frame.origin.x + cell.userImageView.frame.size.width + leftMargin;
+        frame.origin.y = cell.containerView.frame.origin.y + cell.containerView.frame.size.height + topMargin;
+    }
+    label.frame = frame;
+    
+    return label;
 }
 
 - (UIImage *)balloonImageForSending
@@ -130,7 +181,7 @@
 
 - (void)messageInputViewDidSelectMediaButton:(SOMessageInputView *)inputView
 {
-    
+    // Take a photo/video or choose from gallery
 }
 
 @end

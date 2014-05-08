@@ -22,11 +22,13 @@
 @property (strong, nonatomic) UIButton *sendButton;
 @property (strong, nonatomic) UIButton *mediaButton;
 
+@property (strong, nonatomic) UIView *separatorView;
+
 @property (nonatomic, readonly) BOOL viewIsDragging;
 
 /**
  * After setting above properties make sure that you called
- * -adjustInputView; method for apply changes
+ * -adjustInputView method for apply changes
  */
 @property (nonatomic) CGFloat textInitialHeight;
 @property (nonatomic) CGFloat textMaxHeight;

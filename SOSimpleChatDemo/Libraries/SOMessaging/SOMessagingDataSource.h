@@ -19,6 +19,19 @@
 - (NSMutableArray *)messages;
 
 /**
+ * Override this method if you want to customize cell that will be shown.
+ * This method calls after cell default adjustment on every reuse time
+ */
+- (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
+
+@optional
+
+/**
+ * Default implementation of this method is calculating height of the cell for message at given index.
+ */
+- (CGFloat)heightForMessageForIndex:(NSInteger)index;
+
+/**
  * Messages will be grouped by returned time interval (in seconds).
  * return 0 if you don't want grouping.
  */
@@ -33,13 +46,6 @@
  * Return resizable image for receiving balloon background image
  */
 - (UIImage *)balloonImageForReceiving;
-
-@optional
-/**
- * Override this method if you want to customize cell that will be shown.
- * This method calls after cell default adjustment on every reuse time
- */
-- (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
 
 /**
  * Maximum width of message

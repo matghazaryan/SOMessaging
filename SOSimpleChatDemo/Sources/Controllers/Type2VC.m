@@ -28,7 +28,6 @@
     self.myImage      = [UIImage imageNamed:@"arturdev.jpg"];
     self.partnerImage = [UIImage imageNamed:@"jobs.jpg"];
     
-    [SOMessageCell setDefaultConfigs];
     
     [self loadMessages];
 }
@@ -108,7 +107,7 @@
 
 - (void)messageInputViewDidSelectMediaButton:(SOMessageInputView *)inputView
 {
-    
+    // Take a photo/video or choose from gallery 
 }
 
 @end

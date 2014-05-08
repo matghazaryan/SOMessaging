@@ -18,6 +18,8 @@
     UIView *inputAccessoryForFindingKeyboard;
     CGFloat initialInputViewPosYWhenKeyboardIsShown;
     BOOL keyboardHidesFromDragging;
+    UITapGestureRecognizer *tap;
+    UIPanGestureRecognizer *pan;
 }
 
 @property (weak, nonatomic) UIView *keyboardView;
@@ -89,6 +91,11 @@
     self.mediaButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
     [self addSubview:self.mediaButton];
     
+    self.separatorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5f)];
+    self.separatorView.backgroundColor = [UIColor lightGrayColor];
+    self.separatorView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+    [self addSubview:self.separatorView];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShowNote:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHideNote:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationDidChandeNote:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -106,6 +113,10 @@
 #pragma mark - Public methods
 - (void)adjustInputView
 {
+    CGRect frame = self.frame;
+    frame.size.height = self.textInitialHeight;
+    self.frame = frame;
+    
     if (!self.mediaButton.hidden) {
         CGRect mediaFrame = self.mediaButton.frame;
         mediaFrame.origin = CGPointMake(0, 0);
@@ -114,8 +125,6 @@
     } else {
         self.mediaButton.frame = CGRectZero;
     }
-    
-
     
     CGRect sendFrame = self.sendButton.frame;
     sendFrame.origin = CGPointMake(self.frame.size.width - sendFrame.size.width, 0);
@@ -142,6 +151,8 @@
     txtFrame.size.width = txtBgFrame.size.width - leftPadding - rightPadding;
     txtFrame.size.height = txtBgFrame.size.height - topPadding - bottomPadding;
     self.textView.frame = txtFrame;
+    
+    [self adjustPosition];
 }
 
 - (void)adjustPosition
@@ -154,8 +165,16 @@
     self.tableView.contentInset = contentInsets;
     self.tableView.scrollIndicatorInsets = contentInsets;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    if (tap) {
+        [self removeGestureRecognizer:tap];
+    }
+    
+    if (pan) {
+        [self.superview removeGestureRecognizer:pan];
+    }
+    
+    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     
     pan.delegate = self;
     
@@ -232,7 +251,6 @@
             frm.origin.y = self.superview.bounds.size.height - frm.size.height - keyboardFrame.size.height;
         }
         
-        
         [UIView animateWithDuration:0.3 animations:^{
             self.frame = frm;
 
@@ -280,8 +298,8 @@
     }];
     
     //Closing keyboard on tap
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self.textView action:@selector(resignFirstResponder)];
-    [self.tableView addGestureRecognizer:tap];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.textView action:@selector(resignFirstResponder)];
+    [self.tableView addGestureRecognizer:tapGesture];
 }
 
 - (void)handleKeyboardWillHideNote:(NSNotification *)notification
@@ -367,7 +385,7 @@
     
     if (_viewIsDragging)
     {
-        CGPoint translation = [pan translationInView:pan.view];
+        CGPoint translation = [pan translationInView:self.superview];
         
         frame.origin.y   += translation.y;
         kbFrame.origin.y += translation.y;

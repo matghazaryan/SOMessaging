@@ -22,7 +22,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
    
-    [SOMessageCell setDefaultConfigs];
+
     [self loadMessages];
 }
 
@@ -47,7 +47,7 @@
 {
     SOMessage *message = self.dataSource[index];
     
-    // Adjusting content for 3pt. (In this demo the width of bubble's tail is 3pt)
+    // Adjusting content for 3pt. (In this demo the width of bubble's tail is 6pt)
     if (!message.fromMe) {
         cell.contentInsets = UIEdgeInsetsMake(0, 3.0f, 0, 0); //Move content for 3 pt. to right
         cell.textView.textColor = [UIColor blackColor];
@@ -79,7 +79,7 @@
 
 - (void)messageInputViewDidSelectMediaButton:(SOMessageInputView *)inputView
 {
-
+    // Take a photo/video or choose from gallery
 }
 
 

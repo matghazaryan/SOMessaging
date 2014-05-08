@@ -224,20 +224,13 @@ static BOOL cellIsDragging;
 {
     CGFloat userImageViewLeftMargin = 3;
     
-    CGRect usedFrame = CGRectZero;
-    if (self.message.attributes) {
-        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:self.message.text attributes:self.message.attributes];
-        self.textView.attributedText = attributedText;
-        usedFrame.size = [self.message.text usedSizeForMaxWidth:self.messageMaxWidth withAttributes:self.message.attributes];
-    } else {
-        self.textView.text = self.message.text;
-        usedFrame.size = [self.message.text usedSizeForMaxWidth:self.messageMaxWidth withFont:self.messageFont];
-    }
-    
+    CGRect usedFrame = [self usedRectForWidth:self.messageMaxWidth];;
     if (self.balloonMinWidth) {
         CGFloat messageMinWidth = self.balloonMinWidth - messageLeftMargin - messageRightMargin;
         if (usedFrame.size.width <  messageMinWidth) {
             usedFrame.size.width = messageMinWidth;
+            
+            usedFrame.size.height = [self usedRectForWidth:messageMinWidth].size.height;
         }
     }
     
@@ -337,6 +330,23 @@ static BOOL cellIsDragging;
     timeLabel.origin.x = self.contentView.frame.size.width + 5;
     self.timeLabel.frame = timeLabel;
     self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
+    
+}
+
+- (CGRect)usedRectForWidth:(CGFloat)width
+{
+    CGRect usedFrame = CGRectZero;
+    
+    if (self.message.attributes) {
+        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:self.message.text attributes:self.message.attributes];
+        self.textView.attributedText = attributedText;
+        usedFrame.size = [self.message.text usedSizeForMaxWidth:width withAttributes:self.message.attributes];
+    } else {
+        self.textView.text = self.message.text;
+        usedFrame.size = [self.message.text usedSizeForMaxWidth:width withFont:self.messageFont];
+    }
+    
+    return usedFrame;
 }
 
 //---
@@ -438,7 +448,7 @@ static BOOL cellIsDragging;
     UIView *bgView = [[UIView alloc] init];
     bgView.frame = self.mediaImageView.bounds;
     bgView.backgroundColor = [UIColor blackColor];
-    bgView.alpha = 0.5f;
+    bgView.alpha = 0.4f;
     [self.mediaOverlayView addSubview:bgView];
     
     UIImageView *playButtonImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_button.png"]];

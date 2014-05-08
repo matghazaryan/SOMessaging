@@ -37,7 +37,7 @@
         int index = (int)[data indexOfObject:msg];
         if (index > 0) {
             SOMessage *prevMesage = result.lastObject;
-            message.date = [NSDate dateWithTimeInterval:((index % 2) ? 2*24*60*60 : 120) sinceDate:prevMesage.date];
+            message.date = [NSDate dateWithTimeInterval:((index % 2) ? 2 * 24 * 60 * 60 : 120) sinceDate:prevMesage.date];
         }
         
         if (message.type == SOMessageTypePhoto) {

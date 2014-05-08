@@ -15,7 +15,7 @@
 #import "SOMessageCell.h"
 
 
-@interface SOMessagingViewController : UIViewController <SOMessagingDataSource, SOMessagingDelegate>
+@interface SOMessagingViewController : UIViewController <SOMessagingDataSource, SOMessagingDelegate, UITableViewDataSource>
 
 #pragma mark - Properties
 @property (strong, nonatomic) UITableView *tableView;
