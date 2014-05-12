@@ -11,8 +11,8 @@ Messaging library for iOS 7.x by <b> arturdev </b>.
 <br>Click on screenshots to see video demo
 <br>
 
-This is a simple library to easily create a messaging app.
-Fully customizable.
+This is a simple library to easily create a messaging app with smooth animatios.<br>
+You can customize EVERYTHING!!!
 
 ###Requierments
 Xcode 5 <br>
