@@ -14,9 +14,9 @@ This is a simple library to easily create a messaging app.
 Fully customizable.
 
 ###Requierments
-Xcode 5
-iOS > 7.0
-ARC
+Xcode 5 <b>
+iOS 7.0 + <b>
+ARC 
 
 USAGE
 =====
