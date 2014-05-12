@@ -3,9 +3,13 @@ SOMessaging
 
 Messaging library for iOS 7.x by <b> arturdev </b>.
 
+[![Video Tutorial](https://raw.github.com/arturdev/AMSlideMenu/master/AMSlideMenuDemo-with%20Storyboard/AMSlideMenu/youtube.png)](http://www.youtube.com/watch?v=y33t_bWS_Zk)
+
+<a href="https://www.youtube.com/watch?v=AIUhyK_a22U">
 <img src="https://raw.githubusercontent.com/arturdev/SOMessaging/master/Screenshots/screen1.jpg" width=240>
 <img src="https://raw.githubusercontent.com/arturdev/SOMessaging/master/Screenshots/screen2.jpg" width=240>
 <img src="https://raw.githubusercontent.com/arturdev/SOMessaging/master/Screenshots/screen3.jpg" width=240>
+</a>
 <br>
 
 This is a simple library to easily create a messaging app.
