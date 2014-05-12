@@ -172,5 +172,14 @@
 		<key>type</key>
 		<string>SOMessageTypeVideo</string>
 	</dict>
+	<dict>
+		<key>fromMe</key>
+		<string>YES</string>
+		<key>type</key>
+		<string>SOMessageTypeText</string>
+		<key>message</key>
+		<string>😘
+Love you! </string>
+	</dict>
 </array>
 </plist>
