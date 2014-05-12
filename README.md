@@ -12,7 +12,7 @@ Messaging library for iOS 7.x by <b> arturdev </b>.
 <br>
 
 This is a simple library to easily create a messaging app with smooth animatios.<br>
-Things that can be customized:
+Things that can be customized:<br>
 • EVERYTHING!!!
 
 ###Requierments
