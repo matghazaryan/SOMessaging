@@ -8,7 +8,7 @@ Messaging library for iOS 7.x by <b> arturdev </b>.
 <img src="https://raw.githubusercontent.com/arturdev/SOMessaging/master/Screenshots/screen2.jpg" width=240>
 <img src="https://raw.githubusercontent.com/arturdev/SOMessaging/master/Screenshots/screen3.jpg" width=240>
 </a>
-<be>Click on screenshots to see video demo
+<br>Click on screenshots to see video demo
 <br>
 
 This is a simple library to easily create a messaging app.
