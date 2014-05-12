@@ -2,8 +2,8 @@
 //  StartVC.m
 //  SOSimpleChatDemo
 //
-//  Created by Artur Mkrtchyan on 4/23/14.
-//  Copyright (c) 2014 SocialOjbects Software. All rights reserved.
+// Created by : arturdev
+// Copyright (c) 2014 SocialObjects Software. All rights reserved.
 //
 
 #import "Type1VC.h"
