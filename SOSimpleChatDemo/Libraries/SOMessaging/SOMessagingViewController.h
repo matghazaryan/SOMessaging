@@ -22,8 +22,19 @@
 @property (strong, nonatomic) SOMessageInputView *inputView;
 
 #pragma mark - Methods
+/**
+ * Add new balloon to tableView in right side
+ */
 - (void)sendMessage:(SOMessage *)message;
+
+/**
+ * Add new balloon to tableView in left side
+ */
 - (void)receiveMessage:(SOMessage *)message;
+
+/**
+ * Reloading datasource
+ */
 - (void)refreshMessages;
 
 @end

@@ -18,8 +18,8 @@
     UIView *inputAccessoryForFindingKeyboard;
     CGFloat initialInputViewPosYWhenKeyboardIsShown;
     BOOL keyboardHidesFromDragging;
-    UITapGestureRecognizer *tap;
-    UIPanGestureRecognizer *pan;
+    UITapGestureRecognizer *tapGesture;
+    UIPanGestureRecognizer *panGesture;
 }
 
 @property (weak, nonatomic) UIView *keyboardView;
@@ -165,21 +165,21 @@
     self.tableView.contentInset = contentInsets;
     self.tableView.scrollIndicatorInsets = contentInsets;
     
-    if (tap) {
-        [self removeGestureRecognizer:tap];
+    if (tapGesture) {
+        [self removeGestureRecognizer:tapGesture];
     }
     
-    if (pan) {
-        [self.superview removeGestureRecognizer:pan];
+    if (panGesture) {
+        [self.superview removeGestureRecognizer:panGesture];
     }
     
-    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     
-    pan.delegate = self;
+    panGesture.delegate = self;
     
-    [self addGestureRecognizer:tap];
-    [self.superview addGestureRecognizer:pan];
+    [self addGestureRecognizer:tapGesture];
+    [self.superview addGestureRecognizer:panGesture];
     
     UINavigationController *nc = [self navigationControllerInstance];
     nc.cantAutorotate = NO;
@@ -298,8 +298,8 @@
     }];
     
     //Closing keyboard on tap
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.textView action:@selector(resignFirstResponder)];
-    [self.tableView addGestureRecognizer:tapGesture];
+    UITapGestureRecognizer *tapGestureForTableView = [[UITapGestureRecognizer alloc] initWithTarget:self.textView action:@selector(resignFirstResponder)];
+    [self.tableView addGestureRecognizer:tapGestureForTableView];
 }
 
 - (void)handleKeyboardWillHideNote:(NSNotification *)notification

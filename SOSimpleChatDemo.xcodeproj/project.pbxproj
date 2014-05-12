@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E3FB9A81920C3DC00986D8E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E3FB9A71920C3DC00986D8E /* AppDelegate.m */; };
 		3E70D69A1918D10D00D77D8B /* arturdev.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E70D6991918D10D00D77D8B /* arturdev.jpg */; };
 		3E70D69C1918D14D00D77D8B /* jobs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E70D69B1918D14D00D77D8B /* jobs.jpg */; };
 		3E70D69F1918FB0300D77D8B /* play_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E70D69D1918FB0300D77D8B /* play_button.png */; };
@@ -36,7 +37,6 @@
 		75493C1619070071006C6BCD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C1519070071006C6BCD /* UIKit.framework */; };
 		75493C1C19070071006C6BCD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75493C1A19070071006C6BCD /* InfoPlist.strings */; };
 		75493C1E19070071006C6BCD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C1D19070071006C6BCD /* main.m */; };
-		75493C2219070071006C6BCD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 75493C2119070071006C6BCD /* AppDelegate.m */; };
 		75493C2519070071006C6BCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75493C2319070071006C6BCD /* Main.storyboard */; };
 		75493C2A19070071006C6BCD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75493C2919070071006C6BCD /* Images.xcassets */; };
 		75493C3119070071006C6BCD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75493C3019070071006C6BCD /* XCTest.framework */; };
@@ -67,6 +67,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E3FB9A61920C3DC00986D8E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3E3FB9A71920C3DC00986D8E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3E70D6991918D10D00D77D8B /* arturdev.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arturdev.jpg; sourceTree = "<group>"; };
 		3E70D69B1918D14D00D77D8B /* jobs.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = jobs.jpg; sourceTree = "<group>"; };
 		3E70D69D1918FB0300D77D8B /* play_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_button.png; sourceTree = "<group>"; };
@@ -106,8 +108,6 @@
 		75493C1B19070071006C6BCD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		75493C1D19070071006C6BCD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		75493C1F19070071006C6BCD /* SOSimpleChatDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SOSimpleChatDemo-Prefix.pch"; sourceTree = "<group>"; };
-		75493C2019070071006C6BCD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		75493C2119070071006C6BCD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		75493C2419070071006C6BCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		75493C2919070071006C6BCD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		75493C2F19070071006C6BCD /* SOSimpleChatDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SOSimpleChatDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +161,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E3FB9A51920C3CF00986D8E /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				3E3FB9A61920C3DC00986D8E /* AppDelegate.h */,
+				3E3FB9A71920C3DC00986D8E /* AppDelegate.m */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		3EBD8101191A41E00007B68A /* Videos */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,8 +243,6 @@
 			children = (
 				75493C46190700A1006C6BCD /* Libraries */,
 				75493C47190700A1006C6BCD /* Sources */,
-				75493C2019070071006C6BCD /* AppDelegate.h */,
-				75493C2119070071006C6BCD /* AppDelegate.m */,
 				75493C2919070071006C6BCD /* Images.xcassets */,
 				75493C1819070071006C6BCD /* Supporting Files */,
 			);
@@ -284,6 +291,7 @@
 		75493C47190700A1006C6BCD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				3E3FB9A51920C3CF00986D8E /* Common */,
 				3EBD8110191A56540007B68A /* Managers */,
 				75493C48190700A1006C6BCD /* Controllers */,
 			);
@@ -486,7 +494,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75493C2219070071006C6BCD /* AppDelegate.m in Sources */,
 				75276BC0190AB78B0051611C /* SOMessageInputView.m in Sources */,
 				75493C4F190703A7006C6BCD /* SOMessagingViewController.m in Sources */,
 				3EBD810C191A4D2B0007B68A /* Type3VC.m in Sources */,
@@ -500,6 +507,7 @@
 				75493C52190703C7006C6BCD /* Type1VC.m in Sources */,
 				75493C5A1907103A006C6BCD /* SOMessageCell.m in Sources */,
 				3E73950E19111947004BB8A3 /* UINavigationController+Rotation.m in Sources */,
+				3E3FB9A81920C3DC00986D8E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

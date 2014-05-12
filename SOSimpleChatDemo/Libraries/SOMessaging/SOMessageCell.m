@@ -182,7 +182,7 @@ static BOOL cellIsDragging;
 - (void)setMessage:(SOMessage *)message
 {
     _message = message;
- 
+
     [self setInitialSizes];
 //    [self adjustCell];
 }
@@ -201,7 +201,9 @@ static BOOL cellIsDragging;
         self.mediaImageView.hidden = NO;
         [self adjustForVideoOnly];
     } else if (self.message.type == SOMessageTypeOther) {
-        
+        if (!CGSizeEqualToSize(self.userImageViewSize, CGSizeZero) && self.userImage) {
+            self.userImageView.hidden = NO;
+        }
     }
     
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
@@ -219,7 +221,6 @@ static BOOL cellIsDragging;
     
 }
 
-//---
 - (void)adjustForTextOnly
 {
     CGFloat userImageViewLeftMargin = 3;
@@ -349,7 +350,6 @@ static BOOL cellIsDragging;
     return usedFrame;
 }
 
-//---
 - (void)adjustForPhotoOnly
 {
     CGFloat userImageViewLeftMargin = 3;
@@ -473,8 +473,6 @@ static BOOL cellIsDragging;
     }
     
     return !isHorizontalPan;
-
-//    return YES;
 }
 
 #pragma mark - 
@@ -554,6 +552,7 @@ static BOOL cellIsDragging;
     self.panGesture.enabled = NO;
     self.panGesture.enabled = YES;
 }
+
 #pragma mark - Getters and Setters
 + (CGFloat) messageTopMargin
 {
