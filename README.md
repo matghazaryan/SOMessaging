@@ -80,6 +80,7 @@ In Demo project you can find how to use this library and how to customize.
 
 See ```SOMessagingDataSource``` protocol
 
+```ObjC
 /**
  * Array of SOMessage objects.
  */
@@ -143,4 +144,4 @@ See ```SOMessagingDataSource``` protocol
  * Size user's imageview
  */
 - (CGSize)userImageSize;
-
+```
