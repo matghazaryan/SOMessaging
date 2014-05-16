@@ -15,7 +15,7 @@ This is a simple library to easily create a messaging app with smooth animations
 Things that can be customized:<br>
 • EVERYTHING!!!
 
-###Requierments
+### Requirements
 Xcode 5 <br>
 iOS 7.0 + <br>
 ARC 
@@ -39,7 +39,7 @@ Link <b>MediaPlayer.framework</b>, <b>QuartzCore.framework</b>.
 
 Make subclass of <b>SOMessagingViewController</b>
 
-Override following required methods of SOMessagingDataSource protocol:
+Override the following required methods of the SOMessagingDataSource protocol:
 ```ObjC
 - (NSMutableArray *)messages
 {
@@ -59,7 +59,7 @@ Override following required methods of SOMessagingDataSource protocol:
 }
 ```
 
-Override following required methods of SOMessagingDelegate protocol:
+Override the following (required) methods for the SOMessagingDelegate protocol:
 ```ObjC
 - (void)didSelectMedia:(NSData *)media inMessageCell:(SOMessageCell *)cell
 {
@@ -91,7 +91,7 @@ You are done!
 CUSTOMIZATION
 =============
 
-In Demo project you can find how to use this library and how to customize.
+In the Demo project you can find out how you can use and customize this library!
 
 See ```SOMessagingDataSource``` protocol
 
@@ -103,30 +103,30 @@ See ```SOMessagingDataSource``` protocol
 
 /**
  * Override this method if you want to customize cell that will be shown.
- * This method calls after cell default adjustment on every reuse time
+ * This method is called after cell default adjustment on every reuse time
  */
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index;
 
 @optional
 
 /**
- * Default implementation of this method is calculating height of the cell for message at given index.
+ * Default implementation of this method for calculating the height of the cell for a message at given index.
  */
 - (CGFloat)heightForMessageForIndex:(NSInteger)index;
 
 /**
- * Messages will be grouped by returned time interval (in seconds).
+ * Messages will be grouped by a return time interval (in seconds).
  * return 0 if you don't want grouping.
  */
 - (NSTimeInterval)intervalForMessagesGrouping;
 
 /**
- * Return resizable image for sending balloon background image
+ * Returns a resizable image for the sending balloon's background
  */
 - (UIImage *)balloonImageForSending;
 
 /**
- * Return resizable image for receiving balloon background image
+ * Returns a resizable image for the receiving balloon's background
  */
 - (UIImage *)balloonImageForReceiving;
 
@@ -146,17 +146,17 @@ See ```SOMessagingDataSource``` protocol
 - (CGFloat)balloonMinWidth;
 
 /**
- * Font of message
+ * Font for the message
  */
 - (UIFont *)messageFont;
 
 /**
- * Size of photo or video thumbnail imageView
+ * Size of the photo or video thumbnail imageView
  */
 - (CGSize)mediaThumbnailSize;
 
 /**
- * Size user's imageview
+ * Size of the user's imageview
  */
 - (CGSize)userImageSize;
 ```
