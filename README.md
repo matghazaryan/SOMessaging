@@ -20,8 +20,19 @@ Xcode 5 <br>
 iOS 7.0 + <br>
 ARC 
 
+### Installation with CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries installation in your projects.
+
+#### Podfile
+
+```ruby
+pod "SOMessaging", "~> 1.0.0"
+```
+
 USAGE
 =====
+
 Copy <b>SOMessaging</b> folder to your project.
 
 Link <b>MediaPlayer.framework</b>, <b>QuartzCore.framework</b>.
