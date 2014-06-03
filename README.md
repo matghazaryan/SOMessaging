@@ -37,7 +37,7 @@ Copy <b>SOMessaging</b> folder to your project.
 
 Link <b>MediaPlayer.framework</b>, <b>QuartzCore.framework</b>.
 
-Make class that conforms to protocol SOMessage and synthesize all properties of that protocol. (In this demo it will be <b>Message</b>).
+Make a class that conforms to protocol SOMessage and synthesize all properties of that protocol. (In this demo it will be <b>Message</b>).
 
 Make subclass of <b>SOMessagingViewController</b>
 
