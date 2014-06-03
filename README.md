@@ -37,18 +37,20 @@ Copy <b>SOMessaging</b> folder to your project.
 
 Link <b>MediaPlayer.framework</b>, <b>QuartzCore.framework</b>.
 
+Make class that conforms to protocol SOMessage and synthesize all properties of that protocol. (In this demo it will be <b>Message</b>).
+
 Make subclass of <b>SOMessagingViewController</b>
 
 Override the following required methods of the SOMessagingDataSource protocol:
 ```ObjC
 - (NSMutableArray *)messages
 {
-    //return array of SOMessage objects
+    //return array of id<SOMessage> objects
 }
 
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
-    SOMessage *message = self.dataSource[index];
+    id<SOMessage> message = self.dataSource[index];
     
     // Customize balloon as you wish
     if (message.fromMe) {
@@ -73,7 +75,7 @@ Override the following (required) methods for the SOMessagingDelegate protocol:
         return;
     }
 
-    SOMessage *msg = [[SOMessage alloc] init];
+    Message *msg = [[Message alloc] init];
     msg.text = message;
     msg.fromMe = YES;
 
