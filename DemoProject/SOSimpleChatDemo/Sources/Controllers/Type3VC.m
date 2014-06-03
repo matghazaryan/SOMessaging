@@ -8,6 +8,7 @@
 
 #import "Type3VC.h"
 #import "ContentManager.h"
+#import "Message.h"
 
 @interface Type3VC ()
 
@@ -63,7 +64,7 @@
 
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
-    SOMessage *message = self.dataSource[index];
+    Message *message = self.dataSource[index];
     
     // Adjusting content for 4pt. (In this demo the width of bubble's tail is 8pt)
     if (!message.fromMe) {
@@ -100,7 +101,7 @@
 
 - (UILabel *)generateLabelForCell:(SOMessageCell *)cell
 {
-    SOMessage *message = cell.message;
+    Message *message = (Message *)cell.message;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd.MM.yyyy HH:mm"];
     UILabel *label = [[UILabel alloc] init];
@@ -172,7 +173,7 @@
         return;
     }
     
-    SOMessage *msg = [[SOMessage alloc] init];
+    Message *msg = [[Message alloc] init];
     msg.text = message;
     msg.fromMe = YES;
     

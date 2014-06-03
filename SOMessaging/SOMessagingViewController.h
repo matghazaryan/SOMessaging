@@ -41,12 +41,12 @@
 /**
  * Add new balloon to tableView in right side
  */
-- (void)sendMessage:(SOMessage *)message;
+- (void)sendMessage:(id<SOMessage>)message;
 
 /**
  * Add new balloon to tableView in left side
  */
-- (void)receiveMessage:(SOMessage *)message;
+- (void)receiveMessage:(id<SOMessage>)message;
 
 /**
  * Reloading datasource

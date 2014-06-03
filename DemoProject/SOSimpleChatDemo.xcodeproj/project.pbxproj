@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E207894193DFC6300EC9FA4 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E207893193DFC6300EC9FA4 /* Message.m */; };
 		3E3FB9A81920C3DC00986D8E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E3FB9A71920C3DC00986D8E /* AppDelegate.m */; };
 		3E70D69A1918D10D00D77D8B /* arturdev.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E70D6991918D10D00D77D8B /* arturdev.jpg */; };
 		3E70D69C1918D14D00D77D8B /* jobs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E70D69B1918D14D00D77D8B /* jobs.jpg */; };
@@ -48,7 +49,6 @@
 		75B35A361922B80800513423 /* play_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B35A1A1922B80800513423 /* play_button.png */; };
 		75B35A371922B80800513423 /* play_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B35A1B1922B80800513423 /* play_button@2x.png */; };
 		75B35A381922B80800513423 /* SOImageBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B35A1D1922B80800513423 /* SOImageBrowserView.m */; };
-		75B35A391922B80800513423 /* SOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B35A1F1922B80800513423 /* SOMessage.m */; };
 		75B35A3A1922B80800513423 /* SOMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B35A211922B80800513423 /* SOMessageCell.m */; };
 		75B35A3B1922B80800513423 /* SOMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B35A231922B80800513423 /* SOMessageInputView.m */; };
 		75B35A3C1922B80800513423 /* SOMessagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B35A281922B80800513423 /* SOMessagingViewController.m */; };
@@ -67,6 +67,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E207892193DFC6300EC9FA4 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		3E207893193DFC6300EC9FA4 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3E3FB9A61920C3DC00986D8E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3E3FB9A71920C3DC00986D8E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3E70D6991918D10D00D77D8B /* arturdev.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arturdev.jpg; sourceTree = "<group>"; };
@@ -119,7 +121,6 @@
 		75B35A1C1922B80800513423 /* SOImageBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOImageBrowserView.h; sourceTree = "<group>"; };
 		75B35A1D1922B80800513423 /* SOImageBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOImageBrowserView.m; sourceTree = "<group>"; };
 		75B35A1E1922B80800513423 /* SOMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessage.h; sourceTree = "<group>"; };
-		75B35A1F1922B80800513423 /* SOMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessage.m; sourceTree = "<group>"; };
 		75B35A201922B80800513423 /* SOMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageCell.h; sourceTree = "<group>"; };
 		75B35A211922B80800513423 /* SOMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOMessageCell.m; sourceTree = "<group>"; };
 		75B35A221922B80800513423 /* SOMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOMessageInputView.h; sourceTree = "<group>"; };
@@ -161,6 +162,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E207891193DFC5100EC9FA4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3E207892193DFC6300EC9FA4 /* Message.h */,
+				3E207893193DFC6300EC9FA4 /* Message.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		3E3FB9A51920C3CF00986D8E /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +295,7 @@
 			children = (
 				3E3FB9A51920C3CF00986D8E /* Common */,
 				3EBD8110191A56540007B68A /* Managers */,
+				3E207891193DFC5100EC9FA4 /* Models */,
 				75493C48190700A1006C6BCD /* Controllers */,
 			);
 			path = Sources;
@@ -334,7 +345,6 @@
 				75B35A1C1922B80800513423 /* SOImageBrowserView.h */,
 				75B35A1D1922B80800513423 /* SOImageBrowserView.m */,
 				75B35A1E1922B80800513423 /* SOMessage.h */,
-				75B35A1F1922B80800513423 /* SOMessage.m */,
 				75B35A201922B80800513423 /* SOMessageCell.h */,
 				75B35A211922B80800513423 /* SOMessageCell.m */,
 				75B35A221922B80800513423 /* SOMessageInputView.h */,
@@ -490,10 +500,10 @@
 				3EBD810C191A4D2B0007B68A /* Type3VC.m in Sources */,
 				75B35A3C1922B80800513423 /* SOMessagingViewController.m in Sources */,
 				75B35A3A1922B80800513423 /* SOMessageCell.m in Sources */,
+				3E207894193DFC6300EC9FA4 /* Message.m in Sources */,
 				3EBD8109191A4D0A0007B68A /* Type2VC.m in Sources */,
 				75493C1E19070071006C6BCD /* main.m in Sources */,
 				75B35A381922B80800513423 /* SOImageBrowserView.m in Sources */,
-				75B35A391922B80800513423 /* SOMessage.m in Sources */,
 				75B35A2D1922B80800513423 /* NSString+Calculation.m in Sources */,
 				3EBD8113191A566B0007B68A /* ContentManager.m in Sources */,
 				75B35A3E1922B80800513423 /* UINavigationController+Rotation.m in Sources */,

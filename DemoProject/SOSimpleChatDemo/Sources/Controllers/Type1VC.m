@@ -8,6 +8,7 @@
 
 #import "Type1VC.h"
 #import "ContentManager.h"
+#import "Message.h"
 
 @interface Type1VC ()
 
@@ -45,7 +46,7 @@
 
 - (void)configureMessageCell:(SOMessageCell *)cell forMessageAtIndex:(NSInteger)index
 {
-    SOMessage *message = self.dataSource[index];
+    Message *message = self.dataSource[index];
     
     // Adjusting content for 3pt. (In this demo the width of bubble's tail is 6pt)
     if (!message.fromMe) {
@@ -70,7 +71,7 @@
         return;
     }
 
-    SOMessage *msg = [[SOMessage alloc] init];
+    Message *msg = [[Message alloc] init];
     msg.text = message;
     msg.fromMe = YES;
 

@@ -25,7 +25,7 @@
 #import <Foundation/Foundation.h>
 #import "SOMessageType.h"
 
-@interface SOMessage : NSObject
+@protocol SOMessage
 
 /**
  * Message text

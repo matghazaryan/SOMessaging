@@ -138,7 +138,7 @@
 {
     CGFloat height;
     
-    SOMessage *message = self.conversation[indexPath.section][indexPath.row];
+    id<SOMessage> message = self.conversation[indexPath.section][indexPath.row];
     int index = (int)[[self messages] indexOfObject:message];
     height = [self heightForMessageForIndex:index];
 
@@ -167,7 +167,7 @@
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     view.backgroundColor = [UIColor clearColor];
     
-    SOMessage *firstMessageInGroup = [self.conversation[section] firstObject];
+    id<SOMessage> firstMessageInGroup = [self.conversation[section] firstObject];
     NSDate *date = [firstMessageInGroup date];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -193,7 +193,7 @@
 
     SOMessageCell *cell;
 
-    SOMessage *message = self.conversation[indexPath.section][indexPath.row];
+    id<SOMessage> message = self.conversation[indexPath.section][indexPath.row];
     
     cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
@@ -232,7 +232,7 @@
 {
     CGFloat height;
     
-    SOMessage *message = [self messages][index];
+    id<SOMessage> message = [self messages][index];
     
     if (message.type == SOMessageTypeText) {
         CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
@@ -336,7 +336,7 @@
 }
 
 #pragma mark - Public methods
-- (void)sendMessage:(SOMessage *)message
+- (void)sendMessage:(id<SOMessage>) message
 {
     message.fromMe = YES;
     NSMutableArray *messages = [self messages];
@@ -345,7 +345,7 @@
     [self refreshMessages];
 }
 
-- (void)receiveMessage:(SOMessage *)message
+- (void)receiveMessage:(id<SOMessage>) message
 {
     message.fromMe = NO;
 
@@ -387,8 +387,8 @@
                 [firstGroup addObject:allMessages[i]];
                 [conversation addObject:firstGroup];
             } else {
-                SOMessage *prevMessage    = allMessages[i-1];
-                SOMessage *currentMessage = allMessages[i];
+                id<SOMessage> prevMessage    = allMessages[i-1];
+                id<SOMessage> currentMessage = allMessages[i];
                 
                 NSDate *prevMessageDate    = prevMessage.date;
                 NSDate *currentMessageDate = currentMessage.date;

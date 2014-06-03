@@ -7,7 +7,7 @@
 //
 
 #import "ContentManager.h"
-#import "SOMessage.h"
+#import "Message.h"
 #import "SOMessageType.h"
 
 @implementation ContentManager
@@ -28,7 +28,7 @@
     NSMutableArray *result = [NSMutableArray new];
     NSArray *data = [NSArray arrayWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Conversation" ofType:@"plist"]]];
     for (NSDictionary *msg in data) {
-        SOMessage *message = [[SOMessage alloc] init];
+        Message *message = [[Message alloc] init];
         message.fromMe = [msg[@"fromMe"] boolValue];
         message.text = msg[@"message"];
         message.type = [self messageTypeFromString:msg[@"type"]];
@@ -36,7 +36,7 @@
         
         int index = (int)[data indexOfObject:msg];
         if (index > 0) {
-            SOMessage *prevMesage = result.lastObject;
+            Message *prevMesage = result.lastObject;
             message.date = [NSDate dateWithTimeInterval:((index % 2) ? 2 * 24 * 60 * 60 : 120) sinceDate:prevMesage.date];
         }
         

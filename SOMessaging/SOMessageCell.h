@@ -41,7 +41,7 @@
 @interface SOMessageCell : UITableViewCell
 
 @property (weak, nonatomic) UITableView *tableView;
-@property (weak, nonatomic) SOMessage *message;
+@property (weak, nonatomic) id<SOMessage> message;
 @property (weak, nonatomic) UIImage *balloonImage;
 @property (weak, nonatomic) UIImage *userImage;
 @property (strong, nonatomic) UIFont *messageFont;

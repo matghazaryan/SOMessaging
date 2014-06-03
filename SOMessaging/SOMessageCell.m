@@ -195,7 +195,7 @@ static BOOL cellIsDragging;
 }
 
 #pragma mark -
-- (void)setMessage:(SOMessage *)message
+- (void)setMessage:(id<SOMessage>)message
 {
     _message = message;
 
