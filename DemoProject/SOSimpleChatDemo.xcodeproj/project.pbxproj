@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		277BCE8F1950D7FE00413CF5 /* SOPhotoMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 277BCE8A1950D7FE00413CF5 /* SOPhotoMessageCell.m */; };
+		277BCE901950D7FE00413CF5 /* SOTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 277BCE8C1950D7FE00413CF5 /* SOTextMessageCell.m */; };
+		277BCE911950D7FE00413CF5 /* SOVideoMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 277BCE8E1950D7FE00413CF5 /* SOVideoMessageCell.m */; };
 		3E207894193DFC6300EC9FA4 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E207893193DFC6300EC9FA4 /* Message.m */; };
 		3E3FB9A81920C3DC00986D8E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E3FB9A71920C3DC00986D8E /* AppDelegate.m */; };
 		3E70D69A1918D10D00D77D8B /* arturdev.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E70D6991918D10D00D77D8B /* arturdev.jpg */; };
@@ -67,6 +70,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		277BCE891950D7FE00413CF5 /* SOPhotoMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOPhotoMessageCell.h; sourceTree = "<group>"; };
+		277BCE8A1950D7FE00413CF5 /* SOPhotoMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOPhotoMessageCell.m; sourceTree = "<group>"; };
+		277BCE8B1950D7FE00413CF5 /* SOTextMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOTextMessageCell.h; sourceTree = "<group>"; };
+		277BCE8C1950D7FE00413CF5 /* SOTextMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOTextMessageCell.m; sourceTree = "<group>"; };
+		277BCE8D1950D7FE00413CF5 /* SOVideoMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOVideoMessageCell.h; sourceTree = "<group>"; };
+		277BCE8E1950D7FE00413CF5 /* SOVideoMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOVideoMessageCell.m; sourceTree = "<group>"; };
 		3E207892193DFC6300EC9FA4 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		3E207893193DFC6300EC9FA4 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3E3FB9A61920C3DC00986D8E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -347,6 +356,12 @@
 				75B35A1E1922B80800513423 /* SOMessage.h */,
 				75B35A201922B80800513423 /* SOMessageCell.h */,
 				75B35A211922B80800513423 /* SOMessageCell.m */,
+				277BCE891950D7FE00413CF5 /* SOPhotoMessageCell.h */,
+				277BCE8A1950D7FE00413CF5 /* SOPhotoMessageCell.m */,
+				277BCE8B1950D7FE00413CF5 /* SOTextMessageCell.h */,
+				277BCE8C1950D7FE00413CF5 /* SOTextMessageCell.m */,
+				277BCE8D1950D7FE00413CF5 /* SOVideoMessageCell.h */,
+				277BCE8E1950D7FE00413CF5 /* SOVideoMessageCell.m */,
 				75B35A221922B80800513423 /* SOMessageInputView.h */,
 				75B35A231922B80800513423 /* SOMessageInputView.m */,
 				75B35A241922B80800513423 /* SOMessageType.h */,
@@ -497,15 +512,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				277BCE8F1950D7FE00413CF5 /* SOPhotoMessageCell.m in Sources */,
 				3EBD810C191A4D2B0007B68A /* Type3VC.m in Sources */,
 				75B35A3C1922B80800513423 /* SOMessagingViewController.m in Sources */,
 				75B35A3A1922B80800513423 /* SOMessageCell.m in Sources */,
 				3E207894193DFC6300EC9FA4 /* Message.m in Sources */,
 				3EBD8109191A4D0A0007B68A /* Type2VC.m in Sources */,
 				75493C1E19070071006C6BCD /* main.m in Sources */,
+				277BCE911950D7FE00413CF5 /* SOVideoMessageCell.m in Sources */,
 				75B35A381922B80800513423 /* SOImageBrowserView.m in Sources */,
 				75B35A2D1922B80800513423 /* NSString+Calculation.m in Sources */,
 				3EBD8113191A566B0007B68A /* ContentManager.m in Sources */,
+				277BCE901950D7FE00413CF5 /* SOTextMessageCell.m in Sources */,
 				75B35A3E1922B80800513423 /* UINavigationController+Rotation.m in Sources */,
 				75B35A3B1922B80800513423 /* SOMessageInputView.m in Sources */,
 				75B35A3D1922B80800513423 /* SOPlaceholderedTextView.m in Sources */,

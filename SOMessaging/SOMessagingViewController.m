@@ -25,6 +25,9 @@
 #import "SOMessagingViewController.h"
 #import "SOMessage.h"
 #import "SOMessageCell.h"
+#import "SOPhotoMessageCell.h"
+#import "SOTextMessageCell.h"
+#import "SOVideoMessageCell.h"
 
 #import "NSString+Calculation.h"
 
@@ -189,20 +192,33 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"sendCell";
+    NSString *cellIdentifier;
 
     SOMessageCell *cell;
 
     id<SOMessage> message = self.conversation[indexPath.section][indexPath.row];
     
+    Class class;
+    if(message.type == SOMessageTypeText){
+        cellIdentifier = @"textCell";
+        class = [SOTextMessageCell class];
+    }else if(message.type == SOMessageTypeVideo){
+        cellIdentifier = @"videoCell";
+        class = [SOVideoMessageCell class];
+    }else if(message.type == SOMessageTypePhoto){
+        cellIdentifier = @"photoCell";
+        class = [SOPhotoMessageCell class];
+    }
+    
     cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[SOMessageCell alloc] initWithStyle:UITableViewCellStyleDefault
+        cell = [[class alloc] initWithStyle:UITableViewCellStyleDefault
                                     reuseIdentifier:cellIdentifier
                                     messageMaxWidth:[self messageMaxWidth]];
         [cell setMediaImageViewSize:[self mediaThumbnailSize]];
         [cell setUserImageViewSize:[self userImageSize]];
     }
+    
     cell.tableView = self.tableView;
     cell.balloonMinHeight = [self balloonMinHeight];
     cell.balloonMinWidth  = [self balloonMinWidth];
@@ -210,8 +226,7 @@
     cell.messageFont = [self messageFont];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.balloonImage = message.fromMe ? self.balloonSendImage : self.balloonReceiveImage;
-    cell.textView.textColor = message.fromMe ? [UIColor whiteColor] : [UIColor blackColor];
-    cell.message = message;    
+    cell.message = message;
     
     // For user customization
     int index = (int)[[self messages] indexOfObject:message];

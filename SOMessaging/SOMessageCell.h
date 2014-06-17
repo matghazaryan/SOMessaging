@@ -47,10 +47,7 @@
 @property (strong, nonatomic) UIFont *messageFont;
 
 @property (strong, nonatomic) UIImageView *userImageView;
-@property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UILabel *timeLabel; //appears while dragging cell
-@property (strong, nonatomic) UIImageView *mediaImageView;
-@property (strong, nonatomic) UIView *mediaOverlayView; // For video only
 
 @property (strong, nonatomic) UIImageView *balloonImageView;
 
@@ -68,8 +65,6 @@
 + (CGFloat) maxContentOffsetX;
 + (void) setMaxContentOffsetX:(CGFloat)offsetX;
 
-+ (void)setDefaultConfigs;
-
 @property (nonatomic) CGFloat balloonMinWidth;
 @property (nonatomic) CGFloat balloonMinHeight;
 @property (nonatomic) CGFloat messageMaxWidth;
@@ -81,8 +76,9 @@
 @property (weak, nonatomic) id<SOMessageCellDelegate> delegate;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth;
-- (void)setMediaImageViewSize:(CGSize)size;
-- (void)setUserImageViewSize:(CGSize)size;
+
+@property (nonatomic) CGSize mediaImageViewSize;
+@property (nonatomic) CGSize userImageViewSize;
 
 - (void)adjustCell;
 
