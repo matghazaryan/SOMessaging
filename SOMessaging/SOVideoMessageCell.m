@@ -8,6 +8,13 @@
 
 #import "SOVideoMessageCell.h"
 
+@interface SOVideoMessageCell()
+
+@property UIView* dimmingView;
+@property UIImageView *playButtonImageView;
+
+@end
+
 @implementation SOVideoMessageCell
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
@@ -16,6 +23,8 @@
     
     if (self) {
         [self initMediaOverlayView];
+        [self initDimmingView];
+        [self initPlayButton];
     }
     
     return self;
@@ -27,6 +36,23 @@
     
     self.mediaOverlayView.backgroundColor = [UIColor clearColor];
     [self.mediaImageView addSubview:self.mediaOverlayView];
+}
+
+-(void)initDimmingView
+{
+    self.dimmingView = [[UIView alloc] init];
+    self.dimmingView.backgroundColor = [UIColor blackColor];
+    self.dimmingView.alpha = 0.4f;
+    [self.mediaOverlayView addSubview:self.dimmingView];
+}
+
+-(void)initPlayButton
+{
+    self.playButtonImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_button.png"]];
+    self.playButtonImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.playButtonImageView.clipsToBounds = YES;
+    self.playButtonImageView.backgroundColor = [UIColor clearColor];
+    [self.mediaOverlayView addSubview:self.playButtonImageView];
 }
 
 -(void)adjustCell
@@ -43,23 +69,12 @@
     frame.size   = self.mediaImageView.frame.size;
     self.mediaOverlayView.frame = frame;
     
-    [self.mediaOverlayView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.dimmingView.frame = self.mediaImageView.bounds;
     
-    UIView *bgView = [[UIView alloc] init];
-    bgView.frame = self.mediaImageView.bounds;
-    bgView.backgroundColor = [UIColor blackColor];
-    bgView.alpha = 0.4f;
-    [self.mediaOverlayView addSubview:bgView];
-    
-    UIImageView *playButtonImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_button.png"]];
-    playButtonImageView.contentMode = UIViewContentModeScaleAspectFit;
-    playButtonImageView.clipsToBounds = YES;
-    playButtonImageView.backgroundColor = [UIColor clearColor];
-    CGRect playFrame = playButtonImageView.frame;
+    CGRect playFrame = self.playButtonImageView.frame;
     playFrame.size   = CGSizeMake(20, 20);
-    playButtonImageView.frame = playFrame;
-    playButtonImageView.center = CGPointMake(self.mediaOverlayView.frame.size.width/2 + self.contentInsets.left - self.contentInsets.right, self.mediaOverlayView.frame.size.height/2);
-    [self.mediaOverlayView addSubview:playButtonImageView];
+    self.playButtonImageView.frame = playFrame;
+    self.playButtonImageView.center = CGPointMake(self.mediaOverlayView.frame.size.width/2 + self.contentInsets.left - self.contentInsets.right, self.mediaOverlayView.frame.size.height/2);
 }
 
 @end
