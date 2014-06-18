@@ -213,10 +213,10 @@
         cell = [[class alloc] initWithStyle:UITableViewCellStyleDefault
                                     reuseIdentifier:cellIdentifier
                                     messageMaxWidth:[self messageMaxWidth]];
-        [cell setMediaImageViewSize:[self mediaThumbnailSize]];
-        [cell setUserImageViewSize:[self userImageSize]];
     }
     
+    [cell setMediaImageViewSize:[self mediaThumbnailSize]];
+    [cell setUserImageViewSize:[self userImageSize]];
     cell.tableView = self.tableView;
     cell.balloonMinHeight = [self balloonMinHeight];
     cell.balloonMinWidth  = [self balloonMinWidth];
