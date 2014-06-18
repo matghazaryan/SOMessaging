@@ -8,6 +8,8 @@
 
 #import "SOPhotoMessageCell.h"
 
+static const int userImageViewLeftMargin = 3;
+
 @implementation SOPhotoMessageCell
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
@@ -51,8 +53,6 @@
 
 - (void)adjustForPhotoOnly
 {
-    CGFloat userImageViewLeftMargin = 3;
-    
     UIImage *image = self.message.thumbnail;
     if (!image) {
         image = [[UIImage alloc] initWithData:self.message.media];
@@ -88,28 +88,25 @@
     self.userImageView.frame = userRect;
     self.userImageView.image = self.userImage;
     
-    CGRect frm = self.containerView.frame;
-    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - frame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
-    frm.origin.y = kBubbleTopMargin;
-    frm.size.width = frame.size.width;
+    CGRect frm = CGRectMake(self.message.fromMe ? self.contentView.frame.size.width - frame.size.width - kBubbleRightMargin : kBubbleLeftMargin,
+                            kBubbleTopMargin,
+                            frame.size.width,
+                            frame.size.height);
     if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
-        frm.size.width += userImageViewLeftMargin + userRect.size.width;
+        
+        CGFloat offset = userImageViewLeftMargin + userRect.size.width;
+        frm.size.width += offset;
         if (self.message.fromMe) {
-            frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
+            frm.origin.x -= offset;
         }
     }
     
-    frm.size.height = frame.size.height;
     if (frm.size.height < self.userImageViewSize.height) {
         CGFloat delta = self.userImageViewSize.height - frm.size.height;
-        frm.size.height = self.userImageViewSize.height;
         
-        for (UIView *sub in self.containerView.subviews) {
-            CGRect fr = sub.frame;
-            fr.origin.y += delta;
-            sub.frame = fr;
-        }
+        frm.size.height = self.userImageViewSize.height;
+        frm.origin.y += delta;
     }
     self.containerView.frame = frm;
     
@@ -118,19 +115,6 @@
     layer.frame    = (CGRect){{0,0},self.balloonImageView.layer.frame.size};
     self.mediaImageView.layer.mask = layer;
     [self.mediaImageView setNeedsDisplay];
-    
-    
-    // Adjusing time label
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
-    self.timeLabel.frame = CGRectZero;
-    self.timeLabel.text = [formatter stringFromDate:self.message.date];
-    
-    [self.timeLabel sizeToFit];
-    CGRect timeLabel = self.timeLabel.frame;
-    timeLabel.origin.x = self.contentView.frame.size.width + 5;
-    self.timeLabel.frame = timeLabel;
-    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
 }
 
 - (void)setMediaImageViewSize:(CGSize)size

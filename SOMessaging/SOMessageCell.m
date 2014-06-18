@@ -29,6 +29,8 @@
     BOOL isHorizontalPan;
 }
 
+@property NSDateFormatter* dateFormatter;
+
 @end
 
 @implementation SOMessageCell
@@ -58,7 +60,7 @@ static BOOL cellIsDragging;
         [self initContainerView];
         [self initUserImageView];
         [self initBalloon];
-        [self setInitialSizes];
+        [self initTimeLabel];
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationWillChandeNote:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
@@ -89,6 +91,7 @@ static BOOL cellIsDragging;
     self.userImageView.clipsToBounds = YES;
     self.userImageView.backgroundColor = [UIColor clearColor];
     self.userImageView.layer.cornerRadius = 5;
+    self.userImageView.hidden = YES;
     
     [self.containerView addSubview:self.userImageView];
 }
@@ -100,17 +103,13 @@ static BOOL cellIsDragging;
     [self.containerView addSubview:self.balloonImageView];
 }
 
-- (void)setInitialSizes
+- (void)initTimeLabel
 {
-    if (self.timeLabel) {
-        [self.timeLabel removeFromSuperview];
-    }
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setDateFormat:@"HH:mm"];
     
     self.timeLabel = [[UILabel alloc] init];
     
-    [self hideSubViews];
-    
-    [self.contentView addSubview:self.timeLabel];
     
     self.contentView.clipsToBounds = NO;
     self.clipsToBounds = NO;
@@ -118,6 +117,8 @@ static BOOL cellIsDragging;
     self.timeLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
     self.timeLabel.textColor = [UIColor grayColor];
     self.timeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    
+    [self.contentView addSubview:self.timeLabel];
 }
 
 - (void)hideSubViews
@@ -147,31 +148,32 @@ static BOOL cellIsDragging;
     [self adjustCell];
 }
 
-#pragma mark -
-- (void)setMessage:(id<SOMessage>)message
-{
-    _message = message;
-
-    [self setInitialSizes];
-//    [self adjustCell];
-}
-
 - (void)adjustCell
 {
     [self hideSubViews];
     
+    // Adjusing time label
+    self.timeLabel.text = [self.dateFormatter stringFromDate:self.message.date];
+    
+    [self.timeLabel sizeToFit];
+    CGRect timeLabel = self.timeLabel.frame;
+    timeLabel.origin.x = self.contentView.frame.size.width + 5;
+    self.timeLabel.frame = timeLabel;
+    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
+    
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
     initialTimeLabelPosX = self.timeLabel.frame.origin.x;
-/* 
---  Not implemented ---
-    else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
-        self.textView.hidden = NO;
-        self.mediaImageView.hidden = NO;
-    } else if (self.message.type & (SOMessageTypeVideo | SOMessageTypeText)) {
-        self.textView.hidden = NO;
-        self.mediaImageView.hidden = NO;
-    }
-*/
+    
+    /*
+     --  Not implemented ---
+     else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
+     self.textView.hidden = NO;
+     self.mediaImageView.hidden = NO;
+     } else if (self.message.type & (SOMessageTypeVideo | SOMessageTypeText)) {
+     self.textView.hidden = NO;
+     self.mediaImageView.hidden = NO;
+     }
+     */
 }
 
 #pragma mark - GestureRecognizer delegates

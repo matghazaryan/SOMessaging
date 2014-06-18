@@ -10,12 +10,6 @@
 
 static const int userImageViewLeftMargin = 3;
 
-@interface SOTextMessageCell()
-
-@property NSDateFormatter* dateFormatter;
-
-@end
-
 @implementation SOTextMessageCell
 
 +(CGSize)sizeForMessage:(id<SOMessage>)message constrainedToWidth:(CGFloat)width withFont:(UIFont*)font
@@ -52,9 +46,6 @@ static const int userImageViewLeftMargin = 3;
     
     if (self) {
         [self initTextView];
-        
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setDateFormat:@"HH:mm"];
     }
     
     return self;
@@ -187,15 +178,6 @@ static const int userImageViewLeftMargin = 3;
         frm.origin.y += delta;
     }
     self.containerView.frame = frm;
-    
-    // Adjusing time label
-    self.timeLabel.text = [self.dateFormatter stringFromDate:self.message.date];
-    
-    [self.timeLabel sizeToFit];
-    CGRect timeLabel = self.timeLabel.frame;
-    timeLabel.origin.x = self.contentView.frame.size.width + 5;
-    self.timeLabel.frame = timeLabel;
-    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
 }
 
 @end
