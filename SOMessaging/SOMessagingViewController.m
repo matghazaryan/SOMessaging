@@ -29,8 +29,6 @@
 #import "SOTextMessageCell.h"
 #import "SOVideoMessageCell.h"
 
-#import "NSString+Calculation.h"
-
 #import "SOImageBrowserView.h"
 #import <MediaPlayer/MediaPlayer.h>
 
@@ -250,21 +248,15 @@
     id<SOMessage> message = [self messages][index];
     
     if (message.type == SOMessageTypeText) {
-        CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
-        if (message.attributes) {
-            size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
-        }
+        CGSize size = [SOTextMessageCell sizeForMessage:message constrainedToWidth:[self messageMaxWidth] withFont:[self messageFont]];
         
         if (self.balloonMinWidth) {
             CGFloat messageMinWidth = self.balloonMinWidth - [SOMessageCell messageLeftMargin] - [SOMessageCell messageRightMargin];
             if (size.width <  messageMinWidth) {
                 size.width = messageMinWidth;
 
-                CGSize newSize = [message.text usedSizeForMaxWidth:messageMinWidth withFont:[self messageFont]];
-                if (message.attributes) {
-                    newSize = [message.text usedSizeForMaxWidth:messageMinWidth withAttributes:message.attributes];
-                }
-                
+                CGSize newSize = [SOTextMessageCell sizeForMessage:message constrainedToWidth:messageMinWidth withFont:[self messageFont]];
+        
                 size.height = newSize.height;
             }
         }

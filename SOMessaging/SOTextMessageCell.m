@@ -7,9 +7,44 @@
 //
 
 #import "SOTextMessageCell.h"
-#import "NSString+Calculation.h"
+
+static const int userImageViewLeftMargin = 3;
+
+@interface SOTextMessageCell()
+
+@property NSDateFormatter* dateFormatter;
+
+@end
 
 @implementation SOTextMessageCell
+
++(CGSize)sizeForMessage:(id<SOMessage>)message constrainedToWidth:(CGFloat)width withFont:(UIFont*)font
+{
+    static UITextView* textMeasurementView;
+    if(!textMeasurementView){
+        textMeasurementView = [self newTextView];
+        textMeasurementView.frame = CGRectMake(0, 0, CGFLOAT_MAX, CGFLOAT_MAX);
+    }
+    
+    // Performance optimization
+    if(textMeasurementView.font != font){
+        textMeasurementView.font = font;
+    }
+    
+    [self setTextForMessage:message onTextView:textMeasurementView];
+    
+    return [textMeasurementView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
+}
+
++(void)setTextForMessage:(id<SOMessage>)message onTextView:(UITextView*)textView
+{
+    if (message.attributes) {
+        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:message.text attributes:message.attributes];
+        textView.attributedText = attributedText;
+    } else {
+        textView.text = message.text;
+    }
+}
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
 {
@@ -17,6 +52,9 @@
     
     if (self) {
         [self initTextView];
+        
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        [self.dateFormatter setDateFormat:@"HH:mm"];
     }
     
     return self;
@@ -24,14 +62,25 @@
 
 -(void)initTextView
 {
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.messageMaxWidth, 0)];
-    
-    self.textView.textColor = [UIColor whiteColor];
-    self.textView.backgroundColor = [UIColor clearColor];
-    [self.textView setTextContainerInset:UIEdgeInsetsZero];
-    self.textView.textContainer.lineFragmentPadding = 0;
+    self.textView = [self.class newTextView];
+    self.textView.frame = CGRectMake(0, 0, self.messageMaxWidth, 0);
     
     [self.containerView addSubview:self.textView];
+}
+
++(UITextView*)newTextView
+{
+    UITextView* textView = [[UITextView alloc] init];
+
+    textView.textColor = [UIColor whiteColor];
+    textView.backgroundColor = [UIColor clearColor];
+    [textView setTextContainerInset:UIEdgeInsetsZero];
+    textView.textContainer.lineFragmentPadding = 0;
+    textView.editable = NO;
+    textView.scrollEnabled = NO;
+    textView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
+    
+    return textView;
 }
 
 -(void)setMessage:(id<SOMessage>)message
@@ -49,29 +98,31 @@
 
 - (void)adjustForTextOnly
 {
-    CGFloat userImageViewLeftMargin = 3;
+    // Performance optimization
+    if(self.textView.font != self.messageFont){
+        self.textView.font = self.messageFont;
+    }
     
-    CGRect usedFrame = [self usedRectForWidth:self.messageMaxWidth];;
+    [self.class setTextForMessage:self.message onTextView:self.textView];
+    
+    CGSize textSize = [self.class sizeForMessage:self.message constrainedToWidth:self.messageMaxWidth withFont:self.messageFont];
     if (self.balloonMinWidth) {
         CGFloat messageMinWidth = self.balloonMinWidth - [self.class messageLeftMargin] - [self.class messageRightMargin];
-        if (usedFrame.size.width <  messageMinWidth) {
-            usedFrame.size.width = messageMinWidth;
+        if (textSize.width <  messageMinWidth) {
+            textSize.width = messageMinWidth;
             
-            usedFrame.size.height = [self usedRectForWidth:messageMinWidth].size.height;
+            textSize.height = [self.class sizeForMessage:self.message constrainedToWidth:messageMinWidth withFont:self.messageFont].height;
         }
     }
     
     CGFloat messageMinHeight = self.balloonMinHeight - [self.class messageTopMargin] - [self.class messageBottomMargin];
     
-    if (self.balloonMinHeight && usedFrame.size.height < messageMinHeight) {
-        usedFrame.size.height = messageMinHeight;
+    if (self.balloonMinHeight && textSize.height < messageMinHeight) {
+        textSize.height = messageMinHeight;
     }
     
-    self.textView.font = self.messageFont;
-    
     CGRect frame = self.textView.frame;
-    frame.size.width  = usedFrame.size.width;
-    frame.size.height = usedFrame.size.height;
+    frame.size = textSize;
     frame.origin.y = [self.class messageTopMargin];
     
     CGRect balloonFrame = CGRectZero;
@@ -101,12 +152,6 @@
     self.balloonImageView.backgroundColor = [UIColor clearColor];
     self.balloonImageView.image = self.balloonImage;
     
-    self.textView.editable = NO;
-    self.textView.scrollEnabled = NO;
-    self.textView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
-    
-    
-    
     if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
         userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
     } else {
@@ -121,60 +166,36 @@
     self.userImageView.frame = userRect;
     self.userImageView.image = self.userImage;
     
-    CGRect frm = CGRectZero;
-    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
-    frm.origin.y = kBubbleTopMargin;
-    frm.size.height = balloonFrame.size.height;
-    frm.size.width = balloonFrame.size.width;
+    CGRect frm = CGRectMake(self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin,
+                            kBubbleTopMargin,
+                            balloonFrame.size.width,
+                            balloonFrame.size.height);
     if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
-        frm.size.width += userImageViewLeftMargin + userRect.size.width;
+        
+        CGFloat offset = userImageViewLeftMargin + userRect.size.width;
+        frm.size.width += offset;
         if (self.message.fromMe) {
-            frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
+            frm.origin.x -= offset;
         }
     }
     
-    
     if (frm.size.height < self.userImageViewSize.height) {
         CGFloat delta = self.userImageViewSize.height - frm.size.height;
-        frm.size.height = self.userImageViewSize.height;
         
-        for (UIView *sub in self.containerView.subviews) {
-            CGRect fr = sub.frame;
-            fr.origin.y += delta;
-            sub.frame = fr;
-        }
+        frm.size.height = self.userImageViewSize.height;
+        frm.origin.y += delta;
     }
     self.containerView.frame = frm;
     
     // Adjusing time label
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
-    self.timeLabel.frame = CGRectZero;
-    self.timeLabel.text = [formatter stringFromDate:self.message.date];
+    self.timeLabel.text = [self.dateFormatter stringFromDate:self.message.date];
     
     [self.timeLabel sizeToFit];
     CGRect timeLabel = self.timeLabel.frame;
     timeLabel.origin.x = self.contentView.frame.size.width + 5;
     self.timeLabel.frame = timeLabel;
     self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
-    
-}
-
-- (CGRect)usedRectForWidth:(CGFloat)width
-{
-    CGRect usedFrame = CGRectZero;
-    
-    if (self.message.attributes) {
-        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:self.message.text attributes:self.message.attributes];
-        self.textView.attributedText = attributedText;
-        usedFrame.size = [self.message.text usedSizeForMaxWidth:width withAttributes:self.message.attributes];
-    } else {
-        self.textView.text = self.message.text;
-        usedFrame.size = [self.message.text usedSizeForMaxWidth:width withFont:self.messageFont];
-    }
-    
-    return usedFrame;
 }
 
 @end

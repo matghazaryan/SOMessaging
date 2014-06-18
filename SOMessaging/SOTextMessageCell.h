@@ -12,4 +12,6 @@
 
 @property (strong, nonatomic) UITextView *textView;
 
++(CGSize)sizeForMessage:(id<SOMessage>)message constrainedToWidth:(CGFloat)width withFont:(UIFont*)font;
+
 @end
