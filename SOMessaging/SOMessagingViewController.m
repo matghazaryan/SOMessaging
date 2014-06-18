@@ -56,6 +56,8 @@
     dispatch_once_t onceToken;
 }
 
+static NSDateFormatter* dateFormatter;
+
 - (void)setup
 {
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
@@ -171,10 +173,12 @@
     id<SOMessage> firstMessageInGroup = [self.conversation[section] firstObject];
     NSDate *date = [firstMessageInGroup date];
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd MMM, eee, HH:mm"];
     UILabel *label = [[UILabel alloc] init];
-    label.text = [formatter stringFromDate:date];
+    if(!dateFormatter){
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"dd MMM, eee, HH:mm"];
+    }
+    label.text = [dateFormatter stringFromDate:date];
     
     label.textColor = [UIColor grayColor];
     label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];

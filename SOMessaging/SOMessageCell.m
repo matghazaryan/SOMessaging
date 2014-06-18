@@ -29,8 +29,6 @@
     BOOL isHorizontalPan;
 }
 
-@property NSDateFormatter* dateFormatter;
-
 @end
 
 @implementation SOMessageCell
@@ -45,6 +43,8 @@ static CGFloat contentOffsetX = 0;
 
 static CGFloat initialTimeLabelPosX;
 static BOOL cellIsDragging;
+
+static NSDateFormatter* dateFormatter;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
 {
@@ -105,11 +105,12 @@ static BOOL cellIsDragging;
 
 - (void)initTimeLabel
 {
-    self.dateFormatter = [[NSDateFormatter alloc] init];
-    [self.dateFormatter setDateFormat:@"HH:mm"];
+    if(!dateFormatter){
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HH:mm"];;
+    }
     
     self.timeLabel = [[UILabel alloc] init];
-    
     
     self.contentView.clipsToBounds = NO;
     self.clipsToBounds = NO;
@@ -153,7 +154,7 @@ static BOOL cellIsDragging;
     [self hideSubViews];
     
     // Adjusing time label
-    self.timeLabel.text = [self.dateFormatter stringFromDate:self.message.date];
+    self.timeLabel.text = [dateFormatter stringFromDate:self.message.date];
     
     [self.timeLabel sizeToFit];
     CGRect timeLabel = self.timeLabel.frame;
