@@ -55,15 +55,10 @@
     [self.mediaOverlayView addSubview:self.playButtonImageView];
 }
 
--(void)adjustCell
+-(void)layoutChatBalloon
 {
-    [super adjustCell];
+    [super layoutChatBalloon];
     
-    [self adjustForVideoOnly];
-}
-
-- (void)adjustForVideoOnly
-{
     CGRect frame = self.mediaOverlayView.frame;
     frame.origin = CGPointZero;
     frame.size   = self.mediaImageView.frame.size;

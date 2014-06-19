@@ -8,8 +8,6 @@
 
 #import "SOPhotoMessageCell.h"
 
-static const int userImageViewLeftMargin = 3;
-
 @implementation SOPhotoMessageCell
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
@@ -44,14 +42,7 @@ static const int userImageViewLeftMargin = 3;
     [self.containerView addSubview:self.mediaImageView];
 }
 
--(void)adjustCell
-{
-    [super adjustCell];
-    
-    [self adjustForPhotoOnly];
-}
-
-- (void)adjustForPhotoOnly
+-(void)layoutChatBalloon
 {
     UIImage *image = self.message.thumbnail;
     if (!image) {
@@ -71,58 +62,17 @@ static const int userImageViewLeftMargin = 3;
     self.balloonImageView.frame = frame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
     self.balloonImageView.image = self.balloonImage;
-    
-    CGRect userRect = self.userImageView.frame;
-    
-    if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
-        userRect.origin.y = frame.origin.y + frame.size.height - userRect.size.height;
-    } else {
-        userRect.origin.y = 0;
-    }
-    
-    if (self.message.fromMe) {
-        userRect.origin.x = frame.origin.x + userImageViewLeftMargin + frame.size.width;
-    } else {
-        userRect.origin.x = frame.origin.x - userImageViewLeftMargin - userRect.size.width;
-    }
-    self.userImageView.frame = userRect;
-    self.userImageView.image = self.userImage;
-    
-    CGRect frm = CGRectMake(self.message.fromMe ? self.contentView.frame.size.width - frame.size.width - kBubbleRightMargin : kBubbleLeftMargin,
-                            kBubbleTopMargin,
-                            frame.size.width,
-                            frame.size.height);
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
-        self.userImageView.hidden = NO;
-        
-        CGFloat offset = userImageViewLeftMargin + userRect.size.width;
-        frm.size.width += offset;
-        if (self.message.fromMe) {
-            frm.origin.x -= offset;
-        }
-    }
-    
-    if (frm.size.height < self.userImageViewSize.height) {
-        CGFloat delta = self.userImageViewSize.height - frm.size.height;
-        
-        frm.size.height = self.userImageViewSize.height;
-        frm.origin.y += delta;
-    }
-    self.containerView.frame = frm;
+}
+
+-(void)adjustCell
+{
+    [super adjustCell];
     
     //Masking mediaImageView with balloon image
     CALayer *layer = self.balloonImageView.layer;
     layer.frame    = (CGRect){{0,0},self.balloonImageView.layer.frame.size};
     self.mediaImageView.layer.mask = layer;
     [self.mediaImageView setNeedsDisplay];
-}
-
-- (void)setMediaImageViewSize:(CGSize)size
-{
-    [super setMediaImageViewSize:size];
-    CGRect frame = self.mediaImageView.frame;
-    frame.size = size;
-    self.mediaImageView.frame = frame;
 }
 
 #pragma mark -

@@ -127,26 +127,12 @@ static NSDateFormatter* dateFormatter;
     self.userImageView.hidden = YES;
 }
 
-- (void)setMediaImageViewSize:(CGSize)size
-{
-    _mediaImageViewSize = size;
-}
-
-- (void)setUserImageViewSize:(CGSize)size
-{
-    _userImageViewSize = size;
-    CGRect frame = self.userImageView.frame;
-    frame.size = size;
-    self.userImageView.frame = frame;
-}
-
 - (void)setUserImage:(UIImage *)userImage
 {
     _userImage = userImage;
     if (!userImage) {
         self.userImageViewSize = CGSizeZero;
     }
-    [self adjustCell];
 }
 
 - (void)adjustCell
@@ -165,6 +151,9 @@ static NSDateFormatter* dateFormatter;
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
     initialTimeLabelPosX = self.timeLabel.frame.origin.x;
     
+    [self layoutChatBalloon];
+    [self adjustContentViewAndImageView];
+    
     /*
      --  Not implemented ---
      else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
@@ -175,6 +164,59 @@ static NSDateFormatter* dateFormatter;
      self.mediaImageView.hidden = NO;
      }
      */
+}
+
+-(void)adjustContentViewAndImageView
+{
+    CGRect balloonFrame = self.balloonImageView.frame;
+    
+    CGRect userRect = CGRectZero;
+    userRect.size = self.userImageViewSize;
+    if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
+        userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
+    } else {
+        userRect.origin.y = 0;
+    }
+    
+    if (self.message.fromMe) {
+        userRect.origin.x = balloonFrame.origin.x + userImageViewLeftMargin + balloonFrame.size.width;
+    } else {
+        userRect.origin.x = balloonFrame.origin.x - userImageViewLeftMargin - userRect.size.width;
+    }
+    self.userImageView.frame = userRect;
+    self.userImageView.image = self.userImage;
+    
+    CGRect frm = CGRectMake(self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin,
+                            kBubbleTopMargin,
+                            balloonFrame.size.width,
+                            balloonFrame.size.height);
+    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
+        self.userImageView.hidden = NO;
+        
+        CGFloat offset = userImageViewLeftMargin + userRect.size.width;
+        frm.size.width += offset;
+        if (self.message.fromMe) {
+            frm.origin.x -= offset;
+        }
+    }
+    
+    if (frm.size.height < self.userImageViewSize.height) {
+        CGFloat delta = self.userImageViewSize.height - frm.size.height;
+        
+        frm.size.height = self.userImageViewSize.height;
+        frm.origin.y += delta;
+    }
+    UIViewAutoresizing m = self.userImageView.autoresizingMask;
+    self.userImageView.autoresizingMask = UIViewAutoresizingNone;
+    
+    self.containerView.frame = frm;
+    
+    self.userImageView.autoresizingMask = m;
+}
+
+-(void)layoutChatBalloon
+{
+    
 }
 
 #pragma mark - GestureRecognizer delegates

@@ -30,6 +30,8 @@
 #define kBubbleRightMargin 7
 #define kBubbleBottomMargin 20
 
+static const int userImageViewLeftMargin = 3;
+
 @class SOMessageCell;
 @protocol SOMessageCellDelegate <NSObject>
 
@@ -81,5 +83,6 @@
 @property (nonatomic) CGSize userImageViewSize;
 
 - (void)adjustCell;
+- (void)layoutChatBalloon;
 
 @end

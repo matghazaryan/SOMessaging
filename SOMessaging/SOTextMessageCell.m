@@ -8,7 +8,6 @@
 
 #import "SOTextMessageCell.h"
 
-static const int userImageViewLeftMargin = 3;
 
 @implementation SOTextMessageCell
 
@@ -80,14 +79,7 @@ static const int userImageViewLeftMargin = 3;
     self.textView.textColor = message.fromMe ? [UIColor whiteColor] : [UIColor blackColor];
 }
 
--(void)adjustCell
-{
-    [super adjustCell];
-    
-    [self adjustForTextOnly];
-}
-
-- (void)adjustForTextOnly
+-(void)layoutChatBalloon
 {
     // Performance optimization
     if(self.textView.font != self.messageFont){
@@ -130,54 +122,15 @@ static const int userImageViewLeftMargin = 3;
     
     self.textView.frame = frame;
     
-    CGRect userRect = CGRectZero;
-    userRect.size = self.userImageViewSize;
-    
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
-        if (balloonFrame.size.height < userRect.size.height) {
-            balloonFrame.size.height = userRect.size.height;
+    if (!CGSizeEqualToSize(self.userImageViewSize, CGSizeZero) && self.userImage) {
+        if (balloonFrame.size.height < self.userImageViewSize.height) {
+            balloonFrame.size.height = self.userImageViewSize.height;
         }
     }
     
     self.balloonImageView.frame = balloonFrame;
     self.balloonImageView.backgroundColor = [UIColor clearColor];
     self.balloonImageView.image = self.balloonImage;
-    
-    if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
-        userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
-    } else {
-        userRect.origin.y = 0;
-    }
-    
-    if (self.message.fromMe) {
-        userRect.origin.x = balloonFrame.origin.x + userImageViewLeftMargin + balloonFrame.size.width;
-    } else {
-        userRect.origin.x = balloonFrame.origin.x - userImageViewLeftMargin - userRect.size.width;
-    }
-    self.userImageView.frame = userRect;
-    self.userImageView.image = self.userImage;
-    
-    CGRect frm = CGRectMake(self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin,
-                            kBubbleTopMargin,
-                            balloonFrame.size.width,
-                            balloonFrame.size.height);
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
-        self.userImageView.hidden = NO;
-        
-        CGFloat offset = userImageViewLeftMargin + userRect.size.width;
-        frm.size.width += offset;
-        if (self.message.fromMe) {
-            frm.origin.x -= offset;
-        }
-    }
-    
-    if (frm.size.height < self.userImageViewSize.height) {
-        CGFloat delta = self.userImageViewSize.height - frm.size.height;
-        
-        frm.size.height = self.userImageViewSize.height;
-        frm.origin.y += delta;
-    }
-    self.containerView.frame = frm;
 }
 
 @end

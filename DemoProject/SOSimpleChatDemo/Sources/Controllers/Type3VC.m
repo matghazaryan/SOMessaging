@@ -93,6 +93,8 @@
 //-----------------------------------------------//
 //     Adding datetime label under balloon
 //-----------------------------------------------//
+    [cell adjustCell];
+    
     UILabel *label = [self generateLabelForCell:cell];
     
     UILabel *existingLabel = [[cell.contentView.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag == %d",label.tag]] lastObject];;
