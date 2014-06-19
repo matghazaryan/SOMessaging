@@ -138,6 +138,8 @@ static NSDateFormatter* dateFormatter;
 - (void)adjustCell
 {
     [self hideSubViews];
+    [self layoutChatBalloon];
+    [self adjustContentViewAndImageView];
     
     // Adjusing time label
     self.timeLabel.text = [dateFormatter stringFromDate:self.message.date];
@@ -150,9 +152,6 @@ static NSDateFormatter* dateFormatter;
     
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
     initialTimeLabelPosX = self.timeLabel.frame.origin.x;
-    
-    [self layoutChatBalloon];
-    [self adjustContentViewAndImageView];
     
     /*
      --  Not implemented ---
