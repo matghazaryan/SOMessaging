@@ -219,6 +219,7 @@ static NSDateFormatter* dateFormatter;
                                     messageMaxWidth:[self messageMaxWidth]];
     }
     
+    [cell setMessageMaxWidth:[self messageMaxWidth]];
     [cell setMediaImageViewSize:[self mediaThumbnailSize]];
     [cell setUserImageViewSize:[self userImageSize]];
     cell.tableView = self.tableView;
