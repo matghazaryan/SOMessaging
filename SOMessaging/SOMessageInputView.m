@@ -206,6 +206,9 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, keyboardFrame.size.height + self.frame.size.height, 0.0);
 
     NSInteger section = [self.tableView numberOfSections] - 1;
+     if (section==-1) {
+        return;
+    }
     NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
     
