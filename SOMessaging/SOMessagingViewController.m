@@ -106,7 +106,10 @@
             NSInteger section = self.conversation.count - 1;
             NSInteger row = [self.conversation[section] count] - 1;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            NSLog(@" indexpath is %@ .. %li ,, %li ",indexPath, (long)indexPath.row,(long)indexPath.section);
+            if ( indexPath.row !=-1) {
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+             }
         }
     });
 }
