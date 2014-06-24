@@ -57,10 +57,8 @@
     // Adjusting content for 3pt. (In this demo the width of bubble's tail is 3pt)
     if (!message.fromMe) {
         cell.contentInsets = UIEdgeInsetsMake(0, 3.0f, 0, 0); //Move content for 3 pt. to right
-        cell.textView.textColor = [UIColor blackColor];
     } else {
         cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 3.0f); //Move content for 3 pt. to left
-        cell.textView.textColor = [UIColor whiteColor];
     }
     
     cell.userImageView.layer.cornerRadius = self.userImageSize.width/2;

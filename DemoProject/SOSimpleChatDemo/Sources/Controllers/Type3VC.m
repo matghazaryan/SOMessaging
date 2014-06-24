@@ -9,6 +9,7 @@
 #import "Type3VC.h"
 #import "ContentManager.h"
 #import "Message.h"
+#import "SOTextMessageCell.h"
 
 @interface Type3VC ()
 
@@ -73,7 +74,9 @@
         cell.contentInsets = UIEdgeInsetsMake(0, 0, 0, 4.0f); //Move content for 4 pt. to left
     }
     
-    cell.textView.textColor = [UIColor blackColor];
+    if([cell isKindOfClass:[SOTextMessageCell class]]){
+        ((SOTextMessageCell*)cell).textView.textColor = [UIColor blackColor];
+    }
     
     cell.userImageView.layer.cornerRadius = 3;
     
@@ -90,6 +93,8 @@
 //-----------------------------------------------//
 //     Adding datetime label under balloon
 //-----------------------------------------------//
+    [cell adjustCell];
+    
     UILabel *label = [self generateLabelForCell:cell];
     
     UILabel *existingLabel = [[cell.contentView.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag == %d",label.tag]] lastObject];;

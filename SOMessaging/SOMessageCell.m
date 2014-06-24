@@ -23,45 +23,28 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
 #import "SOMessageCell.h"
-#import "NSString+Calculation.h"
 
 @interface SOMessageCell() < UIGestureRecognizerDelegate>
 {
     BOOL isHorizontalPan;
 }
-@property (nonatomic) CGSize mediaImageViewSize;
-@property (nonatomic) CGSize userImageViewSize;
 
 @end
 
 @implementation SOMessageCell
 
-static CGFloat messageTopMargin;
-static CGFloat messageBottomMargin;
-static CGFloat messageLeftMargin;
-static CGFloat messageRightMargin;
+static CGFloat messageTopMargin = 9;
+static CGFloat messageBottomMargin = 9;
+static CGFloat messageLeftMargin = 15;
+static CGFloat messageRightMargin = 15;
 
-static CGFloat maxContentOffsetX;
-static CGFloat contentOffsetX;
+static CGFloat maxContentOffsetX = 50;
+static CGFloat contentOffsetX = 0;
 
 static CGFloat initialTimeLabelPosX;
 static BOOL cellIsDragging;
 
-+ (void)load
-{
-    [self setDefaultConfigs];
-}
-
-+ (void)setDefaultConfigs
-{
-    messageTopMargin = 9;
-    messageBottomMargin = 9;
-    messageLeftMargin = 15;
-    messageRightMargin = 15;
-    
-    contentOffsetX = 0;
-    maxContentOffsetX = 50;
-}
+static NSDateFormatter* dateFormatter;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier messageMaxWidth:(CGFloat)messageMaxWidth
 {
@@ -74,7 +57,10 @@ static BOOL cellIsDragging;
         self.panGesture.delegate = self;
         [self addGestureRecognizer:self.panGesture];
         
-        [self setInitialSizes];
+        [self initContainerView];
+        [self initUserImageView];
+        [self initBalloon];
+        [self initTimeLabel];
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOrientationWillChandeNote:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
@@ -83,69 +69,48 @@ static BOOL cellIsDragging;
     return self;
 }
 
-- (void)setInitialSizes
+-(void)initContainerView
 {
-    if (self.containerView) {
-        [self.containerView removeFromSuperview];
-    }
-    if (self.timeLabel) {
-        [self.timeLabel removeFromSuperview];
-    }
+    self.containerView = [[UIView alloc] initWithFrame:self.contentView.bounds];
+    self.containerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     
+    [self.contentView addSubview:self.containerView];
+}
+
+-(void)initUserImageView
+{
     self.userImageView = [[UIImageView alloc] init];
     self.userImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.messageMaxWidth, 0)];
-    self.timeLabel = [[UILabel alloc] init];
-    self.mediaImageView = [[UIImageView alloc] init];
-    self.mediaOverlayView = [[UIView alloc] init];
-    self.balloonImageView = [[UIImageView alloc] init];
-
+    
     if (!CGSizeEqualToSize(self.userImageViewSize, CGSizeZero)) {
         CGRect frame = self.userImageView.frame;
         frame.size = self.userImageViewSize;
         self.userImageView.frame = frame;
     }
-
     self.userImageView.contentMode = UIViewContentModeScaleAspectFill;
     self.userImageView.clipsToBounds = YES;
     self.userImageView.backgroundColor = [UIColor clearColor];
     self.userImageView.layer.cornerRadius = 5;
+    self.userImageView.hidden = YES;
     
-    if (!CGSizeEqualToSize(self.mediaImageViewSize, CGSizeZero)) {
-        CGRect frame = self.mediaImageView.frame;
-        frame.size = self.mediaImageViewSize;
-        self.mediaImageView.frame = frame;
-    }
-    
-    self.mediaImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.mediaImageView.clipsToBounds = YES;
-    self.mediaImageView.backgroundColor = [UIColor clearColor];
-    self.mediaImageView.userInteractionEnabled = YES;
-//    self.mediaImageView.layer.cornerRadius = 10;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMediaTapped:)];
-    [self.mediaImageView addGestureRecognizer:tap];
-    
-    self.mediaOverlayView.backgroundColor = [UIColor clearColor];
-    [self.mediaImageView addSubview:self.mediaOverlayView];
-    
-    self.textView.textColor = [UIColor whiteColor];
-    self.textView.backgroundColor = [UIColor clearColor];
-    [self.textView setTextContainerInset:UIEdgeInsetsZero];
-    self.textView.textContainer.lineFragmentPadding = 0;
-    
-    [self hideSubViews];
-    
-    self.containerView = [[UIView alloc] initWithFrame:self.contentView.bounds];
-    self.containerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    
-    [self.contentView addSubview:self.containerView];
+    [self.containerView addSubview:self.userImageView];
+}
+
+-(void)initBalloon
+{
+    self.balloonImageView = [[UIImageView alloc] init];
     
     [self.containerView addSubview:self.balloonImageView];
-    [self.containerView addSubview:self.textView];
-    [self.containerView addSubview:self.mediaImageView];
-    [self.containerView addSubview:self.userImageView];
+}
+
+- (void)initTimeLabel
+{
+    if(!dateFormatter){
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HH:mm"];;
+    }
     
-    [self.contentView addSubview:self.timeLabel];
+    self.timeLabel = [[UILabel alloc] init];
     
     self.contentView.clipsToBounds = NO;
     self.clipsToBounds = NO;
@@ -153,29 +118,13 @@ static BOOL cellIsDragging;
     self.timeLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
     self.timeLabel.textColor = [UIColor grayColor];
     self.timeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    
+    [self.contentView addSubview:self.timeLabel];
 }
 
 - (void)hideSubViews
 {
     self.userImageView.hidden = YES;
-    self.textView.hidden = YES;
-    self.mediaImageView.hidden = YES;
-}
-
-- (void)setMediaImageViewSize:(CGSize)size
-{
-    _mediaImageViewSize = size;
-    CGRect frame = self.mediaImageView.frame;
-    frame.size = size;
-    self.mediaImageView.frame = frame;
-}
-
-- (void)setUserImageViewSize:(CGSize)size
-{
-    _userImageViewSize = size;
-    CGRect frame = self.userImageView.frame;
-    frame.size = size;
-    self.userImageView.frame = frame;
 }
 
 - (void)setUserImage:(UIImage *)userImage
@@ -184,124 +133,50 @@ static BOOL cellIsDragging;
     if (!userImage) {
         self.userImageViewSize = CGSizeZero;
     }
-    [self adjustCell];
-}
-#pragma mark -
-- (void)handleMediaTapped:(UITapGestureRecognizer *)tap
-{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(messageCell:didTapMedia:)]) {
-        [self.delegate messageCell:self didTapMedia:self.message.media];
-    }
-}
-
-#pragma mark -
-- (void)setMessage:(id<SOMessage>)message
-{
-    _message = message;
-
-    [self setInitialSizes];
-//    [self adjustCell];
 }
 
 - (void)adjustCell
 {
     [self hideSubViews];
+    [self layoutChatBalloon];
+    [self adjustContentViewAndImageView];
     
-    if (self.message.type == SOMessageTypeText) {
-        self.textView.hidden = NO;
-        [self adjustForTextOnly];
-    } else if (self.message.type == SOMessageTypePhoto) {
-        self.mediaImageView.hidden = NO;
-        [self adjustForPhotoOnly];
-    } else if (self.message.type == SOMessageTypeVideo) {
-        self.mediaImageView.hidden = NO;
-        [self adjustForVideoOnly];
-    } else if (self.message.type == SOMessageTypeOther) {
-        if (!CGSizeEqualToSize(self.userImageViewSize, CGSizeZero) && self.userImage) {
-            self.userImageView.hidden = NO;
-        }
-    }
+    // Adjusing time label
+    self.timeLabel.text = [dateFormatter stringFromDate:self.message.date];
+    
+    [self.timeLabel sizeToFit];
+    CGRect timeLabel = self.timeLabel.frame;
+    timeLabel.origin.x = self.contentView.frame.size.width + 5;
+    self.timeLabel.frame = timeLabel;
+    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
     
     self.containerView.autoresizingMask = self.message.fromMe ? UIViewAutoresizingFlexibleLeftMargin : UIViewAutoresizingFlexibleRightMargin;
     initialTimeLabelPosX = self.timeLabel.frame.origin.x;
-/* 
---  Not implemented ---
-    else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
-        self.textView.hidden = NO;
-        self.mediaImageView.hidden = NO;
-    } else if (self.message.type & (SOMessageTypeVideo | SOMessageTypeText)) {
-        self.textView.hidden = NO;
-        self.mediaImageView.hidden = NO;
-    }
-*/
     
+    /*
+     --  Not implemented ---
+     else if (self.message.type & (SOMessageTypePhoto | SOMessageTypeText)) {
+     self.textView.hidden = NO;
+     self.mediaImageView.hidden = NO;
+     } else if (self.message.type & (SOMessageTypeVideo | SOMessageTypeText)) {
+     self.textView.hidden = NO;
+     self.mediaImageView.hidden = NO;
+     }
+     */
 }
 
-- (void)adjustForTextOnly
+-(void)adjustContentViewAndImageView
 {
-    CGFloat userImageViewLeftMargin = 3;
-    
-    CGRect usedFrame = [self usedRectForWidth:self.messageMaxWidth];;
-    if (self.balloonMinWidth) {
-        CGFloat messageMinWidth = self.balloonMinWidth - messageLeftMargin - messageRightMargin;
-        if (usedFrame.size.width <  messageMinWidth) {
-            usedFrame.size.width = messageMinWidth;
-            
-            usedFrame.size.height = [self usedRectForWidth:messageMinWidth].size.height;
-        }
-    }
-    
-    CGFloat messageMinHeight = self.balloonMinHeight - messageTopMargin - messageBottomMargin;
-    
-    if (self.balloonMinHeight && usedFrame.size.height < messageMinHeight) {
-        usedFrame.size.height = messageMinHeight;
-    }
-    
-    self.textView.font = self.messageFont;
-    
-    CGRect frame = self.textView.frame;
-    frame.size.width  = usedFrame.size.width;
-    frame.size.height = usedFrame.size.height;
-    frame.origin.y = messageTopMargin;
-
     CGRect balloonFrame = self.balloonImageView.frame;
-    balloonFrame.size.width = frame.size.width + messageLeftMargin + messageRightMargin;
-    balloonFrame.size.height = frame.size.height + messageTopMargin + messageBottomMargin;
-    balloonFrame.origin.y = 0;
-    frame.origin.x = self.message.fromMe ? messageLeftMargin : (balloonFrame.size.width - frame.size.width - messageLeftMargin);
-    if (!self.message.fromMe && self.userImage) {
-        frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
-        balloonFrame.origin.x = userImageViewLeftMargin + self.userImageViewSize.width;
-    }
     
-    frame.origin.x += self.contentInsets.left - self.contentInsets.right;
-    
-    self.textView.frame = frame;
-    
-    CGRect userRect = self.userImageView.frame;
-    
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
-        if (balloonFrame.size.height < userRect.size.height) {
-            balloonFrame.size.height = userRect.size.height;
-        }
-    }
-    
-    self.balloonImageView.frame = balloonFrame;
-    self.balloonImageView.backgroundColor = [UIColor clearColor];
-    self.balloonImageView.image = self.balloonImage;
-    
-    self.textView.editable = NO;
-    self.textView.scrollEnabled = NO;
-    self.textView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
-    
-
-    
+    CGRect userRect = CGRectZero;
+    userRect.size = self.userImageViewSize;
     if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
         userRect.origin.y = balloonFrame.origin.y + balloonFrame.size.height - userRect.size.height;
     } else {
         userRect.origin.y = 0;
     }
-
+    
     if (self.message.fromMe) {
         userRect.origin.x = balloonFrame.origin.x + userImageViewLeftMargin + balloonFrame.size.width;
     } else {
@@ -310,174 +185,38 @@ static BOOL cellIsDragging;
     self.userImageView.frame = userRect;
     self.userImageView.image = self.userImage;
     
-    CGRect frm = self.containerView.frame;
-    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
-    frm.origin.y = kBubbleTopMargin;
-    frm.size.height = balloonFrame.size.height;
-    frm.size.width = balloonFrame.size.width;
+    CGRect frm = CGRectMake(self.message.fromMe ? self.contentView.frame.size.width - balloonFrame.size.width - kBubbleRightMargin : kBubbleLeftMargin,
+                            kBubbleTopMargin,
+                            balloonFrame.size.width,
+                            balloonFrame.size.height);
     if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
         self.userImageView.hidden = NO;
-        frm.size.width += userImageViewLeftMargin + userRect.size.width;
+        
+        CGFloat offset = userImageViewLeftMargin + userRect.size.width;
+        frm.size.width += offset;
         if (self.message.fromMe) {
-            frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
+            frm.origin.x -= offset;
         }
     }
-
-
+    
     if (frm.size.height < self.userImageViewSize.height) {
         CGFloat delta = self.userImageViewSize.height - frm.size.height;
-        frm.size.height = self.userImageViewSize.height;
         
-        for (UIView *sub in self.containerView.subviews) {
-            CGRect fr = sub.frame;
-            fr.origin.y += delta;
-            sub.frame = fr;
-        }
+        frm.size.height = self.userImageViewSize.height;
+        frm.origin.y += delta;
     }
+    UIViewAutoresizing m = self.userImageView.autoresizingMask;
+    self.userImageView.autoresizingMask = UIViewAutoresizingNone;
+    
     self.containerView.frame = frm;
     
-    // Adjusing time label
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
-    self.timeLabel.frame = CGRectZero;
-    self.timeLabel.text = [formatter stringFromDate:self.message.date];
-
-    [self.timeLabel sizeToFit];
-    CGRect timeLabel = self.timeLabel.frame;
-    timeLabel.origin.x = self.contentView.frame.size.width + 5;
-    self.timeLabel.frame = timeLabel;
-    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
-    
+    self.userImageView.autoresizingMask = m;
 }
 
-- (CGRect)usedRectForWidth:(CGFloat)width
+-(void)layoutChatBalloon
 {
-    CGRect usedFrame = CGRectZero;
     
-    if (self.message.attributes) {
-        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:self.message.text attributes:self.message.attributes];
-        self.textView.attributedText = attributedText;
-        usedFrame.size = [self.message.text usedSizeForMaxWidth:width withAttributes:self.message.attributes];
-    } else {
-        self.textView.text = self.message.text;
-        usedFrame.size = [self.message.text usedSizeForMaxWidth:width withFont:self.messageFont];
-    }
-    
-    return usedFrame;
 }
-
-- (void)adjustForPhotoOnly
-{
-    CGFloat userImageViewLeftMargin = 3;
-    
-    UIImage *image = self.message.thumbnail;
-    if (!image) {
-        image = [[UIImage alloc] initWithData:self.message.media];
-    }
-    self.mediaImageView.image = image;
-
-    CGRect frame = CGRectZero;
-    frame.size = self.mediaImageViewSize;
-
-    if (!self.message.fromMe && self.userImage) {
-        frame.origin.x += userImageViewLeftMargin + self.userImageViewSize.width;
-    }
-    
-    self.mediaImageView.frame = frame;
-
-    self.balloonImageView.frame = frame;
-    self.balloonImageView.backgroundColor = [UIColor clearColor];
-    self.balloonImageView.image = self.balloonImage;
-    
-    CGRect userRect = self.userImageView.frame;
-    
-    if (self.userImageView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
-        userRect.origin.y = frame.origin.y + frame.size.height - userRect.size.height;
-    } else {
-        userRect.origin.y = 0;
-    }
-    
-    if (self.message.fromMe) {
-        userRect.origin.x = frame.origin.x + userImageViewLeftMargin + frame.size.width;
-    } else {
-        userRect.origin.x = frame.origin.x - userImageViewLeftMargin - userRect.size.width;
-    }
-    self.userImageView.frame = userRect;
-    self.userImageView.image = self.userImage;
-    
-    CGRect frm = self.containerView.frame;
-    frm.origin.x = self.message.fromMe ? self.contentView.frame.size.width - frame.size.width - kBubbleRightMargin : kBubbleLeftMargin;
-    frm.origin.y = kBubbleTopMargin;
-    frm.size.width = frame.size.width;
-    if (!CGSizeEqualToSize(userRect.size, CGSizeZero) && self.userImage) {
-        self.userImageView.hidden = NO;
-        frm.size.width += userImageViewLeftMargin + userRect.size.width;
-        if (self.message.fromMe) {
-            frm.origin.x -= userImageViewLeftMargin + userRect.size.width;
-        }
-    }
-
-    frm.size.height = frame.size.height;
-    if (frm.size.height < self.userImageViewSize.height) {
-        CGFloat delta = self.userImageViewSize.height - frm.size.height;
-        frm.size.height = self.userImageViewSize.height;
-        
-        for (UIView *sub in self.containerView.subviews) {
-            CGRect fr = sub.frame;
-            fr.origin.y += delta;
-            sub.frame = fr;
-        }
-    }
-    self.containerView.frame = frm;
-
-    //Masking mediaImageView with balloon image
-    CALayer *layer = self.balloonImageView.layer;
-    layer.frame    = (CGRect){{0,0},self.balloonImageView.layer.frame.size};
-    self.mediaImageView.layer.mask = layer;
-    [self.mediaImageView setNeedsDisplay];
-    
-    
-    // Adjusing time label
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
-    self.timeLabel.frame = CGRectZero;
-    self.timeLabel.text = [formatter stringFromDate:self.message.date];
-    
-    [self.timeLabel sizeToFit];
-    CGRect timeLabel = self.timeLabel.frame;
-    timeLabel.origin.x = self.contentView.frame.size.width + 5;
-    self.timeLabel.frame = timeLabel;
-    self.timeLabel.center = CGPointMake(self.timeLabel.center.x, self.containerView.center.y);
-}
-
-- (void)adjustForVideoOnly
-{
-    [self adjustForPhotoOnly];
-    
-    CGRect frame = self.mediaOverlayView.frame;
-    frame.origin = CGPointZero;
-    frame.size   = self.mediaImageView.frame.size;
-    self.mediaOverlayView.frame = frame;
-    
-    [self.mediaOverlayView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
-    UIView *bgView = [[UIView alloc] init];
-    bgView.frame = self.mediaImageView.bounds;
-    bgView.backgroundColor = [UIColor blackColor];
-    bgView.alpha = 0.4f;
-    [self.mediaOverlayView addSubview:bgView];
-    
-    UIImageView *playButtonImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_button.png"]];
-    playButtonImageView.contentMode = UIViewContentModeScaleAspectFit;
-    playButtonImageView.clipsToBounds = YES;
-    playButtonImageView.backgroundColor = [UIColor clearColor];
-    CGRect playFrame = playButtonImageView.frame;
-    playFrame.size   = CGSizeMake(20, 20);
-    playButtonImageView.frame = playFrame;
-    playButtonImageView.center = CGPointMake(self.mediaOverlayView.frame.size.width/2 + self.contentInsets.left - self.contentInsets.right, self.mediaOverlayView.frame.size.height/2);
-    [self.mediaOverlayView addSubview:playButtonImageView];
-}
-
 
 #pragma mark - GestureRecognizer delegates
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

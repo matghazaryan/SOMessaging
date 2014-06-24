@@ -25,8 +25,9 @@
 #import "SOMessagingViewController.h"
 #import "SOMessage.h"
 #import "SOMessageCell.h"
-
-#import "NSString+Calculation.h"
+#import "SOPhotoMessageCell.h"
+#import "SOTextMessageCell.h"
+#import "SOVideoMessageCell.h"
 
 #import "SOImageBrowserView.h"
 #import <MediaPlayer/MediaPlayer.h>
@@ -54,6 +55,8 @@
 @implementation SOMessagingViewController {
     dispatch_once_t onceToken;
 }
+
+static NSDateFormatter* dateFormatter;
 
 - (void)setup
 {
@@ -172,10 +175,12 @@
     id<SOMessage> firstMessageInGroup = [self.conversation[section] firstObject];
     NSDate *date = [firstMessageInGroup date];
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd MMM, eee, HH:mm"];
     UILabel *label = [[UILabel alloc] init];
-    label.text = [formatter stringFromDate:date];
+    if(!dateFormatter){
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"dd MMM, eee, HH:mm"];
+    }
+    label.text = [dateFormatter stringFromDate:date];
     
     label.textColor = [UIColor grayColor];
     label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
@@ -191,18 +196,32 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"sendCell";
+    NSString *cellIdentifier;
 
     SOMessageCell *cell;
 
     id<SOMessage> message = self.conversation[indexPath.section][indexPath.row];
     
+    Class class;
+    if(message.type == SOMessageTypeText){
+        cellIdentifier = @"textCell";
+        class = [SOTextMessageCell class];
+    }else if(message.type == SOMessageTypeVideo){
+        cellIdentifier = @"videoCell";
+        class = [SOVideoMessageCell class];
+    }else if(message.type == SOMessageTypePhoto){
+        cellIdentifier = @"photoCell";
+        class = [SOPhotoMessageCell class];
+    }
+    
     cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[SOMessageCell alloc] initWithStyle:UITableViewCellStyleDefault
+        cell = [[class alloc] initWithStyle:UITableViewCellStyleDefault
                                     reuseIdentifier:cellIdentifier
                                     messageMaxWidth:[self messageMaxWidth]];
     }
+    
+    [cell setMessageMaxWidth:[self messageMaxWidth]];
     [cell setMediaImageViewSize:[self mediaThumbnailSize]];
     [cell setUserImageViewSize:[self userImageSize]];
     cell.tableView = self.tableView;
@@ -212,8 +231,7 @@
     cell.messageFont = [self messageFont];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.balloonImage = message.fromMe ? self.balloonSendImage : self.balloonReceiveImage;
-    cell.textView.textColor = message.fromMe ? [UIColor whiteColor] : [UIColor blackColor];
-    cell.message = message;    
+    cell.message = message;
     
     // For user customization
     int index = (int)[[self messages] indexOfObject:message];
@@ -237,21 +255,15 @@
     id<SOMessage> message = [self messages][index];
     
     if (message.type == SOMessageTypeText) {
-        CGSize size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withFont:[self messageFont]];
-        if (message.attributes) {
-            size = [message.text usedSizeForMaxWidth:[self messageMaxWidth] withAttributes:message.attributes];
-        }
+        CGSize size = [SOTextMessageCell sizeForMessage:message constrainedToWidth:[self messageMaxWidth] withFont:[self messageFont]];
         
         if (self.balloonMinWidth) {
             CGFloat messageMinWidth = self.balloonMinWidth - [SOMessageCell messageLeftMargin] - [SOMessageCell messageRightMargin];
             if (size.width <  messageMinWidth) {
                 size.width = messageMinWidth;
 
-                CGSize newSize = [message.text usedSizeForMaxWidth:messageMinWidth withFont:[self messageFont]];
-                if (message.attributes) {
-                    newSize = [message.text usedSizeForMaxWidth:messageMinWidth withAttributes:message.attributes];
-                }
-                
+                CGSize newSize = [SOTextMessageCell sizeForMessage:message constrainedToWidth:messageMinWidth withFont:[self messageFont]];
+        
                 size.height = newSize.height;
             }
         }
