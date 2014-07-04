@@ -375,10 +375,12 @@ static NSDateFormatter* dateFormatter;
     [self.tableView reloadData];
     
     NSInteger section = [self.tableView numberOfSections] - 1;
-    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    if (row >= 0) {
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if (section > 0) {
+        NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        if (row >= 0) {
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
     }
 }
 
