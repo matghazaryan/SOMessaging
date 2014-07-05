@@ -1,8 +1,8 @@
 //
-//  SOTextMessageCell.h
+//  NSString+Calculation.h
 //  SOMessaging
 //
-// Created by : mspensieri
+// Created by : arturdev
 // Copyright (c) 2014 SocialObjects Software. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -22,12 +22,11 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
-#import "SOMessageCell.h"
+#import <Foundation/Foundation.h>
 
-@interface SOTextMessageCell : SOMessageCell
+@interface NSString (Calculation)
 
-@property (strong, nonatomic) UITextView *textView;
-
-+(CGSize)sizeForMessage:(id<SOMessage>)message constrainedToWidth:(CGFloat)width withFont:(UIFont*)font;
+- (CGSize)usedSizeForMaxWidth:(CGFloat)width withFont:(UIFont *)font;
+- (CGSize)usedSizeForMaxWidth:(CGFloat)width withAttributes:(NSDictionary *)attributes;
 
 @end
