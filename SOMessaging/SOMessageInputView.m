@@ -313,7 +313,10 @@
     
     CGRect frame = self.frame;
     // calculate the absolute ending point (based on the window rather than superview, which could be contained in a tab bar or tool bar)
-    frame.origin.y = windowRect.size.height - frame.size.height - keyboardRect.size.height;
+    // adjust the y based on the change needed to handle any embedding
+    CGRect globalFrame = [self.superview convertRect:self.frame toView:nil];
+    CGFloat delta = (windowRect.size.height - frame.size.height - keyboardRect.size.height) - globalFrame.origin.y;
+    frame.origin.y += delta;
     initialInputViewPosYWhenKeyboardIsShown = frame.origin.y;
     
     [self adjustTableViewWithCurve:YES scrollsToBottom:YES];
