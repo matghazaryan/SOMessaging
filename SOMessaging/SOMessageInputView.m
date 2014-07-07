@@ -297,8 +297,10 @@
 - (void)handleKeyboardWillShowNote:(NSNotification *)notification
 {
     CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect windowRect = self.window.bounds;
     if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
         keyboardRect = CGRectMake(keyboardRect.origin.x, keyboardRect.origin.y, MAX(keyboardRect.size.width,keyboardRect.size.height), MIN(keyboardRect.size.width,keyboardRect.size.height));
+        windowRect = CGRectMake(windowRect.origin.x, windowRect.origin.y, MAX(windowRect.size.width,windowRect.size.height), MIN(windowRect.size.width,windowRect.size.height));
     }
     
     keyboardFrame = keyboardRect;
@@ -310,7 +312,8 @@
     keyboardDuration = duration;
     
     CGRect frame = self.frame;
-    frame.origin.y = self.superview.bounds.size.height - frame.size.height - keyboardRect.size.height;
+    // calculate the absolute ending point (based on the window rather than superview, which could be contained in a tab bar or tool bar)
+    frame.origin.y = windowRect.size.height - frame.size.height - keyboardRect.size.height;
     initialInputViewPosYWhenKeyboardIsShown = frame.origin.y;
     
     [self adjustTableViewWithCurve:YES scrollsToBottom:YES];
