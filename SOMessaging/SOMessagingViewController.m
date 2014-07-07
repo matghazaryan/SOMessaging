@@ -132,6 +132,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section < 0) {
+        return 0;
+    }
     // Return the number of rows in the section.
     return [self.conversation[section] count];
 }
@@ -362,10 +365,11 @@
     self.conversation = [self grouppedMessages];
     [self.tableView reloadData];
     
-    NSInteger section = [self.tableView numberOfSections] - 1;
-    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    NSInteger section = [self numberOfSectionsInTableView:self.tableView] - 1;
+    NSInteger row     = [self tableView:self.tableView numberOfRowsInSection:section] - 1;
+
     if (row >= 0) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }

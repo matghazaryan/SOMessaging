@@ -204,27 +204,31 @@
 - (void)adjustTableViewWithCurve:(BOOL)withCurve scrollsToBottom:(BOOL)scrollToBottom
 {
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top, 0.0, keyboardFrame.size.height + self.frame.size.height, 0.0);
-
-    NSInteger section = [self.tableView numberOfSections] - 1;
+    
+    NSInteger section = [(id<UITableViewDataSource>)self.delegate numberOfSectionsInTableView:self.tableView] - 1;
      if (section == -1) {
         return;
     }
-    NSInteger row = [self.tableView numberOfRowsInSection:section] - 1;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
     
-    [UIView beginAnimations:@"anim" context:NULL];
-    [UIView setAnimationDuration:keyboardDuration];
-    if (withCurve) {
-        [UIView setAnimationCurve:keyboardCurve];
-    }
-    self.tableView.contentInset = contentInsets;
-    self.tableView.scrollIndicatorInsets = contentInsets;
-    if (scrollToBottom) {
-        if (row >= 0) {
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    NSInteger row = [(id<UITableViewDataSource>)self.delegate tableView:self.tableView numberOfRowsInSection:section] - 1;
+    
+    if (row >= 0) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        
+        [UIView beginAnimations:@"anim" context:NULL];
+        [UIView setAnimationDuration:keyboardDuration];
+        if (withCurve) {
+            [UIView setAnimationCurve:keyboardCurve];
         }
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
+        if (scrollToBottom) {
+            if (row >= 0) {
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
+        }
+        [UIView commitAnimations];
     }
-    [UIView commitAnimations];
 }
 
 #pragma mark - Actions
