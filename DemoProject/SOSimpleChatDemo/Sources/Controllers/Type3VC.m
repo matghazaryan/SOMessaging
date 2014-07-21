@@ -90,24 +90,25 @@
 //-----------------------------------------------//
 //     Adding datetime label under balloon
 //-----------------------------------------------//
-    UILabel *label = [self generateLabelForCell:cell];
-    
-    UILabel *existingLabel = [[cell.contentView.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag == %d",label.tag]] lastObject];;
-    [existingLabel removeFromSuperview];
-    
-    [cell.contentView addSubview:label];
+    [self generateLabelForCell:cell];
 //-----------------------------------------------//
 }
 
-- (UILabel *)generateLabelForCell:(SOMessageCell *)cell
+- (void)generateLabelForCell:(SOMessageCell *)cell
 {
+    static NSInteger labelTag = 90;
+    
     Message *message = (Message *)cell.message;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd.MM.yyyy HH:mm"];
-    UILabel *label = [[UILabel alloc] init];
-    label.font = [UIFont systemFontOfSize:8];
-    label.textColor = [UIColor grayColor];
-    label.tag = 90;
+    UILabel *label = (UILabel *)[cell.contentView viewWithTag:labelTag];
+    if (!label) {
+        label = [[UILabel alloc] init];
+        label.font = [UIFont systemFontOfSize:8];
+        label.textColor = [UIColor grayColor];
+        label.tag = labelTag;
+        [cell.contentView addSubview:label];
+    }
     label.text = [formatter stringFromDate:message.date];
     [label sizeToFit];
     CGRect frame = label.frame;
@@ -119,13 +120,14 @@
     if (message.fromMe) {
         frame.origin.x = cell.contentView.frame.size.width - cell.userImageView.frame.size.width - frame.size.width - rightMargin;
         frame.origin.y = cell.containerView.frame.origin.y + cell.containerView.frame.size.height + topMargin;
+        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     } else {
         frame.origin.x = cell.containerView.frame.origin.x + cell.userImageView.frame.origin.x + cell.userImageView.frame.size.width + leftMargin;
         frame.origin.y = cell.containerView.frame.origin.y + cell.containerView.frame.size.height + topMargin;
+        label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
     }
-    label.frame = frame;
     
-    return label;
+    label.frame = frame;
 }
 
 - (UIImage *)balloonImageForSending

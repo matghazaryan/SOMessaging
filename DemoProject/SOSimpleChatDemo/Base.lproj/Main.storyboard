@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="mbQ-bf-1eT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="mbQ-bf-1eT">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -17,7 +17,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KWH-Tn-PUN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-25" y="-376"/>
+            <point key="canvasLocation" x="-5" y="-760"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oCt-f9-xip">
@@ -72,6 +72,16 @@
                                     <segue destination="zhy-VN-k71" kind="push" id="17B-tk-JxH"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="PgF-ga-3ut">
+                                <rect key="frame" x="92" y="349" width="136" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Type 4">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="o9o-Cr-tMa" kind="push" id="4Vb-zX-1wk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -94,7 +104,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2kJ-rC-amP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-25" y="374"/>
+            <point key="canvasLocation" x="-5" y="-10"/>
         </scene>
         <!--Type3VC - Messaging-->
         <scene sceneID="gbx-Yu-aEw">
@@ -109,7 +119,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6MS-Jv-qkx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-25" y="1124"/>
+            <point key="canvasLocation" x="-5" y="776"/>
+        </scene>
+        <!--Type4VC - Messaging-->
+        <scene sceneID="tlj-cC-WLV">
+            <objects>
+                <viewController id="o9o-Cr-tMa" customClass="Type4VC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dgQ-XS-tzl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Messaging" id="Yq5-Ss-arI"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X0Q-ko-euE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5" y="1540"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
