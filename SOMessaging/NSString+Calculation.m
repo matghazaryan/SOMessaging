@@ -40,7 +40,7 @@
 
     [layoutManager glyphRangeForTextContainer:textContainer];
     CGRect frame = [layoutManager usedRectForTextContainer:textContainer];
-    return frame.size;
+    return CGSizeMake(ceilf(frame.size.width),ceilf(frame.size.height));
 }
 
 - (CGSize)usedSizeForMaxWidth:(CGFloat)width withAttributes:(NSDictionary *)attributes
@@ -56,7 +56,7 @@
     
     CGRect usedFrame = [tempTextView.layoutManager usedRectForTextContainer:tempTextView.textContainer];
     
-    return usedFrame.size;
+    return CGSizeMake(ceilf(usedFrame.size.width),ceilf(usedFrame.size.height));
 }
 
 @end
