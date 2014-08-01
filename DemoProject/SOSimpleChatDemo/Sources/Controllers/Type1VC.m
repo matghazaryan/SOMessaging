@@ -36,6 +36,7 @@
 - (NSMutableArray *)messages
 {
     return self.dataSource;
+
 }
 
 - (NSTimeInterval)intervalForMessagesGrouping

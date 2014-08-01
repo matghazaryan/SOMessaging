@@ -278,13 +278,20 @@
             self.frame = frm;
 
         } completion:^(BOOL finished) {
-            [self.textView scrollRectToVisible:usedFrame animated:YES];
+            [self scrollToCaretInTextView:self.textView animated:NO];
         }];
     } else {
-        [self.textView scrollRectToVisible:usedFrame animated:YES];
+        [self scrollToCaretInTextView:self.textView animated:NO];
     }
     
     [self adjustTableViewWithCurve:NO scrollsToBottom:YES];
+}
+
+- (void)scrollToCaretInTextView:(UITextView *)textView animated:(BOOL)animated
+{
+    CGRect rect = [textView caretRectForPosition:textView.selectedTextRange.end];
+    rect.size.height += textView.textContainerInset.bottom;
+    [textView scrollRectToVisible:rect animated:animated];
 }
 
 #pragma mark - textview delegate
