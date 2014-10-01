@@ -207,6 +207,8 @@
     
     NSInteger section = [(id<UITableViewDataSource>)self.delegate numberOfSectionsInTableView:self.tableView] - 1;
      if (section == -1) {
+     	self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
         return;
     }
     
@@ -228,6 +230,9 @@
             }
         }
         [UIView commitAnimations];
+    } else {
+    	self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
     }
 }
 
