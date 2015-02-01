@@ -70,11 +70,11 @@
     
     [self.view addSubview:self.tableView];
     
-    self.inputView = [[SOMessageInputView alloc] init];
-    self.inputView.delegate = self;
-    self.inputView.tableView = self.tableView;
-    [self.view addSubview:self.inputView];
-    [self.inputView adjustPosition];
+    self.messageInputView = [[SOMessageInputView alloc] init];
+    self.messageInputView.delegate = self;
+    self.messageInputView.tableView = self.tableView;
+    [self.view addSubview:self.messageInputView];
+    [self.messageInputView adjustPosition];
 }
 
 #pragma mark - View lifecicle
@@ -116,7 +116,7 @@
 // This code will work only if this vc hasn't navigation controller
 - (BOOL)shouldAutorotate
 {
-    if (self.inputView.viewIsDragging) {
+    if (self.messageInputView.viewIsDragging) {
         return NO;
     }
     return YES;

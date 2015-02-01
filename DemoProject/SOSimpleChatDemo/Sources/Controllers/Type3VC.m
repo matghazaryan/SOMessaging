@@ -32,11 +32,11 @@
 //--------------------------------------------------
 //         Customizing input view
 //--------------------------------------------------
-    self.inputView.textInitialHeight = 45;
-    self.inputView.textView.font = [UIFont systemFontOfSize:17];
+    self.messageInputView.textInitialHeight = 45;
+    self.messageInputView.textView.font = [UIFont systemFontOfSize:17];
     
     // Apply changes
-    [self.inputView adjustInputView];
+    [self.messageInputView adjustInputView];
 //--------------------------------------------------
     
     [self loadMessages];
