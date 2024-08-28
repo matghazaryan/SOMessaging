@@ -1,7 +1,7 @@
 SOMessaging
 ===========
 
-Messaging library for iOS 7.x by <b> arturdev </b>. <br>
+Messaging library for iOS 7.x by <b> matghazaryan </b>. <br>
 (Not optimized for iOS 8.x yet)
 
 <a href="https://www.youtube.com/watch?v=AIUhyK_a22U">
