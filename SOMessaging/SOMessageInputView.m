@@ -276,7 +276,11 @@
     if (frm.size.height < self.textMaxHeight) {
         if (frm.size.height < self.textInitialHeight) {
             frm.size.height = self.textInitialHeight;
-            frm.origin.y = self.superview.bounds.size.height - frm.size.height - keyboardFrame.size.height;
+            // adjust to global coordinates to compensate for the chat view being contained in a tab bar
+            // and navigation controller
+            CGRect globalFrame = [self.superview convertRect:frm toView:nil];
+            delta = (self.window.bounds.size.height - frm.size.height - keyboardFrame.size.height) - globalFrame.origin.y;
+            frm.origin.y += delta;
         }
         
         [UIView animateWithDuration:0.3 animations:^{
@@ -325,7 +329,10 @@
     
     CGRect frame = self.frame;
     // calculate the absolute ending point (based on the window rather than superview, which could be contained in a tab bar or tool bar)
-    frame.origin.y = windowRect.size.height - frame.size.height - keyboardRect.size.height;
+    // adjust the y based on the change needed to handle any embedding
+    CGRect globalFrame = [self.superview convertRect:self.frame toView:nil];
+    CGFloat delta = (windowRect.size.height - frame.size.height - keyboardRect.size.height) - globalFrame.origin.y;
+    frame.origin.y += delta;
     initialInputViewPosYWhenKeyboardIsShown = frame.origin.y;
     
     [self adjustTableViewWithCurve:YES scrollsToBottom:YES];
